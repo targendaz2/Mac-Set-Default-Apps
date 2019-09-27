@@ -1,4 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+
+"""
+Description here
+"""
 
 import os
 import plistlib
@@ -18,6 +22,9 @@ print 'Running with settings {}'.format(settings)
 
 # Functions
 def get_current_username():
+    """
+    Returns the username of the currently logged on user, if there is one
+    """
     from SystemConfiguration import SCDynamicStoreCopyConsoleUser
     username = (SCDynamicStoreCopyConsoleUser(None, None, None) or [None])[0]
     username = [username,""][username in [u"loginwindow", None, u""]]
@@ -25,6 +32,9 @@ def get_current_username():
     return username
 
 def read_binary_plist(plist_path):
+    """
+    Converts a plist to XML and then returns it as a dictionary
+    """
     # Check if plist exists
     if not os.path.isfile(plist_path):
         # If not, check if its parents exist
@@ -55,6 +65,9 @@ def read_binary_plist(plist_path):
     return plist
 
 def write_binary_plist(dict_, plist_path):
+    """
+    Saves a dictionary to a binary plist
+    """
     filename = os.path.basename(plist_path)
     tmp_path = os.path.join('/tmp', filename + '.tmp')
 
@@ -96,6 +109,7 @@ plist_name = 'com.apple.launchservices.secure.plist'
 plist_rel_dir = 'Library/Preferences/com.apple.LaunchServices'
 user_template_dir = '/System/Library/User Template/English.lproj'
 lsregister = '/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'
+JAMF = True
 
 target_plists = [ os.path.join(user_template_dir, plist_rel_dir, plist_name) ]
 
@@ -150,3 +164,9 @@ for target_plist in target_plists:
 # Rebuild launch services
 rebuild_command = '{} -kill -r -domain local -domain system -domain user'.format(lsregister)
 subprocess.check_output(rebuild_command.split())
+
+def main():
+    pass
+
+if __name__ == '__main__':
+    main()
