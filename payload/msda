@@ -1,0 +1,68 @@
+#!/usr/bin/python
+
+"""\
+Directly modifies launchservices plists to set default file associations in macOS.
+
+A somewhat complete list of UTI's can be found here:
+	https://escapetech.eu/manuals/qdrop/uti.html\
+"""
+
+from __future__ import print_function
+
+from argparse import ArgumentParser, RawDescriptionHelpFormatter
+import os, plistlib, shutil, subprocess, sys
+
+__author__ = 'David G. Rosenberg'
+__copyright__ = 'Copyright (c), Mac Set Default Apps'
+# __credits__ = ['{credit_list}']
+__license__ = 'MTI'
+__version__ = '1.0.0'
+# __maintainer__ = '{maintainer}'
+__email__ = 'dgrosenberg@icloud.com'
+# __status__ = '{dev_status}'
+
+def process_args(arguments):
+	parser = ArgumentParser(
+		description=__doc__,
+		formatter_class=RawDescriptionHelpFormatter,
+		epilog='Please email {} with any issues'.format(
+			__email__,
+		)
+	)
+	parser.add_argument(
+		'app_id',
+		help='the identifier of the application to set as a default',
+		nargs=1,
+		type=str,
+	)
+	parser.add_argument(
+		'-u', '--uti',
+		help='UTIs and roles to associate with the given app ID',
+		action='append',
+		nargs=2,
+		metavar=('UTI', 'role')
+	)
+	parser.add_argument(
+		'-v', '--verbose',
+		help='verbose output',
+		action='store_true',
+	)
+	parser.add_argument(
+		'-V', '--version',
+		help='display version number',
+		action='version',
+	)
+
+	return parser.parse_args(arguments)
+
+def is_uti(string):
+	if '.' in string:
+		return True
+	return False
+
+def main(arguments):
+	args = process_args(arguments)
+	print(args)
+
+if __name__ == '__main__':
+	sys.exit(main(sys.argv[1:]))
