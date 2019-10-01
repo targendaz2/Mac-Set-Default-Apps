@@ -11,7 +11,7 @@ import unittest
 from test_settings import *
 
 msda = imp.load_source('msda', os.path.join(
-	THIS, '../payload/msda')
+	THIS_FILE, '../payload/msda')
 )
 
 class TestStringProcessing(unittest.TestCase):
@@ -32,7 +32,7 @@ class TestStringProcessing(unittest.TestCase):
 		self.assertFalse(result)
 
 
-class TestPListOpenAndSave(unittest.TestCase):
+class TestPListReadAndWrite(unittest.TestCase):
 
 	def setUp(self):
 		self.tmp = tempfile.mkdtemp(prefix=TMP_PREFIX)
@@ -60,10 +60,19 @@ class TestPListOpenAndSave(unittest.TestCase):
 		shutil.copy(XML_PLIST, tmp_xml_plist)
 		xml_contents = readPlist(tmp_xml_plist)
 
-		result = msda.write_binary_plist(xml_contents, tmp_xml_plist)
+		msda.write_binary_plist(xml_contents, tmp_binary_plist)
 		binary_contents = msda.read_binary_plist(tmp_binary_plist)
 		self.assertEqual(xml_contents, binary_contents)
 
+	def test_can_write_binary_plists_if_directory_structure_doesnt_exist(self):
+		tmp_xml_plist = os.path.join(self.tmp, XML_PLIST_NAME)
+		tmp_binary_plist = os.path.join(self.tmp, 'new.dir/tmp.secure.plist')
+		shutil.copy(XML_PLIST, tmp_xml_plist)
+		xml_contents = readPlist(tmp_xml_plist)
+
+		msda.write_binary_plist(xml_contents, tmp_binary_plist)
+		binary_contents = msda.read_binary_plist(tmp_binary_plist)
+		self.assertEqual(xml_contents, binary_contents)
 
 if __name__ == '__main__':
     unittest.main()
