@@ -40,17 +40,29 @@ class TestPListOpenAndSave(unittest.TestCase):
 	def tearDown(self):
 		shutil.rmtree(self.tmp)
 
-	def test_can_open_binary_plist(self):
+	def test_can_open_binary_plists(self):
 		tmp_plist = os.path.join(self.tmp, SIMPLE_BINARY_PLIST_NAME)
 		shutil.copy(SIMPLE_BINARY_PLIST, tmp_plist)
+
 		result = msda.read_binary_plist(tmp_plist)
 		self.assertEqual(result, msda.PLIST_BASE)
 
-	def test_creates_binary_plist_if_non_existant(self):
+	def test_returns_base_plist_if_non_existant(self):
 		tmp_plist = os.path.join(self.tmp, SIMPLE_BINARY_PLIST_NAME)
 		self.assertFalse(os.path.isfile(tmp_plist))
+
 		result = msda.read_binary_plist(tmp_plist)
 		self.assertEqual(result, msda.PLIST_BASE)
+
+	def test_can_write_binary_plists(self):
+		tmp_xml_plist = os.path.join(self.tmp, XML_PLIST_NAME)
+		tmp_binary_plist = os.path.join(self.tmp, 'tmp.secure.plist')
+		shutil.copy(XML_PLIST, tmp_xml_plist)
+		xml_contents = readPlist(tmp_xml_plist)
+
+		result = msda.write_binary_plist(xml_contents, tmp_xml_plist)
+		binary_contents = msda.read_binary_plist(tmp_binary_plist)
+		self.assertEqual(xml_contents, binary_contents)
 
 
 if __name__ == '__main__':
