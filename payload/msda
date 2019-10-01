@@ -9,18 +9,23 @@ A somewhat complete list of UTI's can be found here:
 
 from __future__ import print_function
 
+import os, shutil, subprocess, sys
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
-import os, plistlib, shutil, subprocess, sys
+from plistlib import readPlist
+from tempfile import NamedTemporaryFile
 
 __author__ = 'David G. Rosenberg'
 __copyright__ = 'Copyright (c), Mac Set Default Apps'
-# __credits__ = ['{credit_list}']
 __license__ = 'MTI'
 __version__ = '1.0.0'
-# __maintainer__ = '{maintainer}'
 __email__ = 'dgrosenberg@icloud.com'
-# __status__ = '{dev_status}'
 
+# Settings
+PLIST_NAME = 'com.apple.launchservices.secure.plist'
+PLIST_BASE = {'LSHandlers': []}
+TMP_PREFIX = 'msda_tmp_'
+
+# Functions
 def process_args(arguments):
 	parser = ArgumentParser(
 		description=__doc__,
@@ -32,15 +37,19 @@ def process_args(arguments):
 	parser.add_argument(
 		'app_id',
 		help='the identifier of the application to set as a default',
-		nargs=1,
 		type=str,
+	)
+	parser.add_argument(
+		'-p', '--protocol',
+		help='protocols to associate with the given app ID',
+		action='append',
 	)
 	parser.add_argument(
 		'-u', '--uti',
 		help='UTIs and roles to associate with the given app ID',
 		action='append',
 		nargs=2,
-		metavar=('UTI', 'role')
+		metavar=('UTI', 'ROLE'),
 	)
 	parser.add_argument(
 		'-v', '--verbose',
@@ -59,6 +68,37 @@ def is_uti(string):
 	if '.' in string:
 		return True
 	return False
+
+def _create_base_plist(plist_path):
+	"""
+	Creates the directory structure if the provided PList doesn't exist and
+	returns an empty launchservices plist
+	"""
+	parent_path = os.path.dirname(plist_path)
+	if not os.path.exists(parent_path):
+		import errno
+		try:
+			os.makedirs(parent_path)
+		except OSError as e:
+			if e.errno != errno.EEXIST:
+				raise
+	return PLIST_BASE
+
+def read_binary_plist(plist_path):
+	"""
+	Converts a binary PList to XML and returns it
+	"""
+	if not os.path.isfile(plist_path):
+		return _create_base_plist(plist_path)
+
+	filename = os.path.basename(plist_path)
+	with NamedTemporaryFile(prefix=TMP_PREFIX, delete=True) as tmp_plist:
+		tmp_path = tmp_plist.name
+		shutil.copyfile(plist_path, tmp_path)
+		convert_command = '/usr/bin/plutil -convert xml1 ' + tmp_path
+		subprocess.check_output(convert_command.split())
+		plist = readPlist(tmp_path)
+	return plist
 
 def main(arguments):
 	args = process_args(arguments)
