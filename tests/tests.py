@@ -26,13 +26,13 @@ class TestLaunchServicesObject(unittest.TestCase):
 		shutil.rmtree(self.tmp)
 
 	def test_can_read_binary_plists(self):
-		tmp_plist = seed_simple_binary_plist(self.tmp)
+		tmp_plist = seed_binary_plist(self.tmp)
 
 		self.launchservices.read(tmp_plist)
 		self.assertEqual(dict(self.launchservices), EMPTY_LS_PLIST)
 
 	def test_returns_base_plist_if_non_existant(self):
-		tmp_plist = os.path.join(self.tmp, SIMPLE_BINARY_PLIST_NAME)
+		tmp_plist = os.path.join(self.tmp, SIMPLE_BINARY_PLIST)
 		self.assertFalse(os.path.isfile(tmp_plist))
 
 		self.launchservices.read(tmp_plist)
