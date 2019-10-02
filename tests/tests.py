@@ -44,7 +44,7 @@ class TestLaunchServicesObject(unittest.TestCase):
 		shutil.copy(XML_PLIST, tmp_xml_plist)
 		xml_contents = readPlist(tmp_xml_plist)
 
-		msda.write_binary_plist(xml_contents, tmp_binary_plist)
+		self.launchservices.write(xml_contents, tmp_binary_plist)
 		self.launchservices.read(tmp_binary_plist)
 		self.assertEqual(xml_contents, dict(self.launchservices))
 
@@ -54,7 +54,7 @@ class TestLaunchServicesObject(unittest.TestCase):
 		shutil.copy(XML_PLIST, tmp_xml_plist)
 		xml_contents = readPlist(tmp_xml_plist)
 
-		msda.write_binary_plist(xml_contents, tmp_binary_plist)
+		self.launchservices.write(xml_contents, tmp_binary_plist)
 		self.launchservices.read(tmp_binary_plist)
 		self.assertEqual(xml_contents, dict(self.launchservices))
 
