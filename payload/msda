@@ -85,28 +85,33 @@ def _create_plist_parents(plist_path):
 # Classes
 class LSHandler(object):
 
+	def _from_dict(self, from_dict):
+		self.role = from_dict['LSHandlerPreferredVersions'].keys()[0]
+		self.role = self.role[13:].lower()
+		try:
+			self.uti = from_dict['LSHandlerContentType'].lower()
+			self._type = 'ContentType'
+		except KeyError as e:
+			self.uti = from_dict['LSHandlerURLScheme'].lower()
+			self._type = 'URLScheme'
+		self.app_id = from_dict[self._role_key].lower()
+
+	def _from_properties(self, **kwargs):
+		self.app_id = kwargs['app_id'].lower()
+		self.uti = kwargs['uti'].lower()
+
+		if '.' in self.uti:
+			self._type = 'ContentType'
+			self.role = kwargs.get('role', 'all').lower()
+		else:
+			self._type = 'URLScheme'
+			self.role = 'all'
+
 	def __init__(self, **kwargs):
 		if 'from_dict' in kwargs.keys():
-			from_dict = kwargs['from_dict']
-			self.role = from_dict['LSHandlerPreferredVersions'].keys()[0]
-			self.role = self.role[13:].lower()
-			try:
-				self.uti = from_dict['LSHandlerContentType'].lower()
-				self._type = 'ContentType'
-			except KeyError as e:
-				self.uti = from_dict['LSHandlerURLScheme'].lower()
-				self._type = 'URLScheme'
-			self.app_id = from_dict[self._role_key].lower()
+			self._from_dict(kwargs['from_dict'])
 		else:
-			self.app_id = kwargs['app_id'].lower()
-			self.uti = kwargs['uti'].lower()
-
-			if '.' in self.uti:
-				self._type = 'ContentType'
-				self.role = kwargs.get('role', 'all').lower()
-			else:
-				self._type = 'URLScheme'
-				self.role = 'all'
+			self._from_properties(**kwargs)
 
 	@property
 	def _role_key(self):
