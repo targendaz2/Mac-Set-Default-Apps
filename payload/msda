@@ -83,17 +83,52 @@ def _create_plist_parents(plist_path):
 
 
 # Classes
+class LSHandler(object):
+
+	def __init__(self, **kwargs):
+		if 'from_dict' in kwargs.keys():
+			from_dict = kwargs['from_dict']
+			self.role = from_dict['LSHandlerPreferredVersions'].keys()[0]
+			self.role = self.role[13:].lower()
+			try:
+				self.uti = from_dict['LSHandlerContentType'].lower()
+				self._type = 'ContentType'
+			except KeyError as e:
+				self.uti = from_dict['LSHandlerURLScheme'].lower()
+				self._type = 'URLScheme'
+			self.app_id = from_dict[self._role_key].lower()
+		else:
+			self.app_id = kwargs['app_id'].lower()
+			self.uti = kwargs['uti'].lower()
+
+			if '.' in self.uti:
+				self._type = 'ContentType'
+				self.role = kwargs.get('role', 'all').lower()
+			else:
+				self._type = 'URLScheme'
+				self.role = 'all'
+
+	@property
+	def _role_key(self):
+		return 'LSHandlerRole' + self.role.capitalize()
+
+	def __iter__(self):
+		yield ('LSHandler' + self._type, self.uti)
+		yield (self._role_key, self.app_id)
+		yield ('LSHandlerPreferredVersions', { self._role_key: '-' })
+
+
 class LaunchServices(object):
 
 	def __init__(self):
-		self.lshandlers = []
+		self.handlers = []
 
 	def __iter__(self):
-		yield ('LSHandlers', self.lshandlers)
+		yield ('LSHandlers', self.handlers)
 
 	def read(self, plist_path):
 		if not os.path.isfile(plist_path):
-			return { 'LSHandlers': [] }
+			return
 
 		filename = os.path.basename(plist_path)
 		with NamedTemporaryFile(prefix=TMP_PREFIX, delete=True) as tmp_plist:
@@ -102,7 +137,7 @@ class LaunchServices(object):
 			convert_command = '/usr/bin/plutil -convert xml1 ' + tmp_path
 			subprocess.check_output(convert_command.split())
 			plist = readPlist(tmp_path)
-		self.lshandlers = plist['LSHandlers']
+		self.handlers = plist['LSHandlers']
 
 	def write(self, plist_path):
 		_create_plist_parents(plist_path)
@@ -115,29 +150,6 @@ class LaunchServices(object):
 			subprocess.check_output(convert_command.split())
 			shutil.copyfile(tmp_path, plist_path)
 		return plist_path
-
-
-class LSHandler(object):
-
-	def __init__(self, **kwargs):
-		self.app_id = kwargs['app_id'].lower()
-		self.uti = kwargs['uti'].lower()
-
-		if '.' in self.uti:
-			self._type = 'ContentType'
-			self.role = kwargs.get('role', 'all').lower()
-		else:
-			self._type = 'URLScheme'
-			self.role = 'all'
-
-	@property
-	def _role_key(self):
-		return 'LSHandlerRole' + self.role.capitalize()
-
-	def __iter__(self):
-		yield ('LSHandler' + self._type, self.uti)
-		yield (self._role_key, self.app_id)
-		yield ('LSHandlerPreferredVersions', { self._role_key: '-' })
 
 
 def main(arguments):

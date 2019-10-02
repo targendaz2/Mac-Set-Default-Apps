@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+from __future__ import print_function
+
 import imp
 import os
 from plistlib import readPlist
@@ -62,6 +64,12 @@ class TestLaunchServicesObject(unittest.TestCase):
 		self.ls2.read(dest_plist)
 		self.assertEqual(dict(self.ls), dict(self.ls2))
 
+	@unittest.skip('need to revisit')
+	def test_stores_LSHandlers_in_contained_list(self):
+		src_plist = self.seed_plist(BINARY_PLIST)
+		self.ls.read(src_plist)
+		self.assertIsInstance(self.ls.handlers[0], msda.LSHandler)
+
 
 class TestLSHandlerObject(unittest.TestCase):
 
@@ -122,6 +130,23 @@ class TestLSHandlerObject(unittest.TestCase):
 			}
 		}
 		self.assertEqual(dict(lshandler), comparison_dict)
+
+	def test_can_convert_dict_with_uti_to_LSHandler(self):
+		app_id = 'com.company.fakebrowser'
+		uti = 'public.html'
+		role = 'viewer'
+
+		role_key = 'LSHandlerRole' + role.capitalize()
+		comparison_dict = {
+			'LSHandlerContentType': uti,
+			role_key: app_id,
+			'LSHandlerPreferredVersions': {
+				role_key: '-',
+			}
+		}
+		lshandler = msda.LSHandler(from_dict=comparison_dict)
+		self.assertEqual(dict(lshandler), comparison_dict)
+
 
 if __name__ == '__main__':
     unittest.main()
