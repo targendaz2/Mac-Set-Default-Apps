@@ -77,7 +77,7 @@ class TestPListReadAndWrite(unittest.TestCase):
 
 class TestLSHandlerGeneration(unittest.TestCase):
 
-	def test_can_generate_LSHandler_for_single_uti(self):
+	def test_can_generate_LSHandler_for_uti(self):
 		app_id = 'com.company.fakebrowser'
 		uti = 'public.html'
 		role = 'viewer'
@@ -90,7 +90,7 @@ class TestLSHandlerGeneration(unittest.TestCase):
 
 		role_key = 'LSHandlerRole' + role.capitalize()
 		comparison_dict = {
-			'LSHandlerContentType': uti.lower(),
+			'LSHandlerContentType': uti,
 			role_key: app_id,
 			'LSHandlerPreferredVersions': {
 				role_key: '-',
@@ -98,7 +98,25 @@ class TestLSHandlerGeneration(unittest.TestCase):
 		}
 		self.assertEqual(dict(lshandler), comparison_dict)
 
-	def test_can_generate_LSHandler_for_single_protocol(self):
+	def test_lshandlers_for_utis_have_role_default_to_all(self):
+		app_id = 'com.company.fakebrowser'
+		uti = 'public.url'
+
+		lshandler = msda.LSHandler(
+			app_id=app_id,
+			uti=uti,
+		)
+
+		comparison_dict = {
+			'LSHandlerContentType': uti,
+			'LSHandlerRoleAll': app_id,
+			'LSHandlerPreferredVersions': {
+				'LSHandlerRoleAll': '-',
+			}
+		}
+		self.assertEqual(dict(lshandler), comparison_dict)
+
+	def test_can_generate_LSHandler_for_protocol(self):
 		app_id = 'com.company.fakebrowser'
 		protocol = 'https'
 

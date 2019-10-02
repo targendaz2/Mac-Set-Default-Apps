@@ -131,7 +131,7 @@ class LSHandler(object):
 
 		if is_uti(self.uti):
 			self._type = 'ContentType'
-			self.role = kwargs['role'].lower()
+			self.role = kwargs.get('role', 'all').lower()
 		else:
 			self._type = 'URLScheme'
 			self.role = 'all'
