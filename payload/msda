@@ -22,7 +22,6 @@ __email__ = 'dgrosenberg@icloud.com'
 
 # Settings
 PLIST_NAME = 'com.apple.launchservices.secure.plist'
-PLIST_BASE = {'LSHandlers': []}
 TMP_PREFIX = 'msda_tmp_'
 
 # Functions
@@ -82,22 +81,6 @@ def _create_plist_parents(plist_path):
 			raise
 	return plist_path
 
-def read_binary_plist(plist_path):
-	"""
-	Converts a binary PList to XML and returns it
-	"""
-	if not os.path.isfile(plist_path):
-		return PLIST_BASE
-
-	filename = os.path.basename(plist_path)
-	with NamedTemporaryFile(prefix=TMP_PREFIX, delete=True) as tmp_plist:
-		tmp_path = tmp_plist.name
-		shutil.copyfile(plist_path, tmp_path)
-		convert_command = '/usr/bin/plutil -convert xml1 ' + tmp_path
-		subprocess.check_output(convert_command.split())
-		plist = readPlist(tmp_path)
-	return plist
-
 def write_binary_plist(dict_, plist_path):
 	"""
 	Saves a dictionary to a binary plist
@@ -122,6 +105,19 @@ class LaunchServices(object):
 
 	def __iter__(self):
 		yield ('LSHandlers', self.lshandlers)
+
+	def read(self, plist_path):
+		if not os.path.isfile(plist_path):
+			return { 'LSHandlers': [] }
+
+		filename = os.path.basename(plist_path)
+		with NamedTemporaryFile(prefix=TMP_PREFIX, delete=True) as tmp_plist:
+			tmp_path = tmp_plist.name
+			shutil.copyfile(plist_path, tmp_path)
+			convert_command = '/usr/bin/plutil -convert xml1 ' + tmp_path
+			subprocess.check_output(convert_command.split())
+			plist = readPlist(tmp_path)
+		self.lshandlers = plist['LSHandlers']
 
 
 class LSHandler(object):

@@ -9,3 +9,4 @@ SIMPLE_BINARY_PLIST = os.path.join(
 )
 XML_PLIST_NAME = 'ex_xml.plist'
 XML_PLIST = os.path.join(THIS_FILE, 'assets', XML_PLIST_NAME)
+EMPTY_LS_PLIST = { 'LSHandlers': [] }

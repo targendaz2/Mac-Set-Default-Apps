@@ -15,27 +15,28 @@ msda = imp.load_source('msda', os.path.join(
 )
 
 
-class TestPListReadAndWrite(unittest.TestCase):
+class TestLaunchServicesObject(unittest.TestCase):
 
 	def setUp(self):
 		self.tmp = tempfile.mkdtemp(prefix=TMP_PREFIX)
+		self.launchservices = msda.LaunchServices()
 
 	def tearDown(self):
 		shutil.rmtree(self.tmp)
 
-	def test_can_open_binary_plists(self):
+	def test_can_read_binary_plists(self):
 		tmp_plist = os.path.join(self.tmp, SIMPLE_BINARY_PLIST_NAME)
 		shutil.copy(SIMPLE_BINARY_PLIST, tmp_plist)
 
-		result = msda.read_binary_plist(tmp_plist)
-		self.assertEqual(result, msda.PLIST_BASE)
+		self.launchservices.read(tmp_plist)
+		self.assertEqual(dict(self.launchservices), EMPTY_LS_PLIST)
 
 	def test_returns_base_plist_if_non_existant(self):
 		tmp_plist = os.path.join(self.tmp, SIMPLE_BINARY_PLIST_NAME)
 		self.assertFalse(os.path.isfile(tmp_plist))
 
-		result = msda.read_binary_plist(tmp_plist)
-		self.assertEqual(result, msda.PLIST_BASE)
+		self.launchservices.read(tmp_plist)
+		self.assertEqual(dict(self.launchservices), EMPTY_LS_PLIST)
 
 	def test_can_write_binary_plists(self):
 		tmp_xml_plist = os.path.join(self.tmp, XML_PLIST_NAME)
@@ -44,8 +45,8 @@ class TestPListReadAndWrite(unittest.TestCase):
 		xml_contents = readPlist(tmp_xml_plist)
 
 		msda.write_binary_plist(xml_contents, tmp_binary_plist)
-		binary_contents = msda.read_binary_plist(tmp_binary_plist)
-		self.assertEqual(xml_contents, binary_contents)
+		self.launchservices.read(tmp_binary_plist)
+		self.assertEqual(xml_contents, dict(self.launchservices))
 
 	def test_can_write_binary_plists_if_directory_structure_doesnt_exist(self):
 		tmp_xml_plist = os.path.join(self.tmp, XML_PLIST_NAME)
@@ -54,11 +55,11 @@ class TestPListReadAndWrite(unittest.TestCase):
 		xml_contents = readPlist(tmp_xml_plist)
 
 		msda.write_binary_plist(xml_contents, tmp_binary_plist)
-		binary_contents = msda.read_binary_plist(tmp_binary_plist)
-		self.assertEqual(xml_contents, binary_contents)
+		self.launchservices.read(tmp_binary_plist)
+		self.assertEqual(xml_contents, dict(self.launchservices))
 
 
-class TestLSHandlerGeneration(unittest.TestCase):
+class TestLSHandlerObject(unittest.TestCase):
 
 	def test_can_generate_LSHandler_for_uti(self):
 		app_id = 'com.company.fakebrowser'
