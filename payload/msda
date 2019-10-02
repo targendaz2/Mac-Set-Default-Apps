@@ -64,14 +64,6 @@ def process_args(arguments):
 
 	return parser.parse_args(arguments)
 
-def is_uti(string):
-	"""
-	Determines if a given string is a UTI
-	"""
-	if '.' in string:
-		return True
-	return False
-
 def _create_plist_parents(plist_path):
 	"""
 	Creates the directory structure if the provided PList doesn't exist
@@ -123,13 +115,22 @@ def write_binary_plist(dict_, plist_path):
 
 
 # Classes
+class LaunchServices(object):
+
+	def __init__(self):
+		self.lshandlers = []
+
+	def __iter__(self):
+		yield ('LSHandlers', self.lshandlers)
+
+
 class LSHandler(object):
 
 	def __init__(self, **kwargs):
 		self.app_id = kwargs['app_id'].lower()
 		self.uti = kwargs['uti'].lower()
 
-		if is_uti(self.uti):
+		if '.' in self.uti:
 			self._type = 'ContentType'
 			self.role = kwargs.get('role', 'all').lower()
 		else:
