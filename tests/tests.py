@@ -31,34 +31,34 @@ class TestLaunchServicesObject(unittest.TestCase):
 		return dest
 
 	def test_can_read_binary_plists(self):
-		tmp_plist = self.seed_plist(SIMPLE_BINARY_PLIST)
+		binary_plist = self.seed_plist(SIMPLE_BINARY_PLIST)
 
-		self.launchservices.read(tmp_plist)
+		self.launchservices.read(binary_plist)
 		self.assertEqual(dict(self.launchservices), EMPTY_LS_PLIST)
 
 	def test_returns_base_plist_if_non_existant(self):
-		tmp_plist = os.path.join(self.tmp, SIMPLE_BINARY_PLIST)
-		self.assertFalse(os.path.isfile(tmp_plist))
+		nonexistant_plist = os.path.join(self.tmp, SIMPLE_BINARY_PLIST)
+		self.assertFalse(os.path.isfile(nonexistant_plist))
 
-		self.launchservices.read(tmp_plist)
+		self.launchservices.read(nonexistant_plist)
 		self.assertEqual(dict(self.launchservices), EMPTY_LS_PLIST)
 
 	def test_can_write_binary_plists(self):
-		tmp_xml_plist = self.seed_plist(XML_PLIST)
-		tmp_binary_plist = os.path.join(self.tmp, 'tmp.secure.plist')
-		xml_contents = readPlist(tmp_xml_plist)
+		src_plist = self.seed_plist(XML_PLIST)
+		dest_plist = os.path.join(self.tmp, 'tmp.secure.plist')
+		xml_contents = readPlist(src_plist)
 
-		self.launchservices.write(xml_contents, tmp_binary_plist)
-		self.launchservices.read(tmp_binary_plist)
+		self.launchservices.write(xml_contents, dest_plist)
+		self.launchservices.read(dest_plist)
 		self.assertEqual(xml_contents, dict(self.launchservices))
 
 	def test_can_write_binary_plists_if_directory_structure_doesnt_exist(self):
-		tmp_xml_plist = self.seed_plist(XML_PLIST)
-		tmp_binary_plist = os.path.join(self.tmp, 'new.dir/tmp.secure.plist')
-		xml_contents = readPlist(tmp_xml_plist)
+		src_plist = self.seed_plist(XML_PLIST)
+		dest_plist = os.path.join(self.tmp, 'new.dir/tmp.secure.plist')
+		xml_contents = readPlist(src_plist)
 
-		self.launchservices.write(xml_contents, tmp_binary_plist)
-		self.launchservices.read(tmp_binary_plist)
+		self.launchservices.write(xml_contents, dest_plist)
+		self.launchservices.read(dest_plist)
 		self.assertEqual(xml_contents, dict(self.launchservices))
 
 
