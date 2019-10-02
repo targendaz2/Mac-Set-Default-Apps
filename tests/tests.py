@@ -74,5 +74,48 @@ class TestPListReadAndWrite(unittest.TestCase):
 		binary_contents = msda.read_binary_plist(tmp_binary_plist)
 		self.assertEqual(xml_contents, binary_contents)
 
+
+class TestLSHandlerGeneration(unittest.TestCase):
+
+	def test_can_generate_LSHandler_for_single_uti(self):
+		app_id = 'com.company.fakebrowser'
+		uti = 'public.html'
+		role = 'viewer'
+
+		lshandler = msda.LSHandler(
+			app_id=app_id,
+			uti=uti,
+			role=role,
+		)
+
+		role_key = 'LSHandlerRole' + role.capitalize()
+		comparison_dict = {
+			'LSHandlerContentType': uti.lower(),
+			role_key: app_id,
+			'LSHandlerPreferredVersions': {
+				role_key: '-',
+			}
+		}
+		self.assertEqual(dict(lshandler), comparison_dict)
+
+	def test_can_generate_LSHandler_for_single_protocol(self):
+		app_id = 'com.company.fakebrowser'
+		protocol = 'https'
+
+		lshandler = msda.LSHandler(
+			app_id=app_id,
+			uti=protocol,
+		)
+
+		role_key = 'LSHandlerRoleAll'
+		comparison_dict = {
+			'LSHandlerURLScheme': protocol.lower(),
+			role_key: app_id,
+			'LSHandlerPreferredVersions': {
+				role_key: '-',
+			}
+		}
+		self.assertEqual(dict(lshandler), comparison_dict)
+
 if __name__ == '__main__':
     unittest.main()

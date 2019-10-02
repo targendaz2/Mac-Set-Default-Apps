@@ -16,7 +16,7 @@ from tempfile import NamedTemporaryFile
 
 __author__ = 'David G. Rosenberg'
 __copyright__ = 'Copyright (c), Mac Set Default Apps'
-__license__ = 'MTI'
+__license__ = 'MIT'
 __version__ = '1.0.0'
 __email__ = 'dgrosenberg@icloud.com'
 
@@ -120,6 +120,31 @@ def write_binary_plist(dict_, plist_path):
 		subprocess.check_output(convert_command.split())
 		shutil.copyfile(tmp_path, plist_path)
 	return plist_path
+
+
+# Classes
+class LSHandler(object):
+
+	def __init__(self, app_id, uti, role=None):
+		self.app_id = app_id.lower()
+		self.uti = uti.lower()
+
+		if is_uti(uti):
+			self._type = 'ContentType'
+			self.role = role
+		else:
+			self._type = 'URLScheme'
+			self.role = 'all'
+
+	@property
+	def _role_key(self):
+		return 'LSHandlerRole' + self.role.capitalize()
+
+	def __iter__(self):
+		yield ('LSHandler' + self._type, self.uti)
+		yield (self._role_key, self.app_id)
+		yield ('LSHandlerPreferredVersions', { self._role_key: '-' })
+
 
 def main(arguments):
 	args = process_args(arguments)
