@@ -19,7 +19,8 @@ class TestLaunchServicesObject(unittest.TestCase):
 
 	def setUp(self):
 		self.tmp = tempfile.mkdtemp(prefix=TMP_PREFIX)
-		self.launchservices = msda.LaunchServices()
+		self.ls = msda.LaunchServices()
+		self.ls2 = msda.LaunchServices()
 
 	def tearDown(self):
 		shutil.rmtree(self.tmp)
@@ -33,33 +34,33 @@ class TestLaunchServicesObject(unittest.TestCase):
 	def test_can_read_binary_plists(self):
 		binary_plist = self.seed_plist(SIMPLE_BINARY_PLIST)
 
-		self.launchservices.read(binary_plist)
-		self.assertEqual(dict(self.launchservices), EMPTY_LS_PLIST)
+		self.ls.read(binary_plist)
+		self.assertEqual(dict(self.ls), EMPTY_LS_PLIST)
 
 	def test_returns_base_plist_if_non_existant(self):
 		nonexistant_plist = os.path.join(self.tmp, SIMPLE_BINARY_PLIST)
 		self.assertFalse(os.path.isfile(nonexistant_plist))
 
-		self.launchservices.read(nonexistant_plist)
-		self.assertEqual(dict(self.launchservices), EMPTY_LS_PLIST)
+		self.ls.read(nonexistant_plist)
+		self.assertEqual(dict(self.ls), EMPTY_LS_PLIST)
 
 	def test_can_write_binary_plists(self):
 		src_plist = self.seed_plist(XML_PLIST)
 		dest_plist = os.path.join(self.tmp, 'tmp.secure.plist')
-		xml_contents = readPlist(src_plist)
+		self.ls.read(src_plist)
+		self.ls.write(dest_plist)
 
-		self.launchservices.write(xml_contents, dest_plist)
-		self.launchservices.read(dest_plist)
-		self.assertEqual(xml_contents, dict(self.launchservices))
+		self.ls2.read(dest_plist)
+		self.assertEqual(dict(self.ls), dict(self.ls2))
 
 	def test_can_write_binary_plists_if_directory_structure_doesnt_exist(self):
 		src_plist = self.seed_plist(XML_PLIST)
 		dest_plist = os.path.join(self.tmp, 'new.dir/tmp.secure.plist')
-		xml_contents = readPlist(src_plist)
+		self.ls.read(src_plist)
+		self.ls.write(dest_plist)
 
-		self.launchservices.write(xml_contents, dest_plist)
-		self.launchservices.read(dest_plist)
-		self.assertEqual(xml_contents, dict(self.launchservices))
+		self.ls2.read(dest_plist)
+		self.assertEqual(dict(self.ls), dict(self.ls2))
 
 
 class TestLSHandlerObject(unittest.TestCase):
