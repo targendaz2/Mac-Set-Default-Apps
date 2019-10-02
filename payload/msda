@@ -125,11 +125,12 @@ class LSHandler(object):
 
 class LaunchServices(object):
 
-	def __init__(self):
+	def __init__(self, plist=None):
 		self.handlers = []
+		self.plist = plist
 
 	def __iter__(self):
-		yield ('LSHandlers', self.handlers)
+		yield ('LSHandlers', [ dict(h) for h in self.handlers ])
 
 	def read(self, plist_path):
 		if not os.path.isfile(plist_path):
@@ -142,7 +143,9 @@ class LaunchServices(object):
 			convert_command = '/usr/bin/plutil -convert xml1 ' + tmp_path
 			subprocess.check_output(convert_command.split())
 			plist = readPlist(tmp_path)
-		self.handlers = plist['LSHandlers']
+
+		for lshandler in plist['LSHandlers']:
+			self.handlers.append(LSHandler(from_dict=lshandler))
 
 	def write(self, plist_path):
 		_create_plist_parents(plist_path)

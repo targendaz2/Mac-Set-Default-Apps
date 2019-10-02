@@ -64,7 +64,6 @@ class TestLaunchServicesObject(unittest.TestCase):
 		self.ls2.read(dest_plist)
 		self.assertEqual(dict(self.ls), dict(self.ls2))
 
-	@unittest.skip('need to revisit')
 	def test_stores_LSHandlers_in_contained_list(self):
 		src_plist = self.seed_plist(BINARY_PLIST)
 		self.ls.read(src_plist)
