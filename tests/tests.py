@@ -9,7 +9,6 @@ import tempfile
 import unittest
 
 from test_settings import *
-from test_utils import *
 
 msda = imp.load_source('msda', os.path.join(
 	THIS_FILE, '../payload/msda')
@@ -25,8 +24,14 @@ class TestLaunchServicesObject(unittest.TestCase):
 	def tearDown(self):
 		shutil.rmtree(self.tmp)
 
+	def seed_plist(self, plist_name):
+		src = os.path.join(THIS_FILE, 'assets', plist_name)
+		dest = os.path.join(self.tmp, plist_name)
+		shutil.copy(src, dest)
+		return dest
+
 	def test_can_read_binary_plists(self):
-		tmp_plist = seed_binary_plist(self.tmp)
+		tmp_plist = self.seed_plist(SIMPLE_BINARY_PLIST)
 
 		self.launchservices.read(tmp_plist)
 		self.assertEqual(dict(self.launchservices), EMPTY_LS_PLIST)
@@ -39,7 +44,7 @@ class TestLaunchServicesObject(unittest.TestCase):
 		self.assertEqual(dict(self.launchservices), EMPTY_LS_PLIST)
 
 	def test_can_write_binary_plists(self):
-		tmp_xml_plist = seed_xml_plist(self.tmp)
+		tmp_xml_plist = self.seed_plist(XML_PLIST)
 		tmp_binary_plist = os.path.join(self.tmp, 'tmp.secure.plist')
 		xml_contents = readPlist(tmp_xml_plist)
 
@@ -48,7 +53,7 @@ class TestLaunchServicesObject(unittest.TestCase):
 		self.assertEqual(xml_contents, dict(self.launchservices))
 
 	def test_can_write_binary_plists_if_directory_structure_doesnt_exist(self):
-		tmp_xml_plist = seed_xml_plist(self.tmp)
+		tmp_xml_plist = self.seed_plist(XML_PLIST)
 		tmp_binary_plist = os.path.join(self.tmp, 'new.dir/tmp.secure.plist')
 		xml_contents = readPlist(tmp_xml_plist)
 
