@@ -125,13 +125,13 @@ def write_binary_plist(dict_, plist_path):
 # Classes
 class LSHandler(object):
 
-	def __init__(self, app_id, uti, role=None):
-		self.app_id = app_id.lower()
-		self.uti = uti.lower()
+	def __init__(self, **kwargs):
+		self.app_id = kwargs['app_id'].lower()
+		self.uti = kwargs['uti'].lower()
 
-		if is_uti(uti):
+		if is_uti(self.uti):
 			self._type = 'ContentType'
-			self.role = role
+			self.role = kwargs['role'].lower()
 		else:
 			self._type = 'URLScheme'
 			self.role = 'all'
