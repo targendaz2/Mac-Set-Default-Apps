@@ -72,6 +72,10 @@ class TestLaunchServicesObject(unittest.TestCase):
 		self.ls.read()
 		self.assertIsInstance(self.ls.handlers[0], msda.LSHandler)
 
+	def test_populates_self_if_provided_plist(self):
+		ls = msda.LaunchServices(self.seed_plist(BINARY_PLIST))
+		self.assertIsInstance(ls.handlers[0], msda.LSHandler)
+
 
 class TestLSHandlerObject(unittest.TestCase):
 
