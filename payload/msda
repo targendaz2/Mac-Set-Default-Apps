@@ -164,6 +164,10 @@ class LaunchServices(object):
 			subprocess.check_output(convert_command.split())
 			shutil.copyfile(tmp_path, plist)
 
+	def set_handler(self, **kwargs):
+		lshandler = LSHandler(**kwargs)
+		self.handlers.append(lshandler)
+
 
 def main(arguments):
 	args = process_args(arguments)

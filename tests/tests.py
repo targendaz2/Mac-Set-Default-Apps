@@ -76,6 +76,21 @@ class TestLaunchServicesObject(unittest.TestCase):
 		ls = msda.LaunchServices(self.seed_plist(BINARY_PLIST))
 		self.assertIsInstance(ls.handlers[0], msda.LSHandler)
 
+	def test_can_set_handlers(self):
+		ls = msda.LaunchServices(self.seed_plist(SIMPLE_BINARY_PLIST))
+		ls.set_handler(
+			app_id='edu.school.browser',
+			uti='public.html',
+			role='viewer',
+		)
+		expected_handler = msda.LSHandler(
+			app_id='edu.school.browser',
+			uti='public.html',
+			role='viewer',
+		)
+
+		self.assertEqual(dict(ls.handlers[0]), dict(expected_handler))
+
 
 class TestLSHandlerObject(unittest.TestCase):
 
