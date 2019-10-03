@@ -117,6 +117,11 @@ class LSHandler(object):
 	def _role_key(self):
 		return 'LSHandlerRole' + self.role.capitalize()
 
+	def __eq__(self, other):
+		compare_utis = self.uti == other.uti
+		compare_roles = self.role == other.role
+		return compare_utis and compare_roles
+
 	def __iter__(self):
 		yield ('LSHandler' + self._type, self.uti)
 		yield (self._role_key, self.app_id)
@@ -165,8 +170,11 @@ class LaunchServices(object):
 			shutil.copyfile(tmp_path, plist)
 
 	def set_handler(self, **kwargs):
-		lshandler = LSHandler(**kwargs)
-		self.handlers.append(lshandler)
+		new_lshandler = LSHandler(**kwargs)
+		keep_handlers = [ h for h in self.handlers if new_lshandler != h ]
+		self.handlers = keep_handlers
+		self.handlers.append(new_lshandler)
+		return new_lshandler
 
 
 def main(arguments):

@@ -91,6 +91,26 @@ class TestLaunchServicesObject(unittest.TestCase):
 
 		self.assertEqual(dict(ls.handlers[0]), dict(expected_handler))
 
+	@unittest.skip('')
+	def test_overwrites_handlers_for_same_uti_and_role(self):
+		ls = msda.LaunchServices(self.seed_plist(SIMPLE_BINARY_PLIST))
+		old_handler = ls.set_handler(
+			app_id='edu.school.browser',
+			uti='public.html',
+			role='viewer',
+		)
+
+		self.assertIn(old_handler, ls.handlers)
+
+		new_handler = ls.set_handler(
+			app_id='org.bigorg.browser',
+			uti='public.html',
+			role='viewer',
+		)
+
+		self.assertIn(new_handler, ls.handlers)
+		self.assertNotIn(old_handler, ls.handlers)
+
 
 class TestLSHandlerObject(unittest.TestCase):
 
@@ -167,6 +187,19 @@ class TestLSHandlerObject(unittest.TestCase):
 		}
 		lshandler = msda.LSHandler(from_dict=comparison_dict)
 		self.assertEqual(dict(lshandler), comparison_dict)
+
+	def test_equal_if_same_uti_and_role(self):
+		ls1 = msda.LSHandler(
+			app_id='com.company1.fakebrowser',
+			uti='public.html',
+			role='viewer',
+		)
+		ls2 = msda.LSHandler(
+			app_id='org.company2.fakebrowser',
+			uti='public.html',
+			role='viewer',
+		)
+		self.assertEqual(ls1, ls2)
 
 
 if __name__ == '__main__':
