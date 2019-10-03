@@ -34,39 +34,42 @@ class TestLaunchServicesObject(unittest.TestCase):
 		return dest
 
 	def test_can_read_binary_plists(self):
-		binary_plist = self.seed_plist(SIMPLE_BINARY_PLIST)
+		self.ls.plist = self.seed_plist(SIMPLE_BINARY_PLIST)
 
-		self.ls.read(binary_plist)
+		self.ls.read()
 		self.assertEqual(dict(self.ls), EMPTY_LS_PLIST)
 
 	def test_returns_base_plist_if_non_existant(self):
-		nonexistant_plist = os.path.join(self.tmp, SIMPLE_BINARY_PLIST)
-		self.assertFalse(os.path.isfile(nonexistant_plist))
+		self.ls.plist = os.path.join(self.tmp, SIMPLE_BINARY_PLIST)
+		self.assertFalse(os.path.isfile(self.ls.plist))
 
-		self.ls.read(nonexistant_plist)
+		self.ls.read()
 		self.assertEqual(dict(self.ls), EMPTY_LS_PLIST)
 
 	def test_can_write_binary_plists(self):
-		src_plist = self.seed_plist(XML_PLIST)
+		self.ls.plist = self.seed_plist(XML_PLIST)
 		dest_plist = os.path.join(self.tmp, 'tmp.secure.plist')
-		self.ls.read(src_plist)
+		self.ls.read()
 		self.ls.write(dest_plist)
 
-		self.ls2.read(dest_plist)
+		self.ls2.plist = dest_plist
+		self.ls2.read()
 		self.assertEqual(dict(self.ls), dict(self.ls2))
 
 	def test_can_write_binary_plists_if_directory_structure_doesnt_exist(self):
-		src_plist = self.seed_plist(XML_PLIST)
+		self.ls.plist = self.seed_plist(XML_PLIST)
 		dest_plist = os.path.join(self.tmp, 'new.dir/tmp.secure.plist')
-		self.ls.read(src_plist)
+		self.ls.read()
 		self.ls.write(dest_plist)
 
-		self.ls2.read(dest_plist)
+		self.ls2.plist = dest_plist
+		self.ls2.read()
 		self.assertEqual(dict(self.ls), dict(self.ls2))
 
 	def test_stores_LSHandlers_in_contained_list(self):
 		src_plist = self.seed_plist(BINARY_PLIST)
-		self.ls.read(src_plist)
+		self.ls.plist = src_plist
+		self.ls.read()
 		self.assertIsInstance(self.ls.handlers[0], msda.LSHandler)
 
 

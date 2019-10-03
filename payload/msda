@@ -132,14 +132,14 @@ class LaunchServices(object):
 	def __iter__(self):
 		yield ('LSHandlers', [ dict(h) for h in self.handlers ])
 
-	def read(self, plist_path):
-		if not os.path.isfile(plist_path):
+	def read(self):
+		if not os.path.isfile(self.plist):
 			return
 
-		filename = os.path.basename(plist_path)
+		filename = os.path.basename(self.plist)
 		with NamedTemporaryFile(prefix=TMP_PREFIX, delete=True) as tmp_plist:
 			tmp_path = tmp_plist.name
-			shutil.copyfile(plist_path, tmp_path)
+			shutil.copyfile(self.plist, tmp_path)
 			convert_command = '/usr/bin/plutil -convert xml1 ' + tmp_path
 			subprocess.check_output(convert_command.split())
 			plist = readPlist(tmp_path)
