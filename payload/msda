@@ -119,7 +119,10 @@ class LSHandler(object):
 
 	def __eq__(self, other):
 		compare_utis = self.uti == other.uti
-		compare_roles = self.role == other.role
+		if self.role == 'all' or other.role == 'all':
+			compare_roles = True
+		else:
+			compare_roles = self.role == other.role
 		return compare_utis and compare_roles
 
 	def __iter__(self):
