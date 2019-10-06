@@ -91,8 +91,23 @@ class TestLaunchServicesObject(unittest.TestCase):
 
 		self.assertEqual(dict(ls.handlers[0]), dict(expected_handler))
 
+	def test_can_check_for_set_app_IDs(self):
+		ls = msda.LaunchServices(self.seed_plist(SIMPLE_BINARY_PLIST))
+		ls.set_handler(
+			app_id='edu.school.browser',
+			uti='public.html',
+			role='viewer',
+		)
+		ls.set_handler(
+			app_id='edu.school.email',
+			uti='mailto',
+		)
+
+		self.assertIn('edu.school.browser', ls.app_ids)
+		self.assertIn('edu.school.email', ls.app_ids)
+
 	@unittest.skip('')
-	def test_overwrites_handlers_for_same_uti_and_role(self):
+	def test_overwrites_single_handler_for_same_uti_and_role(self):
 		ls = msda.LaunchServices(self.seed_plist(SIMPLE_BINARY_PLIST))
 		old_handler = ls.set_handler(
 			app_id='edu.school.browser',
@@ -108,8 +123,8 @@ class TestLaunchServicesObject(unittest.TestCase):
 			role='viewer',
 		)
 
-		self.assertIn(new_handler, ls.handlers)
 		self.assertNotIn(old_handler, ls.handlers)
+		self.assertIn(new_handler, ls.handlers)
 
 
 class TestLSHandlerObject(unittest.TestCase):
