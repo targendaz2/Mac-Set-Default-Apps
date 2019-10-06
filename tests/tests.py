@@ -106,7 +106,6 @@ class TestLaunchServicesObject(unittest.TestCase):
 		self.assertIn('edu.school.browser', ls.app_ids)
 		self.assertIn('edu.school.email', ls.app_ids)
 
-	@unittest.skip('')
 	def test_overwrites_single_handler_for_same_uti_and_role(self):
 		ls = msda.LaunchServices(self.seed_plist(SIMPLE_BINARY_PLIST))
 		old_handler = ls.set_handler(
@@ -115,7 +114,7 @@ class TestLaunchServicesObject(unittest.TestCase):
 			role='viewer',
 		)
 
-		self.assertIn(old_handler, ls.handlers)
+		self.assertIn(old_handler.app_id, ls.app_ids)
 
 		new_handler = ls.set_handler(
 			app_id='org.bigorg.browser',
@@ -123,8 +122,41 @@ class TestLaunchServicesObject(unittest.TestCase):
 			role='viewer',
 		)
 
-		self.assertNotIn(old_handler, ls.handlers)
-		self.assertIn(new_handler, ls.handlers)
+		self.assertNotIn(old_handler.app_id, ls.app_ids)
+		self.assertIn(new_handler.app_id, ls.app_ids)
+
+	def test_overwrites_all_handlers_for_same_uti_and_role(self):
+		ls = msda.LaunchServices(self.seed_plist(SIMPLE_BINARY_PLIST))
+		old_handlers = [
+			ls.set_handler(
+				app_id='edu.school.browser',
+				uti='public.html',
+				role='viewer',
+			),
+			ls.set_handler(
+				app_id='edu.school.browser',
+				uti='public.html',
+				role='reader',
+			),
+			ls.set_handler(
+				app_id='edu.school.browser',
+				uti='public.html',
+				role='writer',
+			),
+		]
+
+		for old_handler in old_handlers:
+			self.assertIn(old_handler.app_id, ls.app_ids)
+
+		new_handler = ls.set_handler(
+			app_id='org.bigorg.browser',
+			uti='public.html',
+			role='all',
+		)
+
+		for old_handler in old_handlers:
+			self.assertNotIn(old_handler.app_id, ls.app_ids)
+		self.assertIn(new_handler.app_id, ls.app_ids)
 
 
 class TestLSHandlerObject(unittest.TestCase):
