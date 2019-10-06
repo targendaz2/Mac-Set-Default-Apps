@@ -56,7 +56,7 @@ def process_args(arguments):
 		action='store_true',
 	)
 	parser.add_argument(
-		'-V', '--version',
+		'--version',
 		help='display version number',
 		action='version',
 	)
