@@ -3,3 +3,4 @@ __pycache__
 *.pkg
 *.pyc
 payload/*c
+.vscode/
