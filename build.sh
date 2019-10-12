@@ -15,5 +15,6 @@ pkgbuild --root "${project_folder}/payload" \
 	--identifier "${IDENTIFIER}" \
 	--version "${VERSION}" \
 	--install-location "${INSTALL_DIR}" \
-	--filter='*c'\
+	--filter='*c' \
+	--filter='*.pyc' \
 	"${project_folder}/${PKGNAME} v${VERSION}.pkg"
