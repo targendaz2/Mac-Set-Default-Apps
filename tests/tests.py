@@ -286,7 +286,7 @@ class FunctionalTests(TestCase):
 
 		msda.main(arguments, user_plist=self.user_ls)
 
-		ls = msda.LaunchServices(self.user_ls)
+		ls.read()
 
 		self.assertIn(app_id, ls.app_ids)
 
