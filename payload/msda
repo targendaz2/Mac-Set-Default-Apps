@@ -66,20 +66,21 @@ def process_args(arguments):
 
 def _create_plist_parents(plist_path):
 	"""
-	Creates the directory structure if the provided PList doesn't exist
+	Creates the directory structure if the provided plist doesn't exist
 	"""
+
+	# if the specified plist already exists, don't do anything
 	if os.path.isfile(plist_path):
 		return False
+
+	# if the specified plist's parent directories already exist, don't do
+	# anything
 	parent_path = os.path.dirname(plist_path)
 	if os.path.exists(parent_path):
 		return False
 
-	import errno
-	try:
-		os.makedirs(parent_path)
-	except OSError as e:
-		if e.errno != errno.EEXIST:
-			raise
+	# create the parent directories for the specified plist
+	os.makedirs(parent_path)
 	return plist_path
 
 
@@ -87,20 +88,36 @@ def _create_plist_parents(plist_path):
 class LSHandler(object):
 
 	def _from_dict(self, from_dict):
+		"""
+		Creates an LSHandler object from a dictionary
+		"""
+
+		# grab the role from the string containing it
 		self.role = from_dict['LSHandlerPreferredVersions'].keys()[0]
 		self.role = self.role[13:].lower()
+
+		# grab the UTI/protocol
 		try:
+			# for if it's a UTI
 			self.uti = from_dict['LSHandlerContentType'].lower()
 			self._type = 'ContentType'
 		except KeyError:
+			# for if it's a protocol
 			self.uti = from_dict['LSHandlerURLScheme'].lower()
 			self._type = 'URLScheme'
+
+		# grab the App ID
 		self.app_id = from_dict[self._role_key].lower()
 
 	def _from_properties(self, **kwargs):
+		"""
+		Creates an LSHandler from specified properties
+		"""
 		self.app_id = kwargs['app_id'].lower()
 		self.uti = kwargs['uti'].lower()
 
+		# determines if we're working with a UTI or protocol based on the
+		# presence of periods
 		if '.' in self.uti:
 			self._type = 'ContentType'
 			self.role = kwargs.get('role', 'all').lower()
@@ -108,17 +125,23 @@ class LSHandler(object):
 			self._type = 'URLScheme'
 			self.role = 'all'
 
-	def __init__(self, **kwargs):
-		if 'from_dict' in kwargs.keys():
-			self._from_dict(kwargs['from_dict'])
+	def __init__(self, from_dict=None, **kwargs):
+		if from_dict:
+			self._from_dict(from_dict)
 		else:
 			self._from_properties(**kwargs)
 
 	@property
 	def _role_key(self):
+		"""
+		Generates the dictionary key for an LSHandler's role
+		"""
 		return 'LSHandlerRole' + self.role.capitalize()
 
 	def __eq__(self, other):
+		"""
+		Two LSHandlers for the same role and UTI would be considered equal
+		"""
 		compare_utis = self.uti == other.uti
 		if self.role == 'all' or other.role == 'all':
 			compare_roles = True
@@ -148,38 +171,69 @@ class LaunchServices(object):
 		yield ('LSHandlers', [ dict(h) for h in self.handlers ])
 
 	def read(self):
+		"""
+		Reads the plist at the specified path into a LaunchServices object,
+		creating LSHandler objects as necesary
+		"""
+
+		# is the specified plist doesn't exist, there's nothing to read
 		if not os.path.isfile(self.plist):
 			return
 
 		with NamedTemporaryFile(prefix=TMP_PREFIX, delete=True) as tmp_plist:
+			# copy the target plist to a temporary file
 			tmp_path = tmp_plist.name
 			shutil.copyfile(self.plist, tmp_path)
+
+			# convert to XML from binary
 			convert_command = '/usr/bin/plutil -convert xml1 ' + tmp_path
 			subprocess.check_output(convert_command.split())
+
+			# read the plist
 			plist = readPlist(tmp_path)
 
+		# convert any specified LSHandlers to objects
 		for lshandler in plist['LSHandlers']:
 			self.handlers.append(LSHandler(from_dict=lshandler))
 
 	def write(self, plist=None):
+		"""
+		Writes this object to the specified plist, formatting it as a
+		LaunchServices plist
+		"""
+
+		# allow for alternate destinations (mostly for testing)
 		if not plist:
 			plist = self.plist
 
+		# create parents directories if they don't exist
 		_create_plist_parents(plist)
 
 		with NamedTemporaryFile(prefix=TMP_PREFIX, delete=True) as tmp_plist:
+			# write the LaunchServices object to a temporary file
 			tmp_path = tmp_plist.name
 			writePlist(dict(self), tmp_path)
+
+			# convert it to binary
 			convert_command = '/usr/bin/plutil -convert binary1 ' + tmp_path
 			subprocess.check_output(convert_command.split())
+
+			# and overwrite the specified plist
 			shutil.copyfile(tmp_path, plist)
 
 	@property
 	def app_ids(self):
+		"""
+		Provides a set of all App IDs set as default handlers
+		"""
 		collected_app_ids = [ h.app_id for h in self.handlers ]
 		return set(collected_app_ids)
 
 	def set_handler(self, **kwargs):
+		"""
+		Generates a new LSHandler object, replacing any existing LSHandler
+		objects that conflict with it
+		"""
 		new_lshandler = LSHandler(**kwargs)
 		self.handlers = [ h for h in self.handlers if h != new_lshandler ]
 		self.handlers.append(new_lshandler)
