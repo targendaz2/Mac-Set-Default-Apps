@@ -23,6 +23,7 @@ __email__ = 'dgrosenberg@icloud.com'
 # Settings
 PLIST_NAME = 'com.apple.launchservices.secure.plist'
 TMP_PREFIX = 'msda_tmp_'
+JAMF = False
 
 # Functions
 def process_args(arguments):
@@ -186,7 +187,10 @@ class LaunchServices(object):
 
 
 def main(arguments):
-	args = process_args(arguments)
+	if JAMF:
+		args = process_args(arguments[2:])
+	else:
+		args = process_args(arguments)
 	print(args)
 
 if __name__ == '__main__':
