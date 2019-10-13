@@ -229,12 +229,15 @@ class LaunchServices(object):
 		collected_app_ids = [ h.app_id for h in self.handlers ]
 		return set(collected_app_ids)
 
-	def set_handler(self, **kwargs):
+	def set_handler(self, lshandler=None, **kwargs):
 		"""
-		Generates a new LSHandler object, replacing any existing LSHandler
-		objects that conflict with it
+		Adds the provided LSHandler to the LaunchServices object, converting
+		to a new LSHandler if necesary
 		"""
-		new_lshandler = LSHandler(**kwargs)
+		if not lshandler:
+			new_lshandler = LSHandler(**kwargs)
+		else:
+			new_lshandler = lshandler
 		self.handlers = [ h for h in self.handlers if h != new_lshandler ]
 		self.handlers.append(new_lshandler)
 		return new_lshandler
