@@ -11,6 +11,7 @@ import tempfile
 import unittest
 
 from test_settings import *
+from test_utils import *
 
 msda = imp.load_source('msda', os.path.join(
 	THIS_FILE, '../payload/msda')
@@ -20,142 +21,73 @@ msda = imp.load_source('msda', os.path.join(
 class TestLSHandlerObject(unittest.TestCase):
 
 	def test_can_generate_LSHandler_for_uti(self):
-		app_id = 'com.company.fakebrowser'
-		uti = 'public.html'
-		role = 'viewer'
-
-		lshandler = msda.LSHandler(
-			app_id=app_id,
-			uti=uti,
-			role=role,
+		comparison_dict = uti_lshandler_dict(
+			app_id=html_viewer_lshandler.app_id,
+			uti=html_viewer_lshandler.uti,
+			role=html_viewer_lshandler.role,
 		)
-
-		role_key = 'LSHandlerRole' + role.capitalize()
-		comparison_dict = {
-			'LSHandlerContentType': uti,
-			role_key: app_id,
-			'LSHandlerPreferredVersions': {
-				role_key: '-',
-			}
-		}
-		self.assertEqual(dict(lshandler), comparison_dict)
+		self.assertEqual(dict(html_viewer_lshandler), comparison_dict)
 
 	def test_lshandlers_for_utis_have_role_default_to_all(self):
-		app_id = 'com.company.fakebrowser'
-		uti = 'public.url'
-
-		lshandler = msda.LSHandler(
-			app_id=app_id,
-			uti=uti,
+		comparison_dict = uti_lshandler_dict(
+			app_id=url_all_lshandler.app_id,
+			uti=url_all_lshandler.uti,
 		)
-
-		comparison_dict = {
-			'LSHandlerContentType': uti,
-			'LSHandlerRoleAll': app_id,
-			'LSHandlerPreferredVersions': {
-				'LSHandlerRoleAll': '-',
-			}
-		}
-		self.assertEqual(dict(lshandler), comparison_dict)
+		self.assertEqual(dict(url_all_lshandler), comparison_dict)
 
 	def test_can_generate_LSHandler_for_protocol(self):
-		app_id = 'com.company.fakebrowser'
-		protocol = 'https'
-
-		lshandler = msda.LSHandler(
-			app_id=app_id,
-			uti=protocol,
+		comparison_dict = protocol_lshandler_dict(
+			app_id=https_lshandler.app_id,
+			uti=https_lshandler.uti,
 		)
+		self.assertEqual(dict(https_lshandler), comparison_dict)
 
-		role_key = 'LSHandlerRoleAll'
-		comparison_dict = {
-			'LSHandlerURLScheme': protocol.lower(),
-			role_key: app_id,
-			'LSHandlerPreferredVersions': {
-				role_key: '-',
-			}
-		}
-		self.assertEqual(dict(lshandler), comparison_dict)
 
-	def test_can_convert_dict_with_uti_to_LSHandler(self):
-		app_id = 'com.company.fakebrowser'
-		uti = 'public.html'
-		role = 'viewer'
+class TestLSHandlerObjectEquality(unittest.TestCase):
 
-		role_key = 'LSHandlerRole' + role.capitalize()
-		comparison_dict = {
-			'LSHandlerContentType': uti,
-			role_key: app_id,
-			'LSHandlerPreferredVersions': {
-				role_key: '-',
-			}
-		}
-		lshandler = msda.LSHandler(from_dict=comparison_dict)
-		self.assertEqual(dict(lshandler), comparison_dict)
+	html_all = msda.LSHandler(
+		app_id='org.company2.fakebrowser',
+		uti='public.html',
+		role='all',
+	)
+
+	html_viewer1 = msda.LSHandler(
+		app_id='com.company1.fakebrowser',
+		uti='public.html',
+		role='viewer',
+	)
+
+	html_viewer2 = msda.LSHandler(
+		app_id='org.company2.fakebrowser',
+		uti='public.html',
+		role='viewer',
+	)
+
+	html_reader = msda.LSHandler(
+		app_id='com.company.fakebrowser',
+		uti='public.html',
+		role='reader',
+	)
+
+	mailto_protocol = msda.LSHandler(
+		app_id='com.company.fakebrowser',
+		uti='mailto',
+	)
 
 	def test_equal_if_same_uti_and_role(self):
-		ls1 = msda.LSHandler(
-			app_id='com.company1.fakebrowser',
-			uti='public.html',
-			role='viewer',
-		)
-		ls2 = msda.LSHandler(
-			app_id='org.company2.fakebrowser',
-			uti='public.html',
-			role='viewer',
-		)
-		self.assertEqual(ls1, ls2)
+		self.assertEqual(self.html_viewer1, self.html_viewer2)
 
 	def test_not_equal_if_different_uti(self):
-		ls1 = msda.LSHandler(
-			app_id='com.company.fakebrowser',
-			uti='public.html',
-			role='viewer',
-		)
-		ls2 = msda.LSHandler(
-			app_id='com.company.fakebrowser',
-			uti='mailto',
-		)
-		self.assertNotEqual(ls1, ls2)
+		self.assertNotEqual(self.html_viewer1, self.mailto_protocol)
 
 	def test_not_equal_if_different_role_but_neither_is_all(self):
-		ls1 = msda.LSHandler(
-			app_id='com.company.fakebrowser',
-			uti='public.html',
-			role='viewer',
-		)
-		ls2 = msda.LSHandler(
-			app_id='com.company.fakebrowser',
-			uti='public.html',
-			role='reader',
-		)
-		self.assertNotEqual(ls1, ls2)
+		self.assertNotEqual(self.html_viewer1, self.html_reader)
 
 	def test_equal_if_same_uti_and_existing_role_is_all(self):
-		ls1 = msda.LSHandler(
-			app_id='com.company1.fakebrowser',
-			uti='public.html',
-			role='viewer',
-		)
-		ls2 = msda.LSHandler(
-			app_id='org.company2.fakebrowser',
-			uti='public.html',
-			role='all',
-		)
-		self.assertEqual(ls1, ls2)
+		self.assertEqual(self.html_viewer1, self.html_all)
 
 	def test_equal_if_same_uti_and_replacing_role_is_all(self):
-		ls1 = msda.LSHandler(
-			app_id='com.company1.fakebrowser',
-			uti='public.html',
-			role='all',
-		)
-		ls2 = msda.LSHandler(
-			app_id='org.company2.fakebrowser',
-			uti='public.html',
-			role='viewer',
-		)
-		self.assertEqual(ls1, ls2)
+		self.assertEqual(self.html_all, self.html_viewer1)
 
 
 class TestLaunchServicesObject(unittest.TestCase):
@@ -314,7 +246,7 @@ class TestLaunchServicesObject(unittest.TestCase):
 		self.assertIn(handler, ls.handlers)
 
 
-class TestArguments(unittest.TestCase):
+class FunctionalTests(unittest.TestCase):
 
 	pass
 
