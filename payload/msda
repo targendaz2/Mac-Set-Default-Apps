@@ -91,7 +91,7 @@ class LSHandler(object):
 		try:
 			self.uti = from_dict['LSHandlerContentType'].lower()
 			self._type = 'ContentType'
-		except KeyError as e:
+		except KeyError:
 			self.uti = from_dict['LSHandlerURLScheme'].lower()
 			self._type = 'URLScheme'
 		self.app_id = from_dict[self._role_key].lower()
@@ -150,7 +150,6 @@ class LaunchServices(object):
 		if not os.path.isfile(self.plist):
 			return
 
-		filename = os.path.basename(self.plist)
 		with NamedTemporaryFile(prefix=TMP_PREFIX, delete=True) as tmp_plist:
 			tmp_path = tmp_plist.name
 			shutil.copyfile(self.plist, tmp_path)
@@ -167,7 +166,6 @@ class LaunchServices(object):
 
 		_create_plist_parents(plist)
 
-		filename = os.path.basename(plist)
 		with NamedTemporaryFile(prefix=TMP_PREFIX, delete=True) as tmp_plist:
 			tmp_path = tmp_plist.name
 			writePlist(dict(self), tmp_path)
