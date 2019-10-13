@@ -11,6 +11,7 @@ from __future__ import print_function
 
 import os, shutil, subprocess, sys
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
+from getpass import getuser
 from plistlib import readPlist, writePlist
 from tempfile import NamedTemporaryFile
 
@@ -21,9 +22,12 @@ __version__ = '1.0.0'
 __email__ = 'dgrosenberg@icloud.com'
 
 # Settings
-PLIST_NAME = 'com.apple.launchservices.secure.plist'
-TMP_PREFIX = 'msda_tmp_'
 JAMF = False
+PLIST_NAME = 'com.apple.launchservices.secure.plist'
+PLIST_RELATIVE_LOCATION = 'Library/Preferences/com.apple.LaunchServices/'
+USER_TEMPLATE_LOCATION = '/Library/User Template/English.lproj'
+USER_HOMES_LOCATION = '/Users'
+TMP_PREFIX = 'msda_tmp_'
 
 # Functions
 def process_args(arguments):
@@ -33,6 +37,12 @@ def process_args(arguments):
 		epilog='Please email {} with any issues'.format(
 			__email__,
 		)
+	)
+	parser.add_argument(
+		'mode',
+		help='the mode in which to run this script',
+		choices=['set'],
+		type=str,
 	)
 	parser.add_argument(
 		'app_id',
@@ -82,6 +92,15 @@ def _create_plist_parents(plist_path):
 	# create the parent directories for the specified plist
 	os.makedirs(parent_path)
 	return plist_path
+
+def create_user_ls_path(username):
+	path = os.path.join(
+		USER_HOMES_LOCATION,
+		username,
+		PLIST_RELATIVE_LOCATION,
+		PLIST_NAME
+	)
+	return path
 
 
 # Classes
@@ -243,11 +262,25 @@ class LaunchServices(object):
 		return new_lshandler
 
 
-def main(arguments):
-	if JAMF:
-		args = process_args(arguments[2:])
+def main(arguments, user_plist=None):
+	args = process_args(arguments)
+
+	handler = LSHandler(
+		app_id=args.app_id,
+		uti=args.uti[0][0],
+		role=args.uti[0][1],
+	)
+
+	if user_plist:
+		plist_path = user_plist
 	else:
-		args = process_args(arguments)
+		pass
+		# plist_path = create_user_ls_path(getuser())
+
+	ls = LaunchServices(plist_path)
+	ls.set_handler(handler)
+	ls.write()
+
 	print(args)
 
 if __name__ == '__main__':

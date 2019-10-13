@@ -2,13 +2,16 @@
 
 from __future__ import print_function
 
+import unittest
+from unittest import TestCase
+
+from getpass import getuser
 import imp
 import os
 from plistlib import readPlist
 import shutil
 import sys
 import tempfile
-import unittest
 
 from test_settings import *
 from test_utils import *
@@ -18,7 +21,7 @@ msda = imp.load_source('msda', os.path.join(
 )
 
 
-class TestLSHandlerObject(unittest.TestCase):
+class TestLSHandlerObject(TestCase):
 
 	def test_can_generate_LSHandler_for_uti(self):
 		comparison_dict = uti_lshandler_dict(
@@ -43,7 +46,7 @@ class TestLSHandlerObject(unittest.TestCase):
 		self.assertEqual(dict(https_lshandler), comparison_dict)
 
 
-class TestLSHandlerObjectEquality(unittest.TestCase):
+class TestLSHandlerObjectEquality(TestCase):
 
 	html_all = msda.LSHandler(
 		app_id='org.company2.fakebrowser',
@@ -90,7 +93,7 @@ class TestLSHandlerObjectEquality(unittest.TestCase):
 		self.assertEqual(self.html_all, self.html_viewer1)
 
 
-class TestLaunchServicesObject(unittest.TestCase):
+class TestLaunchServicesObject(TestCase):
 
 	def setUp(self):
 		self.tmp = tempfile.mkdtemp(prefix=TMP_PREFIX)
@@ -240,15 +243,53 @@ class TestLaunchServicesObject(unittest.TestCase):
 		)
 
 		self.assertNotIn(handler, ls.handlers)
-
 		ls.set_handler(handler)
-
 		self.assertIn(handler, ls.handlers)
 
 
-class FunctionalTests(unittest.TestCase):
+class ArgumentTests(TestCase):
 
 	pass
+
+
+class FunctionalTests(TestCase):
+
+	def setUp(self):
+		self.tmp = tempfile.mkdtemp(prefix=TMP_PREFIX)
+		self.user_ls = self.seed_plist(BINARY_PLIST)
+		self.template_ls = self.seed_plist(SIMPLE_BINARY_PLIST)
+
+	def tearDown(self):
+		shutil.rmtree(self.tmp)
+
+	def seed_plist(self, plist_name):
+		src = os.path.join(THIS_FILE, 'assets', plist_name)
+		dest = os.path.join(self.tmp, plist_name)
+		shutil.copy(src, dest)
+		return dest
+
+	def test_set_single_uti_handler_for_current_user(self):
+		# Set up
+		app_id = 'com.techgiant.bestbrowser'
+		uti = 'public.html'
+		role = 'viewer'
+
+		ls = msda.LaunchServices(self.user_ls)
+
+		self.assertNotIn(app_id, ls.app_ids)
+
+		arguments = [
+			'set',
+			app_id,
+			'-u', uti, role,
+		]
+
+		msda.main(arguments, user_plist=self.user_ls)
+
+		ls = msda.LaunchServices(self.user_ls)
+
+		self.assertIn(app_id, ls.app_ids)
+
 
 if __name__ == '__main__':
     unittest.main()
