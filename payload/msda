@@ -265,6 +265,12 @@ class LaunchServices(object):
 def main(arguments, user_plist=None):
 	args = process_args(arguments)
 
+	# combine submitted UTIs and protocols
+	if not args.uti:
+		args.uti = []
+	if args.protocol:
+		args.uti += [ [p, None] for p in args.protocol ]
+
 	handler = LSHandler(
 		app_id=args.app_id,
 		uti=args.uti[0][0],
@@ -280,8 +286,6 @@ def main(arguments, user_plist=None):
 	ls = LaunchServices(plist_path)
 	ls.set_handler(handler)
 	ls.write()
-
-	print(args)
 
 if __name__ == '__main__':
 	sys.exit(main(sys.argv[1:]))

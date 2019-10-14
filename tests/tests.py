@@ -290,6 +290,27 @@ class FunctionalTests(TestCase):
 
 		self.assertIn(app_id, ls.app_ids)
 
+	def test_set_single_protocol_handler_for_current_user(self):
+		# Set up
+		app_id = 'com.techgiant.bestbrowser'
+		uti = 'https'
+
+		ls = msda.LaunchServices(self.user_ls)
+
+		self.assertNotIn(app_id, ls.app_ids)
+
+		arguments = [
+			'set',
+			app_id,
+			'-p', uti,
+		]
+
+		msda.main(arguments, user_plist=self.user_ls)
+
+		ls.read()
+
+		self.assertIn(app_id, ls.app_ids)
+
 
 if __name__ == '__main__':
     unittest.main()
