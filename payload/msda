@@ -139,7 +139,8 @@ class LSHandler(object):
 		# presence of periods
 		if '.' in self.uti:
 			self._type = 'ContentType'
-			self.role = kwargs.get('role', 'all').lower()
+			self.role = kwargs.get('role') or 'all'
+			self.role = self.role.lower()
 		else:
 			self._type = 'URLScheme'
 			self.role = 'all'
@@ -265,18 +266,6 @@ class LaunchServices(object):
 def main(arguments, user_plist=None):
 	args = process_args(arguments)
 
-	# combine submitted UTIs and protocols
-	if not args.uti:
-		args.uti = []
-	if args.protocol:
-		args.uti += [ [p, None] for p in args.protocol ]
-
-	handler = LSHandler(
-		app_id=args.app_id,
-		uti=args.uti[0][0],
-		role=args.uti[0][1],
-	)
-
 	if user_plist:
 		plist_path = user_plist
 	else:
@@ -284,7 +273,21 @@ def main(arguments, user_plist=None):
 		# plist_path = create_user_ls_path(getuser())
 
 	ls = LaunchServices(plist_path)
-	ls.set_handler(handler)
+
+	# combine submitted UTIs and protocols
+	if not args.uti:
+		args.uti = []
+	if args.protocol:
+		args.uti += [ [p, None] for p in args.protocol ]
+
+	for uti in args.uti:
+		handler = LSHandler(
+			app_id=args.app_id,
+			uti=uti[0],
+			role=uti[1],
+		)
+		ls.set_handler(handler)
+
 	ls.write()
 
 if __name__ == '__main__':

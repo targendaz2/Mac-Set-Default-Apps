@@ -65,6 +65,7 @@ def fake_role(all=False):
 def lshandler_factory(num=1, all=True, uti=False, protocol=False):
 	app_id = fake_app_id()
 	handlers = []
+	utis = []
 	for n in range(num):
 		rand_num = random()
 		if rand_num > 0.5 or uti:

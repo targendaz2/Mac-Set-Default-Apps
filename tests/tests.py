@@ -9,6 +9,7 @@ from getpass import getuser
 import imp
 import os
 from plistlib import readPlist
+from random import randint, random
 import shutil
 import sys
 import tempfile
@@ -252,7 +253,7 @@ class FunctionalTests(TestCase):
 
 	def setUp(self):
 		self.tmp = tempfile.mkdtemp(prefix=TMP_PREFIX)
-		self.user_ls = self.seed_plist(BINARY_PLIST)
+		self.user_ls = self.seed_plist(SIMPLE_BINARY_PLIST)
 		self.template_ls = self.seed_plist(SIMPLE_BINARY_PLIST)
 
 	def tearDown(self):
@@ -260,7 +261,7 @@ class FunctionalTests(TestCase):
 
 	def seed_plist(self, plist_name):
 		src = os.path.join(THIS_FILE, 'assets', plist_name)
-		dest = os.path.join(self.tmp, plist_name)
+		dest = os.path.join(self.tmp, str(random()) + '_' + plist_name)
 		shutil.copy(src, dest)
 		return dest
 
@@ -268,7 +269,7 @@ class FunctionalTests(TestCase):
 		handler = lshandler_factory(uti=True)[0]
 		ls = msda.LaunchServices(self.user_ls)
 
-		self.assertNotIn(handler.app_id, ls.app_ids)
+		self.assertNotIn(handler, ls.handlers)
 
 		arguments = [
 			'set',
@@ -278,13 +279,13 @@ class FunctionalTests(TestCase):
 		msda.main(arguments, user_plist=self.user_ls)
 
 		ls.read()
-		self.assertIn(handler.app_id, ls.app_ids)
+		self.assertIn(handler, ls.handlers)
 
 	def test_set_single_protocol_handler_for_current_user(self):
 		handler = lshandler_factory(protocol=True)[0]
 		ls = msda.LaunchServices(self.user_ls)
 
-		self.assertNotIn(handler.app_id, ls.app_ids)
+		self.assertNotIn(handler, ls.handlers)
 
 		arguments = [
 			'set',
@@ -294,7 +295,27 @@ class FunctionalTests(TestCase):
 		msda.main(arguments, user_plist=self.user_ls)
 
 		ls.read()
-		self.assertIn(handler.app_id, ls.app_ids)
+		self.assertIn(handler, ls.handlers)
+
+	def test_set_multiple_uti_handlers_for_current_user(self):
+		handlers = lshandler_factory(uti=True, num=randint(3, 6))
+		ls = msda.LaunchServices(self.user_ls)
+
+		arguments = ['set', handlers[0].app_id]
+		for handler in handlers:
+			print(handler, handler.app_id, handler.uti, handler.role)
+			self.assertNotIn(handler, ls.handlers)
+			self.assertNotIn(handler.app_id, ls.app_ids)
+
+			arguments.extend([
+				'-u', handler.uti, handler.role,
+			])
+		msda.main(arguments, user_plist=self.user_ls)
+
+		ls.read()
+		for handler in handlers:
+			self.assertIn(handler, ls.handlers)
+			self.assertIn(handler.app_id, ls.app_ids)
 
 
 if __name__ == '__main__':
