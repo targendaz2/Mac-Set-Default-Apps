@@ -236,11 +236,7 @@ class TestLaunchServicesObject(TestCase):
 
 	def test_can_set_LSHandler_from_object(self):
 		ls = msda.LaunchServices(self.seed_plist(SIMPLE_BINARY_PLIST))
-		handler = msda.LSHandler(
-			app_id='com.company.fakebrowser',
-			uti='public.html',
-			role='all',
-		)
+		handler = lshandler_factory(all=True)
 
 		self.assertNotIn(handler, ls.handlers)
 		ls.set_handler(handler)
@@ -269,47 +265,36 @@ class FunctionalTests(TestCase):
 		return dest
 
 	def test_set_single_uti_handler_for_current_user(self):
-		# Set up
-		app_id = 'com.techgiant.bestbrowser'
-		uti = 'public.html'
-		role = 'viewer'
-
+		handler = lshandler_factory(uti=True)[0]
 		ls = msda.LaunchServices(self.user_ls)
 
-		self.assertNotIn(app_id, ls.app_ids)
+		self.assertNotIn(handler.app_id, ls.app_ids)
 
 		arguments = [
 			'set',
-			app_id,
-			'-u', uti, role,
+			handler.app_id,
+			'-u', handler.uti, handler.role,
 		]
-
 		msda.main(arguments, user_plist=self.user_ls)
 
 		ls.read()
-
-		self.assertIn(app_id, ls.app_ids)
+		self.assertIn(handler.app_id, ls.app_ids)
 
 	def test_set_single_protocol_handler_for_current_user(self):
-		# Set up
-		app_id = 'com.techgiant.bestbrowser'
-		uti = 'https'
-
+		handler = lshandler_factory(protocol=True)[0]
 		ls = msda.LaunchServices(self.user_ls)
 
-		self.assertNotIn(app_id, ls.app_ids)
+		self.assertNotIn(handler.app_id, ls.app_ids)
 
 		arguments = [
 			'set',
-			app_id,
-			'-p', uti,
+			handler.app_id,
+			'-p', handler.uti,
 		]
-
 		msda.main(arguments, user_plist=self.user_ls)
 
 		ls.read()
-
-		self.assertIn(app_id, ls.app_ids)
+		self.assertIn(handler.app_id, ls.app_ids)
 
 
 if __name__ == '__main__':

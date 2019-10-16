@@ -61,6 +61,29 @@ def fake_role(all=False):
 		roles.append('all')
 	return choice(roles)
 
+# LSHandler Factories
+def lshandler_factory(num=1, all=True, uti=False, protocol=False):
+	app_id = fake_app_id()
+	handlers = []
+	for n in range(num):
+		rand_num = random()
+		if rand_num > 0.5 or uti:
+			uti = fake_uti()
+			role = fake_role(all=all)
+			handler = msda.LSHandler(
+				app_id=app_id,
+				uti=uti,
+				role=role
+			)
+		elif rand_num <= 0.5 or protocol:
+			uti = fake_protocol()
+			handler = msda.LSHandler(
+				app_id=app_id,
+				uti=uti,
+			)
+		handlers.append(handler)
+	return handlers
+
 # Sample LSHandlers
 html_viewer_lshandler = msda.LSHandler(
 	app_id=fake_app_id(),
