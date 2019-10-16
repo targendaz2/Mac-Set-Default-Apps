@@ -306,9 +306,7 @@ class FunctionalTests(TestCase):
 			self.assertNotIn(handler, ls.handlers)
 			self.assertNotIn(handler.app_id, ls.app_ids)
 
-			arguments.extend([
-				'-u', handler.uti, handler.role,
-			])
+			arguments.extend(['-u', handler.uti, handler.role,])
 		msda.main(arguments, user_plist=self.user_ls)
 
 		ls.read()
@@ -325,9 +323,27 @@ class FunctionalTests(TestCase):
 			self.assertNotIn(handler, ls.handlers)
 			self.assertNotIn(handler.app_id, ls.app_ids)
 
-			arguments.extend([
-				'-p', handler.uti,
-			])
+			arguments.extend(['-p', handler.uti])
+		msda.main(arguments, user_plist=self.user_ls)
+
+		ls.read()
+		for handler in handlers:
+			self.assertIn(handler, ls.handlers)
+			self.assertIn(handler.app_id, ls.app_ids)
+
+	def test_set_multiple_protocol_and_uti_handlers_for_current_user(self):
+		handlers = lshandler_factory(num=randint(3, 6))
+		ls = msda.LaunchServices(self.user_ls)
+
+		arguments = ['set', handlers[0].app_id]
+		for handler in handlers:
+			self.assertNotIn(handler, ls.handlers)
+			self.assertNotIn(handler.app_id, ls.app_ids)
+
+			if '.' in handler.uti:
+				arguments.extend(['-u', handler.uti, handler.role])
+			else:
+				arguments.extend(['-p', handler.uti])
 		msda.main(arguments, user_plist=self.user_ls)
 
 		ls.read()
