@@ -4,3 +4,4 @@ __pycache__
 *.pyc
 payload/*c
 .vscode/
+/env/
