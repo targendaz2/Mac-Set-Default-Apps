@@ -15,24 +15,7 @@ fake.add_provider(file)
 fake.add_provider(internet)
 fake.add_provider(lorem)
 
-# Sample LSHandlers
-html_viewer_lshandler = msda.LSHandler(
-	app_id='com.company.fakebrowser',
-	uti='public.html',
-	role='viewer'
-)
-
-https_lshandler = msda.LSHandler(
-	app_id='com.company.fakebrowser',
-	uti='https',
-)
-
-url_all_lshandler = msda.LSHandler(
-	app_id='com.company.fakebrowser',
-	uti='public.url',
-)
-
-# Functions
+# Faker Functions
 def fake_app_id():
 	app_id = '{}.{}.{}'.format(
 		fake.tld(),
@@ -40,18 +23,27 @@ def fake_app_id():
 		fake.word(),
 	)
 	if random() > 0.1:
-		return app_id
-	return app_id + '.' + fake.word()
+		return app_id 					# 90% chance: com.company.app
+	return app_id + '.' + fake.word()	# 10% chance: com.company.app.pro
 
 def fake_uti():
-	if random() > 0.1:
-		return 'public.' + fake.file_extension()
+	if random() > 0.25:
+		return 'public.{}'.format(		# 75% chance: public.html
+			fake.file_extension()
+		)
 	uti = '{}.{}.{}'.format(
 		fake.tld(),
 		fake.domain_word(),
 		fake.file_extension(),
 	)
-	return uti
+	if random() > 0.8:
+		return uti						# 20% chance: com.company.file
+	return '{}.{}.{}.{}'.format(		#  5% chance: com.company.app.file
+		fake.tld(),
+		fake.domain_word(),
+		fake.word(),
+		fake.file_extension(),
+	)
 
 def fake_protocol():
 	protocols = [
@@ -69,6 +61,25 @@ def fake_role(all=False):
 		roles.append('all')
 	return choice(roles)
 
+# Sample LSHandlers
+html_viewer_lshandler = msda.LSHandler(
+	app_id=fake_app_id(),
+	uti=fake_uti(),
+	role=fake_role(),
+)
+
+https_lshandler = msda.LSHandler(
+	app_id=fake_app_id(),
+	uti=fake_protocol(),
+)
+
+url_all_lshandler = msda.LSHandler(
+	app_id=fake_app_id(),
+	uti=fake_uti(),
+)
+
+
+# Sample LSHandler Dicts
 def protocol_lshandler_dict(app_id, uti):
 	role_key = 'LSHandlerRoleAll'
 	dict_ = {
