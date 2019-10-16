@@ -68,7 +68,7 @@ def lshandler_factory(num=1, all=True, uti=False, protocol=False):
 	utis = []
 	for n in range(num):
 		rand_num = random()
-		if rand_num > 0.5 or uti:
+		if (rand_num > 0.5 and not uti) or uti:
 			uti = fake_uti()
 			role = fake_role(all=all)
 			handler = msda.LSHandler(
@@ -76,7 +76,7 @@ def lshandler_factory(num=1, all=True, uti=False, protocol=False):
 				uti=uti,
 				role=role
 			)
-		elif rand_num <= 0.5 or protocol:
+		if (rand_num <= 0.5 and not protocol) or protocol:
 			uti = fake_protocol()
 			handler = msda.LSHandler(
 				app_id=app_id,

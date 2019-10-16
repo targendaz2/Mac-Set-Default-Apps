@@ -303,12 +303,30 @@ class FunctionalTests(TestCase):
 
 		arguments = ['set', handlers[0].app_id]
 		for handler in handlers:
-			print(handler, handler.app_id, handler.uti, handler.role)
 			self.assertNotIn(handler, ls.handlers)
 			self.assertNotIn(handler.app_id, ls.app_ids)
 
 			arguments.extend([
 				'-u', handler.uti, handler.role,
+			])
+		msda.main(arguments, user_plist=self.user_ls)
+
+		ls.read()
+		for handler in handlers:
+			self.assertIn(handler, ls.handlers)
+			self.assertIn(handler.app_id, ls.app_ids)
+
+	def test_set_multiple_protocol_handlers_for_current_user(self):
+		handlers = lshandler_factory(protocol=True, num=randint(3, 6))
+		ls = msda.LaunchServices(self.user_ls)
+
+		arguments = ['set', handlers[0].app_id]
+		for handler in handlers:
+			self.assertNotIn(handler, ls.handlers)
+			self.assertNotIn(handler.app_id, ls.app_ids)
+
+			arguments.extend([
+				'-p', handler.uti,
 			])
 		msda.main(arguments, user_plist=self.user_ls)
 
