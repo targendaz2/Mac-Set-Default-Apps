@@ -254,14 +254,16 @@ class FunctionalTests(TestCase):
 	def setUp(self):
 		self.tmp = tempfile.mkdtemp(prefix=TMP_PREFIX)
 		self.user_ls = self.seed_plist(SIMPLE_BINARY_PLIST)
-		self.template_ls = self.seed_plist(SIMPLE_BINARY_PLIST)
+		self.template_ls = os.path.join(
+			self.tmp, 'com.apple.LaunchServices.Secure.plist'
+		)
 
 	def tearDown(self):
 		shutil.rmtree(self.tmp)
 
 	def seed_plist(self, plist_name):
 		src = os.path.join(THIS_FILE, 'assets', plist_name)
-		dest = os.path.join(self.tmp, str(random()) + '_' + plist_name)
+		dest = os.path.join(self.tmp, plist_name)
 		shutil.copy(src, dest)
 		return dest
 
@@ -350,6 +352,30 @@ class FunctionalTests(TestCase):
 		for handler in handlers:
 			self.assertIn(handler, ls.handlers)
 			self.assertIn(handler.app_id, ls.app_ids)
+
+	def test_set_handlers_for_user_template(self):
+		handlers = lshandler_factory(num=randint(4, 6))
+		user_ls = msda.LaunchServices(self.user_ls)
+		template_ls = msda.LaunchServices(self.template_ls)
+
+		arguments = ['set', '-fut', handlers[0].app_id]
+		for handler in handlers:
+			self.assertNotIn(handler, template_ls.handlers)
+			self.assertNotIn(handler.app_id, template_ls.app_ids)
+
+			if '.' in handler.uti:
+				arguments.extend(['-u', handler.uti, handler.role])
+			else:
+				arguments.extend(['-p', handler.uti])
+		msda.main(arguments,
+			user_plist=self.user_ls,
+			template_plist=self.template_ls,
+		)
+
+		template_ls.read()
+		for handler in handlers:
+			self.assertIn(handler, template_ls.handlers)
+			self.assertIn(handler.app_id, template_ls.app_ids)
 
 
 if __name__ == '__main__':

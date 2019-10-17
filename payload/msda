@@ -50,6 +50,11 @@ def process_args(arguments):
 		type=str,
 	)
 	parser.add_argument(
+		'-fut',
+		help='updates the user template\'s launch services',
+		action='store_true',
+	)
+	parser.add_argument(
 		'-p', '--protocol',
 		help='protocols to associate with the given app ID',
 		action='append',
@@ -263,32 +268,36 @@ class LaunchServices(object):
 		return new_lshandler
 
 
-def main(arguments, user_plist=None):
+def main(arguments, user_plist=None, template_plist=None):
+	# Process arguments
 	args = process_args(arguments)
 
+	# Collect plists
+	plists = []
 	if user_plist:
-		plist_path = user_plist
-	else:
-		pass
-		# plist_path = create_user_ls_path(getuser())
+		plists.append(user_plist)
+	if template_plist:
+		plists.append(template_plist)
 
-	ls = LaunchServices(plist_path)
+	# Process plists
+	for plist in plists:
+		ls = LaunchServices(plist)
 
-	# combine submitted UTIs and protocols
-	if not args.uti:
-		args.uti = []
-	if args.protocol:
-		args.uti += [ [p, None] for p in args.protocol ]
+		# combine submitted UTIs and protocols
+		if not args.uti:
+			args.uti = []
+		if args.protocol:
+			args.uti += [ [p, None] for p in args.protocol ]
 
-	for uti in args.uti:
-		handler = LSHandler(
-			app_id=args.app_id,
-			uti=uti[0],
-			role=uti[1],
-		)
-		ls.set_handler(handler)
+		for uti in args.uti:
+			handler = LSHandler(
+				app_id=args.app_id,
+				uti=uti[0],
+				role=uti[1],
+			)
+			ls.set_handler(handler)
 
-	ls.write()
+		ls.write()
 
 if __name__ == '__main__':
 	sys.exit(main(sys.argv[1:]))
