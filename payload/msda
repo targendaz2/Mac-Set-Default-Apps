@@ -283,19 +283,19 @@ def main(arguments, user_plist=None, template_plist=None):
 	for plist in plists:
 		ls = LaunchServices(plist)
 
-		# combine submitted UTIs and protocols
+		# Combine submitted UTIs and protocols
 		if not args.uti:
 			args.uti = []
 		if args.protocol:
 			args.uti += [ [p, None] for p in args.protocol ]
 
+		# Create and set handlers
 		for uti in args.uti:
-			handler = LSHandler(
+			ls.set_handler(
 				app_id=args.app_id,
 				uti=uti[0],
 				role=uti[1],
 			)
-			ls.set_handler(handler)
 
 		ls.write()
 
