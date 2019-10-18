@@ -361,8 +361,10 @@ class FunctionalTests(TestCase):
 			self.assertIn(handler, ls.handlers)
 			self.assertIn(handler.app_id, ls.app_ids)
 
-	def test_set_handlers_for_user_template(self, user_fn):
+	@mock.patch('msda.create_template_ls_path')
+	def test_set_handlers_for_user_template(self, template_fn, user_fn):
 		user_fn.return_value = self.user_ls
+		template_fn.return_value = self.template_ls
 		handlers = lshandler_factory(num=randint(4, 6))
 		user_ls = msda.LaunchServices(self.user_ls)
 		template_ls = msda.LaunchServices(self.template_ls)
@@ -376,9 +378,7 @@ class FunctionalTests(TestCase):
 				arguments.extend(['-u', handler.uti, handler.role])
 			else:
 				arguments.extend(['-p', handler.uti])
-		msda.main(arguments,
-			template_plist=self.template_ls,
-		)
+		msda.main(arguments)
 
 		template_ls.read()
 		for handler in handlers:

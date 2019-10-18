@@ -107,6 +107,14 @@ def create_user_ls_path(username):
 	)
 	return path
 
+def create_template_ls_path():
+	path = os.path.join(
+		USER_TEMPLATE_LOCATION,
+		PLIST_RELATIVE_LOCATION,
+		PLIST_NAME
+	)
+	return path
+
 
 # Classes
 class LSHandler(object):
@@ -268,7 +276,7 @@ class LaunchServices(object):
 		return new_lshandler
 
 
-def main(arguments, template_plist=None):
+def main(arguments):
 	# Process arguments
 	args = process_args(arguments)
 
@@ -279,8 +287,8 @@ def main(arguments, template_plist=None):
 	plists = []
 	if current_username:
 		plists.append(create_user_ls_path(current_username))
-	if template_plist:
-		plists.append(template_plist)
+	if args.fut:
+		plists.append(create_template_ls_path())
 
 	# Process plists
 	for plist in plists:
