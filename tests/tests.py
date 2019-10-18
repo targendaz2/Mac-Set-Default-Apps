@@ -258,9 +258,10 @@ class FunctionalTests(TestCase):
 		self.tmp = tempfile.mkdtemp(prefix=TMP_PREFIX)
 		self.user_ls_path = self.seed_plist(SIMPLE_BINARY_PLIST)
 		self.user_ls = msda.LaunchServices(self.user_ls_path)
-		self.template_ls = os.path.join(
+		self.template_ls_path = os.path.join(
 			self.tmp, 'com.apple.LaunchServices.Secure.plist'
 		)
+		self.template_ls = msda.LaunchServices(self.template_ls_path)
 
 	def tearDown(self):
 		shutil.rmtree(self.tmp)
@@ -360,14 +361,13 @@ class FunctionalTests(TestCase):
 	@mock.patch('msda.create_template_ls_path')
 	def test_set_handlers_for_user_template(self, template_fn, user_fn):
 		user_fn.return_value = self.user_ls_path
-		template_fn.return_value = self.template_ls
+		template_fn.return_value = self.template_ls_path
 		handlers = lshandler_factory(num=randint(4, 6))
-		template_ls = msda.LaunchServices(self.template_ls)
 
 		arguments = ['set', '-fut', handlers[0].app_id]
 		for handler in handlers:
-			self.assertNotIn(handler, template_ls.handlers)
-			self.assertNotIn(handler.app_id, template_ls.app_ids)
+			self.assertNotIn(handler, self.template_ls.handlers)
+			self.assertNotIn(handler.app_id, self.template_ls.app_ids)
 
 			if '.' in handler.uti:
 				arguments.extend(['-u', handler.uti, handler.role])
@@ -375,10 +375,10 @@ class FunctionalTests(TestCase):
 				arguments.extend(['-p', handler.uti])
 		msda.main(arguments)
 
-		template_ls.read()
+		self.template_ls.read()
 		for handler in handlers:
-			self.assertIn(handler, template_ls.handlers)
-			self.assertIn(handler.app_id, template_ls.app_ids)
+			self.assertIn(handler, self.template_ls.handlers)
+			self.assertIn(handler.app_id, self.template_ls.app_ids)
 
 
 if __name__ == '__main__':
