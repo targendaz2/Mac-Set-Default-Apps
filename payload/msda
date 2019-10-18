@@ -285,7 +285,7 @@ def main(arguments):
 
 	# Collect plists
 	plists = []
-	if current_username:
+	if current_username != '':
 		plists.append(create_user_ls_path(current_username))
 	if args.fut:
 		plists.append(create_template_ls_path())
