@@ -359,13 +359,15 @@ class FunctionalTests(TestCase):
 			self.assertIn(handler.app_id, self.user_ls.app_ids)
 
 	@mock.patch('msda.create_template_ls_path')
-	def test_set_handlers_for_user_template(self, template_fn, user_fn):
+	def test_set_handlers_for_current_user_and_template(self, template_fn, user_fn):
 		user_fn.return_value = self.user_ls_path
 		template_fn.return_value = self.template_ls_path
 		handlers = lshandler_factory(num=randint(4, 6))
 
 		arguments = ['set', '-fut', handlers[0].app_id]
 		for handler in handlers:
+			self.assertNotIn(handler, self.user_ls.handlers)
+			self.assertNotIn(handler.app_id, self.user_ls.app_ids)
 			self.assertNotIn(handler, self.template_ls.handlers)
 			self.assertNotIn(handler.app_id, self.template_ls.app_ids)
 
@@ -375,8 +377,11 @@ class FunctionalTests(TestCase):
 				arguments.extend(['-p', handler.uti])
 		msda.main(arguments)
 
+		self.user_ls.read()
 		self.template_ls.read()
 		for handler in handlers:
+			self.assertIn(handler, self.user_ls.handlers)
+			self.assertIn(handler.app_id, self.user_ls.app_ids)
 			self.assertIn(handler, self.template_ls.handlers)
 			self.assertIn(handler.app_id, self.template_ls.app_ids)
 
