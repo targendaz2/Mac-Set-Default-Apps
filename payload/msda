@@ -15,22 +15,51 @@ from getpass import getuser
 from plistlib import readPlist, writePlist
 from tempfile import NamedTemporaryFile
 
+###############################################################################
+#
+# User-Editable Settings
+#
+###############################################################################
+
+JAMF = False  			  # Is this app being used as a Jamf script?
+TMP_PREFIX = 'msda_tmp_'  # Prefixes tempoaray files created by this app
+
+
+###############################################################################
+#
+# App Information
+#
+###############################################################################
+
 __author__ = 'David G. Rosenberg'
 __copyright__ = 'Copyright (c), Mac Set Default Apps'
 __license__ = 'MIT'
 __version__ = '1.0.0'
 __email__ = 'dgrosenberg@icloud.com'
 
-# Settings
-JAMF = False
+
+###############################################################################
+#
+# Settings Users Shouldn't Edit
+#
+###############################################################################
+
 PLIST_NAME = 'com.apple.launchservices.secure.plist'
 PLIST_RELATIVE_LOCATION = 'Library/Preferences/com.apple.LaunchServices/'
 USER_TEMPLATE_LOCATION = '/Library/User Template/English.lproj'
 USER_HOMES_LOCATION = '/Users'
-TMP_PREFIX = 'msda_tmp_'
 
-# Functions
+
+###############################################################################
+#
+# Argument Processing
+#
+###############################################################################
+
 def process_args(arguments):
+	"""
+	Processes submitted arguments
+	"""
 	parser = ArgumentParser(
 		description=__doc__,
 		formatter_class=RawDescriptionHelpFormatter,
@@ -79,7 +108,14 @@ def process_args(arguments):
 
 	return parser.parse_args(arguments)
 
-def _create_plist_parents(plist_path):
+
+###############################################################################
+#
+# Plist Processing Functions
+#
+###############################################################################
+
+def create_plist_parents(plist_path):
 	"""
 	Creates the directory structure if the provided plist doesn't exist
 	"""
@@ -116,7 +152,12 @@ def create_template_ls_path():
 	return path
 
 
-# Classes
+###############################################################################
+#
+# Class Definitions
+#
+###############################################################################
+
 class LSHandler(object):
 
 	def _from_dict(self, from_dict):
@@ -240,7 +281,7 @@ class LaunchServices(object):
 			plist = self.plist
 
 		# create parents directories if they don't exist
-		_create_plist_parents(plist)
+		create_plist_parents(plist)
 
 		with NamedTemporaryFile(prefix=TMP_PREFIX, delete=True) as tmp_plist:
 			# write the LaunchServices object to a temporary file
@@ -276,9 +317,19 @@ class LaunchServices(object):
 		return new_lshandler
 
 
+###############################################################################
+#
+# Main Function
+#
+###############################################################################
+
 def main(arguments):
 	# Process arguments
+	global verbose
 	args = process_args(arguments)
+	verbose = args.verbose
+
+	# print('Setting "{}" as a default handler for...'.format(args.app_id))
 
 	# Check for current user
 	current_username = getuser()
