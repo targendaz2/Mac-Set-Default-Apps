@@ -268,14 +268,17 @@ class LaunchServices(object):
 		return new_lshandler
 
 
-def main(arguments, user_plist=None, template_plist=None):
+def main(arguments, template_plist=None):
 	# Process arguments
 	args = process_args(arguments)
 
+	# Check for current user
+	current_username = getuser()
+
 	# Collect plists
 	plists = []
-	if user_plist:
-		plists.append(user_plist)
+	if current_username:
+		plists.append(create_user_ls_path(current_username))
 	if template_plist:
 		plists.append(template_plist)
 

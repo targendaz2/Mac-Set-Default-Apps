@@ -14,6 +14,8 @@ import shutil
 import sys
 import tempfile
 
+import mock
+
 from test_settings import *
 from test_utils import *
 
@@ -249,6 +251,7 @@ class ArgumentTests(TestCase):
 	pass
 
 
+@mock.patch('msda.create_user_ls_path')
 class FunctionalTests(TestCase):
 
 	def setUp(self):
@@ -267,7 +270,8 @@ class FunctionalTests(TestCase):
 		shutil.copy(src, dest)
 		return dest
 
-	def test_set_single_uti_handler_for_current_user(self):
+	def test_set_single_uti_handler_for_current_user(self, user_fn):
+		user_fn.return_value = self.user_ls
 		handler = lshandler_factory(uti=True)[0]
 		ls = msda.LaunchServices(self.user_ls)
 
@@ -278,12 +282,13 @@ class FunctionalTests(TestCase):
 			handler.app_id,
 			'-u', handler.uti, handler.role,
 		]
-		msda.main(arguments, user_plist=self.user_ls)
+		msda.main(arguments)
 
 		ls.read()
 		self.assertIn(handler, ls.handlers)
 
-	def test_set_single_protocol_handler_for_current_user(self):
+	def test_set_single_protocol_handler_for_current_user(self, user_fn):
+		user_fn.return_value = self.user_ls
 		handler = lshandler_factory(protocol=True)[0]
 		ls = msda.LaunchServices(self.user_ls)
 
@@ -294,12 +299,13 @@ class FunctionalTests(TestCase):
 			handler.app_id,
 			'-p', handler.uti,
 		]
-		msda.main(arguments, user_plist=self.user_ls)
+		msda.main(arguments)
 
 		ls.read()
 		self.assertIn(handler, ls.handlers)
 
-	def test_set_multiple_uti_handlers_for_current_user(self):
+	def test_set_multiple_uti_handlers_for_current_user(self, user_fn):
+		user_fn.return_value = self.user_ls
 		handlers = lshandler_factory(uti=True, num=randint(3, 6))
 		ls = msda.LaunchServices(self.user_ls)
 
@@ -309,14 +315,15 @@ class FunctionalTests(TestCase):
 			self.assertNotIn(handler.app_id, ls.app_ids)
 
 			arguments.extend(['-u', handler.uti, handler.role,])
-		msda.main(arguments, user_plist=self.user_ls)
+		msda.main(arguments)
 
 		ls.read()
 		for handler in handlers:
 			self.assertIn(handler, ls.handlers)
 			self.assertIn(handler.app_id, ls.app_ids)
 
-	def test_set_multiple_protocol_handlers_for_current_user(self):
+	def test_set_multiple_protocol_handlers_for_current_user(self, user_fn):
+		user_fn.return_value = self.user_ls
 		handlers = lshandler_factory(protocol=True, num=randint(3, 6))
 		ls = msda.LaunchServices(self.user_ls)
 
@@ -326,14 +333,15 @@ class FunctionalTests(TestCase):
 			self.assertNotIn(handler.app_id, ls.app_ids)
 
 			arguments.extend(['-p', handler.uti])
-		msda.main(arguments, user_plist=self.user_ls)
+		msda.main(arguments)
 
 		ls.read()
 		for handler in handlers:
 			self.assertIn(handler, ls.handlers)
 			self.assertIn(handler.app_id, ls.app_ids)
 
-	def test_set_multiple_protocol_and_uti_handlers_for_current_user(self):
+	def test_set_multiple_protocol_and_uti_handlers_for_current_user(self, user_fn):
+		user_fn.return_value = self.user_ls
 		handlers = lshandler_factory(num=randint(3, 6))
 		ls = msda.LaunchServices(self.user_ls)
 
@@ -346,14 +354,15 @@ class FunctionalTests(TestCase):
 				arguments.extend(['-u', handler.uti, handler.role])
 			else:
 				arguments.extend(['-p', handler.uti])
-		msda.main(arguments, user_plist=self.user_ls)
+		msda.main(arguments)
 
 		ls.read()
 		for handler in handlers:
 			self.assertIn(handler, ls.handlers)
 			self.assertIn(handler.app_id, ls.app_ids)
 
-	def test_set_handlers_for_user_template(self):
+	def test_set_handlers_for_user_template(self, user_fn):
+		user_fn.return_value = self.user_ls
 		handlers = lshandler_factory(num=randint(4, 6))
 		user_ls = msda.LaunchServices(self.user_ls)
 		template_ls = msda.LaunchServices(self.template_ls)
@@ -368,7 +377,6 @@ class FunctionalTests(TestCase):
 			else:
 				arguments.extend(['-p', handler.uti])
 		msda.main(arguments,
-			user_plist=self.user_ls,
 			template_plist=self.template_ls,
 		)
 
