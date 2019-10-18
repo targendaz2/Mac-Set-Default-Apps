@@ -15,6 +15,7 @@ from getpass import getuser
 from plistlib import readPlist, writePlist
 from tempfile import NamedTemporaryFile
 
+
 ###############################################################################
 #
 # User-Editable Settings
@@ -103,7 +104,7 @@ def process_args(arguments):
 	parser.add_argument(
 		'--version',
 		help='display version number',
-		action='version',
+		action='store_true',
 	)
 
 	return parser.parse_args(arguments)
@@ -319,18 +320,10 @@ class LaunchServices(object):
 
 ###############################################################################
 #
-# Main Function
+# Main Functions
 #
 ###############################################################################
-
-def main(arguments):
-	# Process arguments
-	global verbose
-	args = process_args(arguments)
-	verbose = args.verbose
-
-	# print('Setting "{}" as a default handler for...'.format(args.app_id))
-
+def set_mode(args):
 	# Check for current user
 	current_username = getuser()
 
@@ -360,6 +353,15 @@ def main(arguments):
 			)
 
 		ls.write()
+	return 0
+
+def main(arguments):
+	# Process arguments
+	global verbose
+	args = process_args(arguments)
+	verbose = args.verbose
+
+	return set_mode(args)
 
 if __name__ == '__main__':
 	sys.exit(main(sys.argv[1:]))
