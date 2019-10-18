@@ -363,5 +363,9 @@ def main(arguments):
 
 	return set_mode(args)
 
+
 if __name__ == '__main__':
-	sys.exit(main(sys.argv[1:]))
+	starting_index = 1
+	# if JAMF:
+	# 	starting_index = 4
+	sys.exit(main(sys.argv[starting_index:]))
