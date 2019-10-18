@@ -256,7 +256,8 @@ class FunctionalTests(TestCase):
 
 	def setUp(self):
 		self.tmp = tempfile.mkdtemp(prefix=TMP_PREFIX)
-		self.user_ls = self.seed_plist(SIMPLE_BINARY_PLIST)
+		self.user_ls_path = self.seed_plist(SIMPLE_BINARY_PLIST)
+		self.user_ls = msda.LaunchServices(self.user_ls_path)
 		self.template_ls = os.path.join(
 			self.tmp, 'com.apple.LaunchServices.Secure.plist'
 		)
@@ -271,11 +272,10 @@ class FunctionalTests(TestCase):
 		return dest
 
 	def test_set_single_uti_handler_for_current_user(self, user_fn):
-		user_fn.return_value = self.user_ls
+		user_fn.return_value = self.user_ls_path
 		handler = lshandler_factory(uti=True)[0]
-		ls = msda.LaunchServices(self.user_ls)
 
-		self.assertNotIn(handler, ls.handlers)
+		self.assertNotIn(handler, self.user_ls.handlers)
 
 		arguments = [
 			'set',
@@ -284,15 +284,14 @@ class FunctionalTests(TestCase):
 		]
 		msda.main(arguments)
 
-		ls.read()
-		self.assertIn(handler, ls.handlers)
+		self.user_ls.read()
+		self.assertIn(handler, self.user_ls.handlers)
 
 	def test_set_single_protocol_handler_for_current_user(self, user_fn):
-		user_fn.return_value = self.user_ls
+		user_fn.return_value = self.user_ls_path
 		handler = lshandler_factory(protocol=True)[0]
-		ls = msda.LaunchServices(self.user_ls)
 
-		self.assertNotIn(handler, ls.handlers)
+		self.assertNotIn(handler, self.user_ls.handlers)
 
 		arguments = [
 			'set',
@@ -301,54 +300,51 @@ class FunctionalTests(TestCase):
 		]
 		msda.main(arguments)
 
-		ls.read()
-		self.assertIn(handler, ls.handlers)
+		self.user_ls.read()
+		self.assertIn(handler, self.user_ls.handlers)
 
 	def test_set_multiple_uti_handlers_for_current_user(self, user_fn):
-		user_fn.return_value = self.user_ls
+		user_fn.return_value = self.user_ls_path
 		handlers = lshandler_factory(uti=True, num=randint(3, 6))
-		ls = msda.LaunchServices(self.user_ls)
 
 		arguments = ['set', handlers[0].app_id]
 		for handler in handlers:
-			self.assertNotIn(handler, ls.handlers)
-			self.assertNotIn(handler.app_id, ls.app_ids)
+			self.assertNotIn(handler, self.user_ls.handlers)
+			self.assertNotIn(handler.app_id, self.user_ls.app_ids)
 
 			arguments.extend(['-u', handler.uti, handler.role,])
 		msda.main(arguments)
 
-		ls.read()
+		self.user_ls.read()
 		for handler in handlers:
-			self.assertIn(handler, ls.handlers)
-			self.assertIn(handler.app_id, ls.app_ids)
+			self.assertIn(handler, self.user_ls.handlers)
+			self.assertIn(handler.app_id, self.user_ls.app_ids)
 
 	def test_set_multiple_protocol_handlers_for_current_user(self, user_fn):
-		user_fn.return_value = self.user_ls
+		user_fn.return_value = self.user_ls_path
 		handlers = lshandler_factory(protocol=True, num=randint(3, 6))
-		ls = msda.LaunchServices(self.user_ls)
 
 		arguments = ['set', handlers[0].app_id]
 		for handler in handlers:
-			self.assertNotIn(handler, ls.handlers)
-			self.assertNotIn(handler.app_id, ls.app_ids)
+			self.assertNotIn(handler, self.user_ls.handlers)
+			self.assertNotIn(handler.app_id, self.user_ls.app_ids)
 
 			arguments.extend(['-p', handler.uti])
 		msda.main(arguments)
 
-		ls.read()
+		self.user_ls.read()
 		for handler in handlers:
-			self.assertIn(handler, ls.handlers)
-			self.assertIn(handler.app_id, ls.app_ids)
+			self.assertIn(handler, self.user_ls.handlers)
+			self.assertIn(handler.app_id, self.user_ls.app_ids)
 
 	def test_set_multiple_protocol_and_uti_handlers_for_current_user(self, user_fn):
-		user_fn.return_value = self.user_ls
+		user_fn.return_value = self.user_ls_path
 		handlers = lshandler_factory(num=randint(3, 6))
-		ls = msda.LaunchServices(self.user_ls)
 
 		arguments = ['set', handlers[0].app_id]
 		for handler in handlers:
-			self.assertNotIn(handler, ls.handlers)
-			self.assertNotIn(handler.app_id, ls.app_ids)
+			self.assertNotIn(handler, self.user_ls.handlers)
+			self.assertNotIn(handler.app_id, self.user_ls.app_ids)
 
 			if '.' in handler.uti:
 				arguments.extend(['-u', handler.uti, handler.role])
@@ -356,17 +352,16 @@ class FunctionalTests(TestCase):
 				arguments.extend(['-p', handler.uti])
 		msda.main(arguments)
 
-		ls.read()
+		self.user_ls.read()
 		for handler in handlers:
-			self.assertIn(handler, ls.handlers)
-			self.assertIn(handler.app_id, ls.app_ids)
+			self.assertIn(handler, self.user_ls.handlers)
+			self.assertIn(handler.app_id, self.user_ls.app_ids)
 
 	@mock.patch('msda.create_template_ls_path')
 	def test_set_handlers_for_user_template(self, template_fn, user_fn):
-		user_fn.return_value = self.user_ls
+		user_fn.return_value = self.user_ls_path
 		template_fn.return_value = self.template_ls
 		handlers = lshandler_factory(num=randint(4, 6))
-		user_ls = msda.LaunchServices(self.user_ls)
 		template_ls = msda.LaunchServices(self.template_ls)
 
 		arguments = ['set', '-fut', handlers[0].app_id]
