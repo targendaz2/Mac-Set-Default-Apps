@@ -22,8 +22,8 @@ from tempfile import NamedTemporaryFile
 #
 ###############################################################################
 
-JAMF = False  			  # Is this app being used as a Jamf script?
-TMP_PREFIX = 'msda_tmp_'  # Prefixes tempoaray files created by this app
+TMP_PREFIX = 'msda_tmp_'       # Prefixes tempoaray files created by this app
+USER_HOMES_LOCATION = '/Users' # Where users' home directories are located
 
 
 ###############################################################################
@@ -48,7 +48,6 @@ __email__ = 'dgrosenberg@icloud.com'
 PLIST_NAME = 'com.apple.launchservices.secure.plist'
 PLIST_RELATIVE_LOCATION = 'Library/Preferences/com.apple.LaunchServices/'
 USER_TEMPLATE_LOCATION = '/Library/User Template/English.lproj'
-USER_HOMES_LOCATION = '/Users'
 
 
 ###############################################################################
@@ -166,6 +165,9 @@ class LSHandler(object):
 		return compare_utis and compare_roles
 
 	def __ne__(self, other):
+		"""
+		Inverts the __eq__ function
+		"""
 		return not self == other
 
 	def __iter__(self):
@@ -264,6 +266,7 @@ class LaunchServices(object):
 # Main Functions
 #
 ###############################################################################
+
 def set_command(args):
 	# Check for current user
 	current_username = getuser()
@@ -296,7 +299,33 @@ def set_command(args):
 		ls.write()
 	return 0
 
+def jamf_set_command(args):
+	# Convert options into arguments
+	for option in args.options.split():
+		setattr(args, option, True)
+
+	# Convert UTIs and roles into form set_command can process
+	args.uti = []
+	for uti in args.utis[0]:
+		processed_uti = uti.split(', ')
+		processed_uti_len = len(processed_uti)
+
+		if processed_uti_len == 1:
+			args.uti.append([processed_uti[0], None])
+		else:
+			args.uti.append(processed_uti)
+
+	# Add protocol attribute for consistency with normal set args
+	args.protocol = []
+
+	# Call normal set function
+	return set_command(args)
+
 def main(arguments):
+	# Strip first 3 args for jamf-set command
+	if 'jamf-set' in arguments:
+		arguments = arguments[3:]
+
 	# Global parser setup
 	parser = ArgumentParser(
 		description=__doc__,
@@ -322,7 +351,7 @@ def main(arguments):
 		dest='command',
 	)
 
-	# "Set" parser setup
+	# "set" parser setup
 	set_parser = subparsers.add_parser(
 		'set',
 		help='set LSHandlers for a given App ID',
@@ -351,12 +380,34 @@ def main(arguments):
 		metavar=('UTI', 'ROLE'),
 	)
 
+	# "jamf-set" parser setup
+	set_parser = subparsers.add_parser(
+		'jamf-set',
+		help='set LSHandlers for a given App ID through Jamf',
+	)
+	set_parser.set_defaults(func=jamf_set_command)
+	set_parser.add_argument(
+		'app_id',
+		help='the identifier of the application to set as a default',
+		type=str,
+	)
+	set_parser.add_argument(
+		'options',
+		help='options affecting which plists are updated',
+		choices=('fut',),
+		type=str,
+	)
+	set_parser.add_argument(
+		'utis',
+		help='UTIs and/or protocols to associate with the given app ID',
+		action='append',
+		nargs='+',
+	)
+
+	# Run specified function with processed args
 	args = parser.parse_args(arguments)
 	return args.func(args)
 
 
 if __name__ == '__main__':
-	starting_index = 1
-	# if JAMF:
-	# 	starting_index = 4
-	sys.exit(main(sys.argv[starting_index:]))
+	sys.exit(main(sys.argv[1:]))
