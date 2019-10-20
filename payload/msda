@@ -276,6 +276,8 @@ class LaunchServices(object):
 ###############################################################################
 
 def set_command(args):
+	print('Setting "{}" as a default handler in...'.format(args.app_id))
+
 	# Check for current user
 	current_username = getuser()
 
@@ -289,6 +291,7 @@ def set_command(args):
 	# Process plists
 	for plist in plists:
 		ls = LaunchServices(plist)
+		print('  "{}", for...'.format(ls.plist))
 
 		# Combine submitted UTIs and protocols
 		if not args.uti:
@@ -298,6 +301,10 @@ def set_command(args):
 
 		# Create and set handlers
 		for uti in args.uti:
+			if uti[1] != None:
+				print('    "{}" with role "{}"'.format(uti[0], uti[1]))
+			else:
+				print('    "{}" with role "all"'.format(uti[0]))
 			ls.set_handler(
 				app_id=args.app_id,
 				uti=uti[0],
