@@ -76,6 +76,13 @@ def create_plist_parents(plist_path):
 	os.makedirs(parent_path)
 	return plist_path
 
+
+###############################################################################
+#
+# File/Directory Functions
+#
+###############################################################################
+
 def create_user_ls_path(username):
 	path = os.path.join(
 		USER_HOMES_LOCATION,
