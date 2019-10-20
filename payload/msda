@@ -405,8 +405,12 @@ def main(arguments):
 		nargs='+',
 	)
 
-	# Run specified function with processed args
+	# Process specified args
 	args = parser.parse_args(arguments)
+	global verbose
+	verbose = args.verbose
+
+	# Run specified function with processed args
 	return args.func(args)
 
 
