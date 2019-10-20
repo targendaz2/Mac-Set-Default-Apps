@@ -5,7 +5,6 @@ from __future__ import print_function
 import unittest
 from unittest import TestCase
 
-from getpass import getuser
 import imp
 import os
 from plistlib import readPlist
