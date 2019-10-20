@@ -45,6 +45,7 @@ __email__ = 'dgrosenberg@icloud.com'
 #
 ###############################################################################
 
+LSREGISTER_BINARY = '/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'
 PLIST_NAME = 'com.apple.launchservices.secure.plist'
 PLIST_RELATIVE_LOCATION = 'Library/Preferences/com.apple.LaunchServices/'
 USER_TEMPLATE_LOCATION = '/Library/User Template/English.lproj'
@@ -410,4 +411,13 @@ def main(arguments):
 
 
 if __name__ == '__main__':
-	sys.exit(main(sys.argv[1:]))
+	exit_code = main(sys.argv[1:])
+
+	# Rebuild launch services
+	rebuild_command = LSREGISTER_BINARY + ' -kill -r \
+		-domain local \
+		-domain system \
+		-domain user'
+	subprocess.check_output(rebuild_command.split())
+
+	sys.exit(exit_code)
