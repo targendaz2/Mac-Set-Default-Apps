@@ -418,10 +418,12 @@ if __name__ == '__main__':
 	exit_code = main(sys.argv[1:])
 
 	# Rebuild launch services
-	rebuild_command = LSREGISTER_BINARY + ' -kill -r \
-		-domain local \
-		-domain system \
-		-domain user'
-	subprocess.check_output(rebuild_command.split())
+	rebuild_command = [LSREGISTER_BINARY,
+		'-kill', '-r',
+		'-domain', 'local',
+		'-domain', '-system',
+		'-domain', '-user',
+	]
+	subprocess.check_output(rebuild_command)
 
 	sys.exit(exit_code)
