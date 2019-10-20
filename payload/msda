@@ -297,6 +297,7 @@ def set_command(args):
 	return 0
 
 def main(arguments):
+	# Global parser setup
 	parser = ArgumentParser(
 		description=__doc__,
 		formatter_class=RawDescriptionHelpFormatter,
@@ -311,16 +312,20 @@ def main(arguments):
 	)
 	parser.add_argument(
 		'--version',
-		help='prints the current version of this app',
-		action='store_true',
+		help='prints the current version',
+		action='version',
+		version=__version__,
 	)
 	subparsers = parser.add_subparsers(
 		help='the subcommand to run',
-		metavar='command'
+		metavar='command',
+		dest='command',
 	)
+
+	# "Set" parser setup
 	set_parser = subparsers.add_parser(
 		'set',
-		help='set help'
+		help='set LSHandlers for a given App ID',
 	)
 	set_parser.set_defaults(func=set_command)
 	set_parser.add_argument(
