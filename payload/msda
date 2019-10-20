@@ -265,7 +265,7 @@ class LaunchServices(object):
 #
 ###############################################################################
 
-def process_mode(arguments):
+def process_command(arguments):
 	"""
 	Processes submitted arguments
 	"""
@@ -277,10 +277,11 @@ def process_mode(arguments):
 		)
 	)
 	parser.add_argument(
-		'mode',
-		help='the mode in which to run this script',
-		choices=['set', 'version'],
+		'command',
+		help='subcommand to run',
+		choices=['set'],
 		type=str,
+		metavar=('command'),
 	)
 	parser.add_argument(
 		'-v', '--verbose',
@@ -310,6 +311,11 @@ def process_mode(arguments):
 		nargs=2,
 		metavar=('UTI', 'ROLE'),
 	)
+	parser.add_argument(
+		'--version',
+		help='prints the current version of this app',
+		action='store_true',
+	)
 
 	return parser.parse_known_args(arguments)
 
@@ -321,7 +327,7 @@ def process_mode(arguments):
 # Main Functions
 #
 ###############################################################################
-def set_mode(args):
+def set_command(args):
 	# Check for current user
 	current_username = getuser()
 
@@ -356,10 +362,10 @@ def set_mode(args):
 def main(arguments):
 	# Process arguments
 	global verbose
-	args, _ = process_mode(arguments)
+	args, _ = process_command(arguments)
 	verbose = args.verbose
 
-	return set_mode(args)
+	return set_command(args)
 
 
 if __name__ == '__main__':
