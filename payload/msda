@@ -261,69 +261,6 @@ class LaunchServices(object):
 
 ###############################################################################
 #
-# Argument Processing
-#
-###############################################################################
-
-def process_command(arguments):
-	"""
-	Processes submitted arguments
-	"""
-	parser = ArgumentParser(
-		description=__doc__,
-		formatter_class=RawDescriptionHelpFormatter,
-		epilog='Please email {} with any issues'.format(
-			__email__,
-		)
-	)
-	parser.add_argument(
-		'command',
-		help='subcommand to run',
-		choices=['set'],
-		type=str,
-		metavar=('command'),
-	)
-	parser.add_argument(
-		'-v', '--verbose',
-		help='verbose output',
-		action='store_true',
-	)
-
-	parser.add_argument(
-		'app_id',
-		help='the identifier of the application to set as a default',
-		type=str,
-	)
-	parser.add_argument(
-		'-fut',
-		help='updates the user template\'s launch services',
-		action='store_true',
-	)
-	parser.add_argument(
-		'-p', '--protocol',
-		help='protocols to associate with the given app ID',
-		action='append',
-	)
-	parser.add_argument(
-		'-u', '--uti',
-		help='UTIs and roles to associate with the given app ID',
-		action='append',
-		nargs=2,
-		metavar=('UTI', 'ROLE'),
-	)
-	parser.add_argument(
-		'--version',
-		help='prints the current version of this app',
-		action='store_true',
-	)
-
-	return parser.parse_known_args(arguments)
-
-
-
-
-###############################################################################
-#
 # Main Functions
 #
 ###############################################################################
@@ -360,12 +297,57 @@ def set_command(args):
 	return 0
 
 def main(arguments):
-	# Process arguments
-	global verbose
-	args, _ = process_command(arguments)
-	verbose = args.verbose
+	parser = ArgumentParser(
+		description=__doc__,
+		formatter_class=RawDescriptionHelpFormatter,
+		epilog='Please email {} with any issues'.format(
+			__email__,
+		)
+	)
+	parser.add_argument(
+		'-v', '--verbose',
+		help='verbose output',
+		action='store_true',
+	)
+	parser.add_argument(
+		'--version',
+		help='prints the current version of this app',
+		action='store_true',
+	)
+	subparsers = parser.add_subparsers(
+		help='the subcommand to run',
+		metavar='command'
+	)
+	set_parser = subparsers.add_parser(
+		'set',
+		help='set help'
+	)
+	set_parser.set_defaults(func=set_command)
+	set_parser.add_argument(
+		'app_id',
+		help='the identifier of the application to set as a default',
+		type=str,
+	)
+	set_parser.add_argument(
+		'-fut',
+		help='updates the user template\'s launch services',
+		action='store_true',
+	)
+	set_parser.add_argument(
+		'-p', '--protocol',
+		help='protocols to associate with the given app ID',
+		action='append',
+	)
+	set_parser.add_argument(
+		'-u', '--uti',
+		help='UTIs and roles to associate with the given app ID',
+		action='append',
+		nargs=2,
+		metavar=('UTI', 'ROLE'),
+	)
 
-	return set_command(args)
+	args = parser.parse_args(arguments)
+	return args.func(args)
 
 
 if __name__ == '__main__':
