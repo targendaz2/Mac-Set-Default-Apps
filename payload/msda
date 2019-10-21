@@ -291,7 +291,7 @@ def set_command(args):
 	# Process plists
 	for plist in plists:
 		ls = LaunchServices(plist)
-		print('  "{}", for...'.format(ls.plist))
+		print('  "{}"...'.format(ls.plist))
 
 		# Combine submitted UTIs and protocols
 		if not args.uti:
@@ -302,9 +302,9 @@ def set_command(args):
 		# Create and set handlers
 		for uti in args.uti:
 			if uti[1] != None:
-				print('    "{}" with role "{}"'.format(uti[0], uti[1]))
+				print('    for "{}" with role "{}"'.format(uti[0], uti[1]))
 			else:
-				print('    "{}" with role "all"'.format(uti[0]))
+				print('    for "{}" with role "all"'.format(uti[0]))
 			ls.set_handler(
 				app_id=args.app_id,
 				uti=uti[0],
@@ -349,11 +349,11 @@ def main(arguments):
 			__email__,
 		)
 	)
-	parser.add_argument(
-		'-v', '--verbose',
-		help='verbose output',
-		action='store_true',
-	)
+	# parser.add_argument(
+	# 	'-v', '--verbose',
+	# 	help='verbose output',
+	# 	action='store_true',
+	# )
 	parser.add_argument(
 		'--version',
 		help='prints the current version',
@@ -421,8 +421,10 @@ def main(arguments):
 
 	# Process specified args
 	args = parser.parse_args(arguments)
-	global verbose
-	verbose = args.verbose
+	# global verbose
+	# verbose = args.verbose
+
+	print('')
 
 	# Run specified function with processed args
 	return args.func(args)
