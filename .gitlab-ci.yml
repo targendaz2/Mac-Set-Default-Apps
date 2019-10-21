@@ -1,0 +1,15 @@
+stages:
+  - test
+  - build
+
+test:
+  stage: test
+  script:
+    - apt-get update -qy
+    - apt-get install -y python-dev python-pip
+    - pip install -r requirements/test.txt
+    - ./tests/tests.py
+
+build:
+  stage: build
+  script: ./build.sh
