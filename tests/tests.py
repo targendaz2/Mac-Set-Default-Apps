@@ -95,21 +95,12 @@ class TestLSHandlerObjectEquality(TestCase):
 		self.assertEqual(self.html_all, self.html_viewer1)
 
 
-class TestLaunchServicesObject(TestCase):
+class TestLaunchServicesObject(LaunchServicesTestCase):
 
 	def setUp(self):
-		self.tmp = tempfile.mkdtemp(prefix=TMP_PREFIX)
+		super(TestLaunchServicesObject, self).setUp()
 		self.ls = msda.LaunchServices()
 		self.ls2 = msda.LaunchServices()
-
-	def tearDown(self):
-		shutil.rmtree(self.tmp)
-
-	def seed_plist(self, plist_name):
-		src = os.path.join(THIS_FILE, 'assets', plist_name)
-		dest = os.path.join(self.tmp, plist_name)
-		shutil.copy(src, dest)
-		return dest
 
 	def test_can_read_binary_plists(self):
 		self.ls.plist = self.seed_plist(SIMPLE_BINARY_PLIST)
@@ -245,31 +236,17 @@ class TestLaunchServicesObject(TestCase):
 		self.assertIn(handler, ls.handlers)
 
 
-class ArgumentTests(TestCase):
-
-	pass
-
-
 @mock.patch('msda.create_user_ls_path')
-class SetFunctionalTests(TestCase):
+class FunctionalTests(LaunchServicesTestCase):
 
 	def setUp(self):
-		self.tmp = tempfile.mkdtemp(prefix=TMP_PREFIX)
+		super(FunctionalTests, self).setUp()
 		self.user_ls_path = self.seed_plist(SIMPLE_BINARY_PLIST)
 		self.user_ls = msda.LaunchServices(self.user_ls_path)
 		self.template_ls_path = os.path.join(
 			self.tmp, 'com.apple.LaunchServices.Secure.plist'
 		)
 		self.template_ls = msda.LaunchServices(self.template_ls_path)
-
-	def tearDown(self):
-		shutil.rmtree(self.tmp)
-
-	def seed_plist(self, plist_name):
-		src = os.path.join(THIS_FILE, 'assets', plist_name)
-		dest = os.path.join(self.tmp, plist_name)
-		shutil.copy(src, dest)
-		return dest
 
 	def test_set_single_uti_handler_for_current_user(self, user_fn):
 		user_fn.return_value = self.user_ls_path

@@ -1,10 +1,13 @@
 import imp, os
 from random import choice, random
+import shutil
+import tempfile
+from unittest import TestCase
 
 from faker import Faker
 from faker.providers import file, internet, lorem
 
-from test_settings import THIS_FILE
+from test_settings import THIS_FILE, TMP_PREFIX
 
 msda = imp.load_source('msda', os.path.join(
 	THIS_FILE, '../payload/msda')
@@ -125,3 +128,18 @@ def uti_lshandler_dict(app_id, uti, role='all'):
 		}
 	}
 	return dict_
+
+# Abstract Classes
+class LaunchServicesTestCase(TestCase):
+
+	def setUp(self):
+		self.tmp = tempfile.mkdtemp(prefix=TMP_PREFIX)
+
+	def tearDown(self):
+		shutil.rmtree(self.tmp)
+
+	def seed_plist(self, plist_name):
+		src = os.path.join(THIS_FILE, 'assets', plist_name)
+		dest = os.path.join(self.tmp, plist_name)
+		shutil.copy(src, dest)
+		return dest
