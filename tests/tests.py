@@ -22,7 +22,6 @@ msda = imp.load_source('msda', os.path.join(
 	THIS_FILE, '../payload/msda')
 )
 
-
 class TestLSHandlerObject(TestCase):
 
 	def test_can_generate_LSHandler_for_uti(self):

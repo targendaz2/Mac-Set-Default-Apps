@@ -133,13 +133,10 @@ def uti_lshandler_dict(app_id, uti, role='all'):
 class LaunchServicesTestCase(TestCase):
 
     def setUp(self):
-        os.mkdir(TMP_ROOT)
-        self.tmp = tempfile.mkdtemp(
-            dir=os.path.join(THIS_FILE, '..', 'tmp'),
-        )
+        self.tmp = tempfile.mkdtemp(prefix=msda.TMP_PREFIX)
 
     def tearDown(self):
-        shutil.rmtree(TMP_ROOT)
+        shutil.rmtree(self.tmp)
 
     def seed_plist(self, plist_name):
         src = os.path.join(THIS_FILE, 'assets', plist_name)

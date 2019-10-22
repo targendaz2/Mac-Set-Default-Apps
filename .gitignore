@@ -6,3 +6,4 @@ payload/*c
 .vscode/
 /env/
 /tmp/
+/builds/
