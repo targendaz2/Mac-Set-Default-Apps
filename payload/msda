@@ -11,7 +11,6 @@ from __future__ import print_function
 
 import os, shutil, subprocess, sys
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
-from getpass import getuser
 from plistlib import readPlist, writePlist
 from tempfile import NamedTemporaryFile
 
@@ -53,7 +52,7 @@ USER_TEMPLATE_LOCATION = '/Library/User Template/English.lproj'
 
 ###############################################################################
 #
-# Plist Processing Functions
+# Functions
 #
 ###############################################################################
 
@@ -76,19 +75,12 @@ def create_plist_parents(plist_path):
 	os.makedirs(parent_path)
 	return plist_path
 
-
-###############################################################################
-#
-# File/Directory Functions
-#
-###############################################################################
-
 def create_user_ls_path(username):
 	path = os.path.join(
 		USER_HOMES_LOCATION,
 		username,
 		PLIST_RELATIVE_LOCATION,
-		PLIST_NAME
+		PLIST_NAME,
 	)
 	return path
 
@@ -96,9 +88,24 @@ def create_template_ls_path():
 	path = os.path.join(
 		USER_TEMPLATE_LOCATION,
 		PLIST_RELATIVE_LOCATION,
-		PLIST_NAME
+		PLIST_NAME,
 	)
 	return path
+
+def get_current_username():
+	who_cmd = subprocess.Popen(
+		('who'),
+		stdout=subprocess.PIPE,
+	)
+	grep_cmd = subprocess.Popen(
+		('grep', 'console'),
+		stdin=who_cmd.stdout, stdout=subprocess.PIPE,
+	)
+	username = subprocess.check_output(
+		('cut', '-d', ' ', '-f1'),
+		stdin=grep_cmd.stdout,
+	)
+	return username
 
 
 ###############################################################################
@@ -279,7 +286,7 @@ def set_command(args):
 	print('Setting "{}" as a default handler in...'.format(args.app_id))
 
 	# Check for current user
-	current_username = getuser()
+	current_username = get_current_username()
 
 	# Collect plists
 	plists = []

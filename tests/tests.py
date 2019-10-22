@@ -362,9 +362,10 @@ class FunctionalTests(LaunchServicesTestCase):
 			self.assertIn(handler.app_id, self.template_ls.app_ids)
 
 	@mock.patch('msda.create_template_ls_path')
-	@mock.patch('msda.getuser')
-	def test_set_handlers_for_only_template(self, getuser, template_fn, user_fn):
-		getuser.return_value = ''
+	@mock.patch('msda.get_current_username', return_value='')
+	def test_set_handlers_for_only_template(self,
+		get_current_username, template_fn, user_fn,
+	):
 		user_fn.return_value = self.user_ls_path
 		template_fn.return_value = self.template_ls_path
 		handlers = lshandler_factory(num=randint(4, 6))
