@@ -22,6 +22,35 @@ msda = imp.load_source('msda', os.path.join(
 	THIS_FILE, '../payload/msda')
 )
 
+class TestLaunchServicesTestCaseSetUpAndTearDown(LaunchServicesTestCase):
+
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def test_setUp_creates_tmp_directory(self):
+        super(TestLaunchServicesTestCaseSetUpAndTearDown, self).setUp()
+        self.assertIsNotNone(self.tmp)
+        self.assertTrue(os.path.exists(self.tmp))
+
+    def test_tearDown_removes_tmp_directory(self):
+        super(TestLaunchServicesTestCaseSetUpAndTearDown, self).setUp()
+        super(TestLaunchServicesTestCaseSetUpAndTearDown, self).tearDown()
+        self.assertFalse(os.path.exists(self.tmp))
+
+
+class TestLaunchServicesTestCaseMethods(LaunchServicesTestCase):
+
+    def test_seed_plist_copies_plist_into_tmp(self):
+        self.assertTrue(os.path.exists(os.path.join(
+            THIS_FILE, 'assets', SIMPLE_BINARY_PLIST,
+        )))
+        tmp_path = self.seed_plist(SIMPLE_BINARY_PLIST)
+        self.assertTrue(os.path.exists(tmp_path))
+
+
 class TestLSHandlerObject(TestCase):
 
 	def test_can_generate_LSHandler_for_uti(self):
