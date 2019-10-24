@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 
 """\
 Directly modifies launchservices plists to set default file associations in macOS.
