@@ -216,7 +216,7 @@ class LaunchServices(object):
 		with NamedTemporaryFile(prefix=TMP_PREFIX, delete=True) as tmp_plist:
 			# copy the target plist to a temporary file
 			tmp_path = tmp_plist.name
-			shutil.copyfile(self.plist, tmp_path)
+			shutil.copy(self.plist, tmp_path)
 
 			# convert to XML from binary
 			convert_command = '/usr/bin/plutil -convert xml1 ' + tmp_path
@@ -252,7 +252,7 @@ class LaunchServices(object):
 			subprocess.check_output(convert_command.split())
 
 			# and overwrite the specified plist
-			shutil.copyfile(tmp_path, plist)
+			shutil.copy(tmp_path, plist)
 
 	@property
 	def app_ids(self):
