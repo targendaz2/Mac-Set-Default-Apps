@@ -38,7 +38,8 @@ DEFAULT_APPS = {			   # Inline method of specifying default apps
 	# 	'protocol'
 	# ],
 	# 'app_id_2': [
-	# 	'mailto',
+	# 	['UTI', 'role'],
+	# 	'protocol'
 	# ],
 }
 
