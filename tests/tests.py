@@ -426,7 +426,7 @@ class FunctionalTests(LaunchServicesTestCase):
 	):
 		user_fn.return_value = self.user_ls_path
 		template_fn.return_value = self.template_ls_path
-		handlers = lshandler_factory(num=randint(1, 6))
+		handlers = lshandler_factory(num=randint(1, 3))
 
 		arguments = ['', '', '', handlers[0].app_id, 'fut']
 		for handler in handlers:
@@ -440,6 +440,45 @@ class FunctionalTests(LaunchServicesTestCase):
 			else:
 				arguments.append(handler.uti)
 		msda.main(arguments)
+
+		self.user_ls.read()
+		self.template_ls.read()
+		for handler in handlers:
+			self.assertIn(handler, self.user_ls.handlers)
+			self.assertIn(handler.app_id, self.user_ls.app_ids)
+			self.assertIn(handler, self.template_ls.handlers)
+			self.assertIn(handler.app_id, self.template_ls.app_ids)
+
+	@mock.patch('msda.create_template_ls_path')
+	@mock.patch('msda.DEFAULT_APPS', new_callable=dict)
+	@mock.patch('msda.INLINE_OPTIONS', {'fut': True})
+	def test_set_handlers_for_current_user_and_template_inline(self,
+		default_apps, template_fn, user_fn,
+	):
+		user_fn.return_value = self.user_ls_path
+		template_fn.return_value = self.template_ls_path
+		handlers1 = lshandler_factory(num=randint(1, 5))
+		handlers2 = lshandler_factory(num=randint(1, 2))
+
+		default_apps[handlers1[0].app_id] = []
+		default_apps[handlers2[0].app_id] = []
+
+		handlers = handlers1 + handlers2
+		for handler in handlers:
+			self.assertNotIn(handler, self.user_ls.handlers)
+			self.assertNotIn(handler.app_id, self.user_ls.app_ids)
+			self.assertNotIn(handler, self.template_ls.handlers)
+			self.assertNotIn(handler.app_id, self.template_ls.app_ids)
+
+			if '.' in handler.uti:
+				default_apps[handler.app_id].append(
+					[handler.uti, handler.role]
+				)
+			else:
+				default_apps[handler.app_id].append(
+					handler.uti
+				)
+		msda.main()
 
 		self.user_ls.read()
 		self.template_ls.read()

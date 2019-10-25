@@ -28,6 +28,27 @@ USER_HOMES_LOCATION = '/Users' # Where users' home directories are located
 
 ###############################################################################
 #
+# Inline Usage Settings
+#
+###############################################################################
+
+DEFAULT_APPS = {			   # Inline method of specifying default apps
+	# 'app_id_1': [			   # Uncomment and replace as needed
+	# 	['UTI', 'role'],
+	# 	'protocol'
+	# ],
+	# 'app_id_2': [
+	# 	'mailto',
+	# ],
+}
+
+INLINE_OPTIONS = {			   # Inline method of specifying options
+	'fut': False,
+}
+
+
+###############################################################################
+#
 # App Information
 #
 ###############################################################################
@@ -322,6 +343,33 @@ def set_command(args):
 		ls.write()
 	return 0
 
+def inline_set_command(args):
+	# Convert options into arguments
+	for option, value in INLINE_OPTIONS.items():
+		setattr(args, option, value)
+
+	# Cycle through submitted app_ids
+	for app_id in DEFAULT_APPS.keys():
+		args.app_id = app_id
+		args.uti = []
+		for uti in DEFAULT_APPS[app_id]:
+			if type(uti) == str:
+				args.uti.append([uti, None])
+			elif type(uti) == list:
+				args.uti.append(uti)
+
+		# Add protocol attribute for consistency with normal set args
+		args.protocol = []
+
+		# Grab exit code of normal set command
+		exit_code = set_command(args)
+
+		# If it's non-zero, exit
+		if exit_code != 0:
+			return exit_code
+	return 0
+
+
 def jamf_set_command(args):
 	# Convert options into arguments
 	for option in args.options.split():
@@ -344,9 +392,11 @@ def jamf_set_command(args):
 	# Call normal set function
 	return set_command(args)
 
-def main(arguments):
-	# Strip first 3 args for jamf-set command
+def main(arguments=None):
+	if DEFAULT_APPS != {} and not arguments:
+		arguments = ['inline-set']
 	if JAMF:
+		# Strip first 3 args for jamf-set command
 		arguments = arguments[3:]
 		arguments.insert(0, 'jamf-set')
 
@@ -403,6 +453,13 @@ def main(arguments):
 		nargs=2,
 		metavar=('UTI', 'ROLE'),
 	)
+
+	# "inline-set" parser setup
+	inline_set_parser = subparsers.add_parser(
+		'inline-set',
+		help='set LSHandlers for a given App ID inline',
+	)
+	inline_set_parser.set_defaults(func=inline_set_command)
 
 	# "jamf-set" parser setup
 	jamf_set_parser = subparsers.add_parser(
