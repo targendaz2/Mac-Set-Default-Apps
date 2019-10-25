@@ -11,6 +11,7 @@ from __future__ import print_function
 
 import os, shutil, subprocess, sys
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
+from platform import mac_ver
 from plistlib import readPlist, writePlist
 from tempfile import NamedTemporaryFile
 
@@ -68,9 +69,15 @@ __email__ = 'dgrosenberg@icloud.com'
 ###############################################################################
 
 LSREGISTER_BINARY = '/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'
+OS_VERSION = float(mac_ver()[0][3:])
 PLIST_NAME = 'com.apple.launchservices.secure.plist'
 PLIST_RELATIVE_LOCATION = 'Library/Preferences/com.apple.LaunchServices/'
 USER_TEMPLATE_LOCATION = '/Library/User Template/English.lproj'
+
+if OS_VERSION < 15.0:
+	USER_TEMPLATE_LOCATION = os.path.join(
+		'/System', USER_TEMPLATE_LOCATION
+	)
 
 
 ###############################################################################
