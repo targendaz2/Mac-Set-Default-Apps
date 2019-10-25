@@ -430,7 +430,6 @@ def main(arguments):
 
 	# Process specified args
 	args = parser.parse_args(arguments)
-	print(args)
 	# global verbose
 	# verbose = args.verbose
 
