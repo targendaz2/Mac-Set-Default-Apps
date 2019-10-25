@@ -21,6 +21,7 @@ from tempfile import NamedTemporaryFile
 #
 ###############################################################################
 
+JAMF = False				   # Is this being used as a Jamf script?
 TMP_PREFIX = 'msda_tmp_'       # Prefixes tempoaray files created by this app
 USER_HOMES_LOCATION = '/Users' # Where users' home directories are located
 
@@ -283,7 +284,7 @@ class LaunchServices(object):
 ###############################################################################
 
 def set_command(args):
-	print('Setting "{}" as a default handler in...'.format(args.app_id))
+	# print('Setting "{}" as a default handler in...'.format(args.app_id))
 
 	# Check for current user
 	current_username = get_current_username()
@@ -298,7 +299,7 @@ def set_command(args):
 	# Process plists
 	for plist in plists:
 		ls = LaunchServices(plist)
-		print('  "{}"...'.format(ls.plist))
+		# print('  "{}"...'.format(ls.plist))
 
 		# Combine submitted UTIs and protocols
 		if not args.uti:
@@ -308,10 +309,10 @@ def set_command(args):
 
 		# Create and set handlers
 		for uti in args.uti:
-			if uti[1] != None:
-				print('    for "{}" with role "{}"'.format(uti[0], uti[1]))
-			else:
-				print('    for "{}" with role "all"'.format(uti[0]))
+			# if uti[1] != None:
+			# 	print('    for "{}" with role "{}"'.format(uti[0], uti[1]))
+			# else:
+			# 	print('    for "{}" with role "all"'.format(uti[0]))
 			ls.set_handler(
 				app_id=args.app_id,
 				uti=uti[0],
@@ -345,8 +346,9 @@ def jamf_set_command(args):
 
 def main(arguments):
 	# Strip first 3 args for jamf-set command
-	if 'jamf-set' in arguments:
+	if JAMF:
 		arguments = arguments[3:]
+		arguments.insert(0, 'jamf-set')
 
 	# Global parser setup
 	parser = ArgumentParser(
@@ -403,23 +405,23 @@ def main(arguments):
 	)
 
 	# "jamf-set" parser setup
-	set_parser = subparsers.add_parser(
+	jamf_set_parser = subparsers.add_parser(
 		'jamf-set',
 		help='set LSHandlers for a given App ID through Jamf',
 	)
-	set_parser.set_defaults(func=jamf_set_command)
-	set_parser.add_argument(
+	jamf_set_parser.set_defaults(func=jamf_set_command)
+	jamf_set_parser.add_argument(
 		'app_id',
 		help='the identifier of the application to set as a default',
 		type=str,
 	)
-	set_parser.add_argument(
+	jamf_set_parser.add_argument(
 		'options',
 		help='options affecting which plists are updated',
 		choices=('fut',),
 		type=str,
 	)
-	set_parser.add_argument(
+	jamf_set_parser.add_argument(
 		'utis',
 		help='UTIs and/or protocols to associate with the given app ID',
 		action='append',
@@ -428,10 +430,11 @@ def main(arguments):
 
 	# Process specified args
 	args = parser.parse_args(arguments)
+	print(args)
 	# global verbose
 	# verbose = args.verbose
 
-	print('')
+	# print('')
 
 	# Run specified function with processed args
 	return args.func(args)

@@ -420,6 +420,7 @@ class FunctionalTests(LaunchServicesTestCase):
 			self.assertIn(handler.app_id, self.template_ls.app_ids)
 
 	@mock.patch('msda.create_template_ls_path')
+	@mock.patch('msda.JAMF', True)
 	def test_set_handlers_for_current_user_and_template_in_Jamf(self,
 		template_fn, user_fn,
 	):
@@ -427,7 +428,7 @@ class FunctionalTests(LaunchServicesTestCase):
 		template_fn.return_value = self.template_ls_path
 		handlers = lshandler_factory(num=randint(1, 6))
 
-		arguments = ['', '', '', 'jamf-set', handlers[0].app_id, 'fut']
+		arguments = ['', '', '', handlers[0].app_id, 'fut']
 		for handler in handlers:
 			self.assertNotIn(handler, self.user_ls.handlers)
 			self.assertNotIn(handler.app_id, self.user_ls.app_ids)
