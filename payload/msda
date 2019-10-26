@@ -44,10 +44,6 @@ DEFAULT_APPS = {			   # Inline method of specifying default apps
 	# ],
 }
 
-INLINE_OPTIONS = {			   # Inline method of specifying options
-	'fut': False,
-}
-
 
 ###############################################################################
 #
@@ -352,10 +348,6 @@ def set_command(args):
 	return 0
 
 def inline_set_command(args):
-	# Convert options into arguments
-	for option, value in INLINE_OPTIONS.items():
-		setattr(args, option, value)
-
 	# Cycle through submitted app_ids
 	for app_id in DEFAULT_APPS.keys():
 		args.app_id = app_id
@@ -366,8 +358,9 @@ def inline_set_command(args):
 			elif type(uti) == list:
 				args.uti.append(uti)
 
-		# Add protocol attribute for consistency with normal set args
+		# Add other attribute for consistency with normal set args
 		args.protocol = []
+		args.fut = True
 
 		# Grab exit code of normal set command
 		exit_code = set_command(args)
@@ -401,12 +394,12 @@ def jamf_set_command(args):
 	return set_command(args)
 
 def main(arguments=None):
-	if DEFAULT_APPS != {} and not arguments:
-		arguments = ['inline-set']
 	if JAMF:
 		# Strip first 3 args for jamf-set command
 		arguments = arguments[3:]
 		arguments.insert(0, 'jamf-set')
+	if DEFAULT_APPS != {}:
+		arguments = ['inline-set']
 
 	# Global parser setup
 	parser = ArgumentParser(

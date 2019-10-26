@@ -451,7 +451,6 @@ class FunctionalTests(LaunchServicesTestCase):
 
 	@mock.patch('msda.create_template_ls_path')
 	@mock.patch('msda.DEFAULT_APPS', new_callable=dict)
-	@mock.patch('msda.INLINE_OPTIONS', {'fut': True})
 	def test_set_handlers_for_current_user_and_template_inline(self,
 		default_apps, template_fn, user_fn,
 	):
