@@ -329,34 +329,10 @@ def set_command(args):
 		ls.write()
 	return 0
 
-
-def jamf_set_command(args):
-	# Convert options into arguments
-	for option in args.options.split():
-		setattr(args, option, True)
-
-	# Convert UTIs and roles into form set_command can process
-	args.uti = []
-	for uti in args.utis[0]:
-		processed_uti = uti.split(', ')
-		processed_uti_len = len(processed_uti)
-
-		if processed_uti_len == 1:
-			args.uti.append([processed_uti[0], None])
-		else:
-			args.uti.append(processed_uti)
-
-	# Add protocol attribute for consistency with normal set args
-	args.protocol = []
-
-	# Call normal set function
-	return set_command(args)
-
 def main(arguments=None):
 	if JAMF:
-		# Strip first 3 args for jamf-set command
-		arguments = arguments[3:]
-		arguments.insert(0, 'jamf-set')
+		# Strip first 3 args and convert 4th to a list
+		arguments = arguments[3].split()
 
 	# Global parser setup
 	parser = ArgumentParser(
@@ -410,30 +386,6 @@ def main(arguments=None):
 		action='append',
 		nargs=2,
 		metavar=('UTI', 'ROLE'),
-	)
-
-	# "jamf-set" parser setup
-	jamf_set_parser = subparsers.add_parser(
-		'jamf-set',
-		help='set LSHandlers for a given App ID through Jamf',
-	)
-	jamf_set_parser.set_defaults(func=jamf_set_command)
-	jamf_set_parser.add_argument(
-		'app_id',
-		help='the identifier of the application to set as a default',
-		type=str,
-	)
-	jamf_set_parser.add_argument(
-		'options',
-		help='options affecting which plists are updated',
-		choices=('fut',),
-		type=str,
-	)
-	jamf_set_parser.add_argument(
-		'utis',
-		help='UTIs and/or protocols to associate with the given app ID',
-		action='append',
-		nargs='+',
 	)
 
 	# Process specified args

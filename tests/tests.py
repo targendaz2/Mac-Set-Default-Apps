@@ -428,7 +428,7 @@ class FunctionalTests(LaunchServicesTestCase):
 		template_fn.return_value = self.template_ls_path
 		handlers = lshandler_factory(num=randint(1, 3))
 
-		arguments = ['', '', '', handlers[0].app_id, 'fut']
+		arguments = ['', '', '', 'set -fut ' + handlers[0].app_id]
 		for handler in handlers:
 			self.assertNotIn(handler, self.user_ls.handlers)
 			self.assertNotIn(handler.app_id, self.user_ls.app_ids)
@@ -436,9 +436,9 @@ class FunctionalTests(LaunchServicesTestCase):
 			self.assertNotIn(handler.app_id, self.template_ls.app_ids)
 
 			if '.' in handler.uti:
-				arguments.append(handler.uti + ', ' + handler.role)
+				arguments[3] += ' -u ' + handler.uti + ' ' + handler.role
 			else:
-				arguments.append(handler.uti)
+				arguments[3] += ' -p ' + handler.uti
 		msda.main(arguments)
 
 		self.user_ls.read()
