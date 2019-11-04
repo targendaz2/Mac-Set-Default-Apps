@@ -26,8 +26,8 @@ jobs:
       - name: Upload built package
         uses: actions/upload-artifact@master
         with:
-          name: "Mac Set Default Apps v1.0.0.pkg"
-          path: "./Mac Set Default Apps v1.0.0.pkg"
+          name: "Mac Set Default Apps.pkg"
+          path: "./Mac Set Default Apps *.pkg"
 
   # release:
   #   runs-on: macOS-latest
