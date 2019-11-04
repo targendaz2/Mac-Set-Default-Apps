@@ -1,4 +1,4 @@
-name: Test and Build
+name: Test, Build, and Release
 
 on:
   push:
@@ -18,7 +18,18 @@ jobs:
 
   build:
     runs-on: macOS-latest
+    needs: test
     steps:
       - uses: actions/checkout@v1
       - name: Build the package
         run: ./build.sh
+      - name: Upload built package
+        uses: actions/upload-artifact@master
+        with:
+          name: "Mac Set Default Apps v1.0.0.pkg"
+          path: "./Mac Set Default Apps v1.0.0.pkg"
+
+  # release:
+  #   runs-on: macOS-latest
+  #   needs: [test, build]
+  #   steps:
