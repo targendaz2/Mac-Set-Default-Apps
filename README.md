@@ -1,6 +1,6 @@
 # Mac Set Default Apps (MSDA)
 
-MSDA provides an easy way to silently change the default applications used by macOS.
+MSDA provides an easy way to silently change the default applications used by macOS. There are no pop-ups or prompts and, even better, it works for Google Chrome!
 
 ## Requirements
 * macOS 10.14.0 or newer
@@ -71,8 +71,8 @@ How can I find an application's ID?
 How can I figure out what protocols or UTIs to set?
 > I've tried to include the most common examples above. Otherwise, a complete list of protocols can be found [here](https://en.wikipedia.org/wiki/List_of_URI_schemes), and UTIs [here](https://escapetech.eu/manuals/qdrop/uti.html).
 
-Are there command other than `set`?
-> At the moment, no. I wanted to leave the option, however, for others that might be useful.
+Are there commands other than `set`?
+> At the moment, no. Please [create an issue] (https://github.com/targendaz2/Mac-Set-Default-Apps/issues/new) on this app's GitHub page if there are commands you'd find useful.
 
 Where can I go for help with this app?
 > If you need help with this app specifically, please feel free to [create an issue](https://github.com/targendaz2/Mac-Set-Default-Apps/issues/new) on this app's GitHub page. I'll try to either respond, or implement changes to the app in response as soon as possible.
