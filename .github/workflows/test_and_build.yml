@@ -1,0 +1,65 @@
+name: Test, Build, and Release
+
+on:
+  push:
+    branches:
+      - master
+      - release
+
+jobs:
+  test:
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install testing dependencies
+        run: pip install -r requirements/test.txt
+      - name: Run tests
+        run: ./tests/tests.py
+
+  build:
+    runs-on: macOS-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v1
+      - name: Get the version number
+        id: get_version
+        run: echo "##[set-output name=version;]$(./payload/msda --version 2>&1)"
+      - name: Build the package
+        run: ./build.sh
+      - name: Upload built package
+        uses: actions/upload-artifact@master
+        with:
+          name: ${{ format('Mac Set Default Apps v{0}.pkg', steps.get_version.outputs.version) }}
+          path: ${{ format('./Mac Set Default Apps v{0}.pkg', steps.get_version.outputs.version) }}
+
+  release:
+    runs-on: macOS-latest
+    needs: [test, build]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Get the version number
+        id: get_version
+        run: echo "##[set-output name=version;]$(./payload/msda --version 2>&1)"
+      - name: Download built package
+        uses: actions/download-artifact@v1
+        with:
+          name: ${{ format('Mac Set Default Apps v{0}.pkg', steps.get_version.outputs.version) }}
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ format('v{0}', steps.get_version.outputs.version) }}
+          release_name: ${{ format('v{0}', steps.get_version.outputs.version) }}
+          draft: false
+          prerelease: false
+      - name: Upload built package to release
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ format('./Mac Set Default Apps v{0}.pkg', steps.get_version.outputs.version) }}
+          asset_name: ${{ format('Mac Set Default Apps v{0}.pkg', steps.get_version.outputs.version) }}
+          asset_content_type: application/vnd.apple.installer+xml
