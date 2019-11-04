@@ -21,13 +21,15 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@v1
+      - name: Get the version number
+        run: echo ::set-env name=VERSION::$(./payload/msda --version 2>&1)
       - name: Build the package
         run: ./build.sh
       - name: Upload built package
         uses: actions/upload-artifact@master
         with:
           name: "Mac Set Default Apps.pkg"
-          path: "./Mac Set Default Apps *.pkg"
+          path: "./Mac Set Default Apps v$VERSION.pkg"
 
   # release:
   #   runs-on: macOS-latest

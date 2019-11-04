@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PKGNAME="Mac Set Default Apps"
-VERSION="1.0.0"
+VERSION=$(./payload/msda --version 2>&1)
 INSTALL_DIR="/usr/local/bin/"
 IDENTIFIER="com.dgrdev.msda"
 
