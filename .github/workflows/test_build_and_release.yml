@@ -29,8 +29,8 @@ jobs:
       - name: Upload built package
         uses: actions/upload-artifact@master
         with:
-          name: ${{ format('Mac Set Default Apps v{0}.pkg', steps.get_version.outputs.version) }}
-          path: ${{ format('./Mac Set Default Apps v{0}.pkg', steps.get_version.outputs.version) }}
+          name: ${{ format('MacSetDefaultApps-v{0}.pkg', steps.get_version.outputs.version) }}
+          path: ${{ format('./MacSetDefaultApps-v{0}.pkg', steps.get_version.outputs.version) }}
 
   release:
     runs-on: macOS-latest
@@ -43,7 +43,7 @@ jobs:
       - name: Download built package
         uses: actions/download-artifact@v1
         with:
-          name: ${{ format('Mac Set Default Apps v{0}.pkg', steps.get_version.outputs.version) }}
+          name: ${{ format('MacSetDefaultApps-v{0}.pkg', steps.get_version.outputs.version) }}
           path: '.'
       - name: Create release
         id: create_release
@@ -61,6 +61,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ format('./Mac Set Default Apps v{0}.pkg', steps.get_version.outputs.version) }}
-          asset_name: ${{ format('Mac Set Default Apps v{0}.pkg', steps.get_version.outputs.version) }}
+          asset_path: ${{ format('./MacSetDefaultApps-v{0}.pkg', steps.get_version.outputs.version) }}
+          asset_name: ${{ format('MacSetDefaultApps-v{0}.pkg', steps.get_version.outputs.version) }}
           asset_content_type: application/vnd.apple.installer+xml

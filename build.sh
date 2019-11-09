@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PKGNAME="Mac Set Default Apps"
+PKGNAME="MacSetDefaultApps"
 VERSION=$(./payload/msda --version 2>&1)
 INSTALL_DIR="/usr/local/bin/"
 IDENTIFIER="com.dgrdev.msda"
@@ -17,6 +17,6 @@ pkgbuild --root "${project_folder}/payload" \
 	--install-location "${INSTALL_DIR}" \
 	--filter='.+c' \
 	--filter='.+\.pyc' \
-	"${project_folder}/${PKGNAME} v${VERSION}.pkg"
+	"${project_folder}/${PKGNAME}-v${VERSION}.pkg"
 
 exit 0
