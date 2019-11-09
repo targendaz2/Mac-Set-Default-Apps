@@ -44,6 +44,7 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: ${{ format('Mac Set Default Apps v{0}.pkg', steps.get_version.outputs.version) }}
+          path: ${{ format('./Mac Set Default Apps v{0}.pkg', steps.get_version.outputs.version) }}
       - name: Create release
         id: create_release
         uses: actions/create-release@v1
