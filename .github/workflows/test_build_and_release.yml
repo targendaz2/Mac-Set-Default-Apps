@@ -61,6 +61,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ format('./Mac Set Default Apps v{0}.pkg', steps.get_version.outputs.version) }}
-          asset_name: ${{ format('Mac Set Default Apps v{0}.pkg', steps.get_version.outputs.version) }}
+          asset_path: './Mac Set Default Apps v1.0.0.pkg'
+          # asset_path: ${{ format('./Mac Set Default Apps v{0}.pkg', steps.get_version.outputs.version) }}
+          asset_name: ./Mac Set Default Apps v1.0.0.pkg
+          # asset_name: ${{ format('Mac Set Default Apps v{0}.pkg', steps.get_version.outputs.version) }}
           asset_content_type: application/vnd.apple.installer+xml
