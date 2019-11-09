@@ -8,7 +8,6 @@ on:
 jobs:
   build:
     runs-on: macOS-latest
-    needs: test
     steps:
       - uses: actions/checkout@v1
       - name: Get the version number
