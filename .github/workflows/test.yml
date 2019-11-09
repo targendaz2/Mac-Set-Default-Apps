@@ -1,4 +1,4 @@
-name: Test, Build, and Release
+name: Test
 
 on: push
 
