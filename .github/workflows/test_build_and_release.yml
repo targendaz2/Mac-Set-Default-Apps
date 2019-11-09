@@ -47,7 +47,7 @@ jobs:
           path: ${{ format('./Mac Set Default Apps v{0}.pkg', steps.get_version.outputs.version) }}
       - name: Create release
         id: create_release
-        uses: actions/create-release@v1
+        uses: actions/create-release@v1.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -56,7 +56,7 @@ jobs:
           draft: false
           prerelease: false
       - name: Upload built package to release
-        uses: actions/upload-release-asset@v1
+        uses: actions/upload-release-asset@v1.0.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
