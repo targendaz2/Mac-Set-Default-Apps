@@ -1,0 +1,13 @@
+name: Test, Build, and Release
+
+on: push
+
+jobs:
+  test:
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install testing dependencies
+        run: pip install -r requirements/test.txt
+      - name: Run tests
+        run: ./tests/tests.py

@@ -4,18 +4,8 @@ on:
   push:
     branches:
       - master
-      - release
 
 jobs:
-  test:
-    runs-on: macOS-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: Install testing dependencies
-        run: pip install -r requirements/test.txt
-      - name: Run tests
-        run: ./tests/tests.py
-
   build:
     runs-on: macOS-latest
     needs: test
@@ -34,7 +24,7 @@ jobs:
 
   release:
     runs-on: macOS-latest
-    needs: [test, build]
+    needs: build
     steps:
       - uses: actions/checkout@v1
       - name: Get the version number
