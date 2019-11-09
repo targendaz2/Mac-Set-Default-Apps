@@ -31,7 +31,6 @@ msda command -h --version
 * --version: Print the current version of MSDA
 
 ### Set Command Usage
-
 **Note:** The computer will need to be restarted after using the `set` command in order to apply the changes
 
 ```
@@ -58,9 +57,14 @@ Set Google Chrome as the default web browser for the current user and the user t
 msda set com.google.chrome -p http -p https -u public.url all -u public.html viewer -u public.xhtml all -fut
 ```
 
-Set Adobe Acrobat as the default PDF reader for the current user and the user template
+Set Adobe Acrobat as the default PDF reader for the current user only
 ```
-msda set com.adobe.acrobat.pro -u com.adobe.pdf all -fut
+msda set com.adobe.acrobat.pro -u com.adobe.pdf all
+```
+
+Set Google Chrome as the default web browser and email client for the current user and the user template
+```
+msda set com.google.chrome -p http -p https -p mailto -u public.url all -u public.html viewer -u public.xhtml all -fut
 ```
 
 ## FAQ
@@ -75,7 +79,7 @@ Are there commands other than `set`?
 > At the moment, no. Please [create an issue](https://github.com/targendaz2/Mac-Set-Default-Apps/issues/new) on this app's GitHub page if there are commands you'd find useful.
 
 Where can I go for help with this app?
-> If you need help with this app specifically, please feel free to [create an issue](https://github.com/targendaz2/Mac-Set-Default-Apps/issues/new) on this app's GitHub page. I'll try to either respond, or implement changes to the app in response as soon as possible.
+> If you need help with this app specifically, please feel free to [create an issue](https://github.com/targendaz2/Mac-Set-Default-Apps/issues/new) on this app's GitHub page. I'll try to either respond, or implement changes to the app as soon as possible.
 
 What about help with other Mac-related things?
->[Jamf Nation](https://www.jamf.com/jamf-nation/), the [MacSysAdmin subreddit](https://www.reddit.com/r/macsysadmin/), and the [MacAdmins Slack channel](https://macadmins.slack.com) are all great resources for people managing Macs in an enterprise environment.
+>[Jamf Nation](https://www.jamf.com/jamf-nation/), the [MacSysAdmin subreddit](https://www.reddit.com/r/macsysadmin/), and the [MacAdmins Slack channel](https://macadmins.slack.com) are all great resources for help managing Macs in an enterprise environment.
