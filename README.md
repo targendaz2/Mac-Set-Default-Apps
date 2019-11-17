@@ -14,7 +14,7 @@ MSDA provides an easy way to silently change the default applications used by ma
 ### As a Jamf Script
 **Note:** I assume these instructions will also work for MDM services other than Jamf, I just only have familiarity with Jamf
 
-1. Copy the contents of [payload/msda](https://github.com/targendaz2/Mac-Set-Default-Apps/blob/master/payload/msda) into a new Jamf script
+1. Copy the contents of [payload/msda.py](https://github.com/targendaz2/Mac-Set-Default-Apps/blob/master/payload/msda.py) into a new Jamf script
 2. Set the `JAMF` variable to `True` in the User-Editable Settings section
 
 ## Usage
