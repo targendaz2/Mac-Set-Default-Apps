@@ -4,6 +4,7 @@ import shutil
 import tempfile
 from unittest import TestCase
 
+import factory
 from faker import Faker
 from faker.providers import file, internet, lorem
 
@@ -64,30 +65,6 @@ def fake_role(all=False):
         roles.append('all')
     return choice(roles)
 
-# LSHandler Factories
-def lshandler_factory(num=1, all=True, uti=False, protocol=False):
-    app_id = fake_app_id()
-    handlers = []
-    utis = []
-    for n in range(num):
-        rand_num = random()
-        if (rand_num > 0.5 and not uti) or uti:
-            uti = fake_uti()
-            role = fake_role(all=all)
-            handler = msda.LSHandler(
-                app_id=app_id,
-                uti=uti,
-                role=role
-            )
-        if (rand_num <= 0.5 and not protocol) or protocol:
-            uti = fake_protocol()
-            handler = msda.LSHandler(
-                app_id=app_id,
-                uti=uti,
-            )
-        handlers.append(handler)
-    return handlers
-
 # Sample LSHandlers
 html_viewer_lshandler = msda.LSHandler(
     app_id=fake_app_id(),
@@ -128,6 +105,41 @@ def uti_lshandler_dict(app_id, uti, role='all'):
         }
     }
     return dict_
+
+# LSHandler Factories
+class LSHandlerFactory(factory.Factory):
+
+    class Meta:
+        model = msda.LSHandler
+
+    class Params:
+        rand_num = random()
+        use_all = True
+        use_uti = False
+        use_protocol = False
+
+    app_id = fake_app_id()
+
+    @factory.lazy_attribute
+    def uti(self):
+        if (self.rand_num > 0.5 and not self.use_uti) or self.use_uti:
+            return fake_uti()
+        if (self.rand_num <= 0.5 and not self.use_protocol) or self.use_protocol:
+            return fake_protocol()
+
+    @factory.lazy_attribute
+    def role(self):
+        if (self.rand_num > 0.5 and not self.use_uti) or self.use_uti:
+            return fake_role(all=self.use_all)
+
+
+def lshandler_factory(num=1, all=True, uti=False, protocol=False):
+    return LSHandlerFactory.build_batch(num,
+        app_id=fake_app_id(),
+        use_all=all,
+        use_uti=uti,
+        use_protocol=protocol,
+    )
 
 # Abstract Classes
 class LaunchServicesTestCase(TestCase):
