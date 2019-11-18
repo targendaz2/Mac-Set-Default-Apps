@@ -11,6 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Install testing dependencies
-        run: pip install -r requirements/test.txt
+        run: pip install -r requirements/ci.txt
       - name: Run tests
         run: ./tests/tests.py
