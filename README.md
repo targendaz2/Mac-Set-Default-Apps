@@ -54,9 +54,9 @@ Set Google Chrome as the default web browser for the current user and the user t
 msda set com.google.chrome -p http -p https -u public.url all -u public.html viewer -u public.xhtml all -fut
 ```
 
-Set Microsoft Outlook as the default email client for the current user only
+Set Microsoft Outlook as the default email client for the current user and the user template
 ```
-msda set com.microsoft.outlook -p mailto
+msda set com.microsoft.outlook -p mailto -fut
 ```
 
 Set Adobe Acrobat as the default PDF reader for the current user only
