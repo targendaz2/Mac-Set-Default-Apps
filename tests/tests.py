@@ -19,7 +19,7 @@ from test_settings import *
 from test_utils import *
 
 msda = imp.load_source('msda', os.path.join(
-	THIS_FILE, '../payload/msda')
+	THIS_FILE, '../payload/msda.py')
 )
 
 class TestLaunchServicesTestCaseSetUpAndTearDown(LaunchServicesTestCase):

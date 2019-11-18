@@ -11,7 +11,7 @@ from faker.providers import file, internet, lorem
 from test_settings import *
 
 msda = imp.load_source('msda', os.path.join(
-    THIS_FILE, '../payload/msda')
+    THIS_FILE, '../payload/msda.py')
 )
 
 fake = Faker()
