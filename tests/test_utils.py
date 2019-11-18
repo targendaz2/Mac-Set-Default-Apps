@@ -65,23 +65,6 @@ def fake_role(all=False):
         roles.append('all')
     return choice(roles)
 
-# Sample LSHandlers
-html_viewer_lshandler = msda.LSHandler(
-    app_id=fake_app_id(),
-    uti=fake_uti(),
-    role=fake_role(),
-)
-
-https_lshandler = msda.LSHandler(
-    app_id=fake_app_id(),
-    uti=fake_protocol(),
-)
-
-url_all_lshandler = msda.LSHandler(
-    app_id=fake_app_id(),
-    uti=fake_uti(),
-)
-
 
 # Sample LSHandler Dicts
 def protocol_lshandler_dict(app_id, uti):
@@ -113,32 +96,37 @@ class LSHandlerFactory(factory.Factory):
         model = msda.LSHandler
 
     class Params:
-        rand_num = random()
         use_all = True
-        use_uti = False
-        use_protocol = False
+        uti_only = False
+        protocol_only = False
 
     app_id = fake_app_id()
 
     @factory.lazy_attribute
     def uti(self):
-        if (self.rand_num > 0.5 and not self.use_uti) or self.use_uti:
+        rand_num = random()
+        if self.uti_only:
             return fake_uti()
-        if (self.rand_num <= 0.5 and not self.use_protocol) or self.use_protocol:
+        elif self.protocol_only:
+            return fake_protocol()
+        elif rand_num > 0.5:
+            return fake_uti()
+        elif rand_num <= 0.5:
             return fake_protocol()
 
     @factory.lazy_attribute
     def role(self):
-        if (self.rand_num > 0.5 and not self.use_uti) or self.use_uti:
+        if '.' in self.uti:
             return fake_role(all=self.use_all)
+        return 'all'
 
 
 def lshandler_factory(num=1, all=True, uti=False, protocol=False):
     return LSHandlerFactory.build_batch(num,
         app_id=fake_app_id(),
         use_all=all,
-        use_uti=uti,
-        use_protocol=protocol,
+        uti_only=uti,
+        protocol_only=protocol,
     )
 
 # Abstract Classes

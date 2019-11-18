@@ -54,26 +54,29 @@ class TestLaunchServicesTestCaseMethods(LaunchServicesTestCase):
 class TestLSHandlerObject(TestCase):
 
 	def test_can_generate_LSHandler_for_uti(self):
+		sample_lshandler = LSHandlerFactory.build(uti_only=True)
 		comparison_dict = uti_lshandler_dict(
-			app_id=html_viewer_lshandler.app_id,
-			uti=html_viewer_lshandler.uti,
-			role=html_viewer_lshandler.role,
+			app_id=sample_lshandler.app_id,
+			uti=sample_lshandler.uti,
+			role=sample_lshandler.role,
 		)
-		self.assertEqual(dict(html_viewer_lshandler), comparison_dict)
+		self.assertEqual(dict(sample_lshandler), comparison_dict)
 
 	def test_lshandlers_for_utis_have_role_default_to_all(self):
+		sample_lshandler = LSHandlerFactory.build(uti_only=True)
 		comparison_dict = uti_lshandler_dict(
-			app_id=url_all_lshandler.app_id,
-			uti=url_all_lshandler.uti,
+			app_id=sample_lshandler.app_id,
+			uti=sample_lshandler.uti,
 		)
-		self.assertEqual(dict(url_all_lshandler), comparison_dict)
+		self.assertEqual(dict(sample_lshandler), comparison_dict)
 
 	def test_can_generate_LSHandler_for_protocol(self):
+		sample_lshandler = LSHandlerFactory.build(protocol_only=True)
 		comparison_dict = protocol_lshandler_dict(
-			app_id=https_lshandler.app_id,
-			uti=https_lshandler.uti,
+			app_id=sample_lshandler.app_id,
+			uti=sample_lshandler.uti,
 		)
-		self.assertEqual(dict(https_lshandler), comparison_dict)
+		self.assertEqual(dict(sample_lshandler), comparison_dict)
 
 
 class TestLSHandlerObjectEquality(TestCase):
