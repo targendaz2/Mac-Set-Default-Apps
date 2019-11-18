@@ -77,35 +77,6 @@ class TestLSHandlerObject(TestCase):
 
 class TestLSHandlerObjectEquality(TestCase):
 
-	html_all = msda.LSHandler(
-		app_id='org.company2.fakebrowser',
-		uti='public.html',
-		role='all',
-	)
-
-	html_viewer1 = msda.LSHandler(
-		app_id='com.company1.fakebrowser',
-		uti='public.html',
-		role='viewer',
-	)
-
-	html_viewer2 = msda.LSHandler(
-		app_id='org.company2.fakebrowser',
-		uti='public.html',
-		role='viewer',
-	)
-
-	html_reader = msda.LSHandler(
-		app_id='com.company.fakebrowser',
-		uti='public.html',
-		role='reader',
-	)
-
-	mailto_protocol = msda.LSHandler(
-		app_id='com.company.fakebrowser',
-		uti='mailto',
-	)
-
 	def test_equal_if_same_uti_and_role(self):
 		uti = fake_uti()
 		role = fake_role(all=False)
@@ -115,16 +86,31 @@ class TestLSHandlerObjectEquality(TestCase):
 		)
 
 	def test_not_equal_if_different_uti(self):
-		self.assertNotEqual(self.html_viewer1, self.mailto_protocol)
+		self.assertNotEqual(
+			LSHandlerFactory(uti='public.html'),
+			LSHandlerFactory(uti='mailto'),
+		)
 
 	def test_not_equal_if_different_role_but_neither_is_all(self):
-		self.assertNotEqual(self.html_viewer1, self.html_reader)
+		uti = fake_uti()
+		self.assertNotEqual(
+			LSHandlerFactory(uti=uti, role='viewer'),
+			LSHandlerFactory(uti=uti, role='editor'),
+		)
 
 	def test_equal_if_same_uti_and_existing_role_is_all(self):
-		self.assertEqual(self.html_viewer1, self.html_all)
+		uti = fake_uti()
+		self.assertEqual(
+			LSHandlerFactory(uti=uti, role='all'),
+			LSHandlerFactory(uti=uti, use_all=False),
+		)
 
 	def test_equal_if_same_uti_and_replacing_role_is_all(self):
-		self.assertEqual(self.html_all, self.html_viewer1)
+		uti = fake_uti()
+		self.assertEqual(
+			LSHandlerFactory(uti=uti, use_all=False),
+			LSHandlerFactory(uti=uti, role='all'),
+		)
 
 
 class TestLaunchServicesObject(LaunchServicesTestCase):
