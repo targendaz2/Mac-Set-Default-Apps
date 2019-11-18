@@ -65,30 +65,6 @@ def fake_role(all=False):
         roles.append('all')
     return choice(roles)
 
-
-# Sample LSHandler Dicts
-def protocol_lshandler_dict(app_id, uti):
-    role_key = 'LSHandlerRoleAll'
-    dict_ = {
-        'LSHandlerURLScheme': uti.lower(),
-        role_key: app_id,
-        'LSHandlerPreferredVersions': {
-            role_key: '-',
-        }
-    }
-    return dict_
-
-def uti_lshandler_dict(app_id, uti, role='all'):
-    role_key = 'LSHandlerRole' + role.capitalize()
-    dict_ = {
-        'LSHandlerContentType': uti,
-        role_key: app_id,
-        'LSHandlerPreferredVersions': {
-            role_key: '-',
-        }
-    }
-    return dict_
-
 # LSHandler Factories
 class LSHandlerFactory(factory.Factory):
 

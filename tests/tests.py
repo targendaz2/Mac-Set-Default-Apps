@@ -53,31 +53,26 @@ class TestLaunchServicesTestCaseMethods(LaunchServicesTestCase):
 
 class TestLSHandlerObject(TestCase):
 
-	def test_can_generate_LSHandler_for_uti(self):
-		sample_lshandler = LSHandlerFactory.build(uti_only=True)
-		comparison_dict = uti_lshandler_dict(
-			app_id=sample_lshandler.app_id,
-			uti=sample_lshandler.uti,
-			role=sample_lshandler.role,
-		)
-		self.assertEqual(dict(sample_lshandler), comparison_dict)
+	def test_LSHandler_can_be_converted_to_dict(self):
+		sample_lshandler = LSHandlerFactory()
+		self.assertIsInstance(dict(sample_lshandler), dict)
 
-	def test_lshandlers_for_utis_have_role_default_to_all(self):
-		sample_lshandler = LSHandlerFactory.build(uti_only=True, role=None)
-		comparison_dict = uti_lshandler_dict(
-			app_id=sample_lshandler.app_id,
-			uti=sample_lshandler.uti,
-			role='all',
+	def test_can_generate_LSHandler_for_uti(self):
+		sample_lshandler = LSHandlerFactory(uti_only=True)
+		sample_dict = dict(sample_lshandler)
+		self.assertIn(sample_lshandler.app_id, sample_dict.values())
+		self.assertIn(sample_lshandler.uti, sample_dict.values())
+		self.assertIn(
+			'LSHandlerRole' + sample_lshandler.role.capitalize(),
+			sample_dict.keys()
 		)
-		self.assertEqual(dict(sample_lshandler), comparison_dict)
 
 	def test_can_generate_LSHandler_for_protocol(self):
-		sample_lshandler = LSHandlerFactory.build(protocol_only=True)
-		comparison_dict = protocol_lshandler_dict(
-			app_id=sample_lshandler.app_id,
-			uti=sample_lshandler.uti,
-		)
-		self.assertEqual(dict(sample_lshandler), comparison_dict)
+		sample_lshandler = LSHandlerFactory(protocol_only=True)
+		sample_dict = dict(sample_lshandler)
+		self.assertIn(sample_lshandler.app_id, sample_dict.values())
+		self.assertIn(sample_lshandler.uti, sample_dict.values())
+		self.assertIn('LSHandlerRoleAll', sample_dict.keys())
 
 
 class TestLSHandlerObjectEquality(TestCase):
