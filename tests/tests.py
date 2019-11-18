@@ -3,7 +3,7 @@
 from __future__ import print_function
 
 import unittest
-from unittest import TestCase
+from pyfakefs.fake_filesystem_unittest import TestCase
 
 import imp
 import os
