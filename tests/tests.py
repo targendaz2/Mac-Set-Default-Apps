@@ -266,7 +266,7 @@ class TestLaunchServicesObject(LaunchServicesTestCase):
 
 	def test_can_set_LSHandler_from_object(self):
 		ls = msda.LaunchServices(self.seed_plist(SIMPLE_BINARY_PLIST))
-		handler = lshandler_factory(all=True)
+		handler = LSHandlerFactory(use_all=True)
 
 		self.assertNotIn(handler, ls.handlers)
 		ls.set_handler(handler)
@@ -287,7 +287,7 @@ class FunctionalTests(LaunchServicesTestCase):
 
 	def test_set_single_uti_handler_for_current_user(self, user_fn):
 		user_fn.return_value = self.user_ls_path
-		handler = lshandler_factory(uti=True)[0]
+		handler = LSHandlerFactory(uti_only=True)
 
 		self.assertNotIn(handler, self.user_ls.handlers)
 
@@ -303,7 +303,7 @@ class FunctionalTests(LaunchServicesTestCase):
 
 	def test_set_single_protocol_handler_for_current_user(self, user_fn):
 		user_fn.return_value = self.user_ls_path
-		handler = lshandler_factory(protocol=True)[0]
+		handler = LSHandlerFactory(protocol_only=True)
 
 		self.assertNotIn(handler, self.user_ls.handlers)
 
@@ -319,7 +319,7 @@ class FunctionalTests(LaunchServicesTestCase):
 
 	def test_set_multiple_uti_handlers_for_current_user(self, user_fn):
 		user_fn.return_value = self.user_ls_path
-		handlers = lshandler_factory(uti=True, num=randint(3, 6))
+		handlers = LSHandlerFactory.build_batch(randint(3, 6), uti_only=True)
 
 		arguments = ['set', handlers[0].app_id]
 		for handler in handlers:
@@ -336,7 +336,7 @@ class FunctionalTests(LaunchServicesTestCase):
 
 	def test_set_multiple_protocol_handlers_for_current_user(self, user_fn):
 		user_fn.return_value = self.user_ls_path
-		handlers = lshandler_factory(protocol=True, num=randint(3, 6))
+		handlers = LSHandlerFactory.build_batch(randint(3, 6), protocol_only=True)
 
 		arguments = ['set', handlers[0].app_id]
 		for handler in handlers:
@@ -353,7 +353,7 @@ class FunctionalTests(LaunchServicesTestCase):
 
 	def test_set_multiple_protocol_and_uti_handlers_for_current_user(self, user_fn):
 		user_fn.return_value = self.user_ls_path
-		handlers = lshandler_factory(num=randint(3, 6))
+		handlers = LSHandlerFactory.build_batch(randint(3, 6))
 
 		arguments = ['set', handlers[0].app_id]
 		for handler in handlers:
@@ -375,7 +375,7 @@ class FunctionalTests(LaunchServicesTestCase):
 	def test_set_handlers_for_current_user_and_template(self, template_fn, user_fn):
 		user_fn.return_value = self.user_ls_path
 		template_fn.return_value = self.template_ls_path
-		handlers = lshandler_factory(num=randint(4, 6))
+		handlers = LSHandlerFactory.build_batch(randint(4, 6))
 
 		arguments = ['set', '-fut', handlers[0].app_id]
 		for handler in handlers:
@@ -405,7 +405,7 @@ class FunctionalTests(LaunchServicesTestCase):
 	):
 		user_fn.return_value = self.user_ls_path
 		template_fn.return_value = self.template_ls_path
-		handlers = lshandler_factory(num=randint(4, 6))
+		handlers = LSHandlerFactory.build_batch(randint(4, 6))
 
 		arguments = ['set', '-fut', handlers[0].app_id]
 		for handler in handlers:
@@ -435,7 +435,7 @@ class FunctionalTests(LaunchServicesTestCase):
 	):
 		user_fn.return_value = self.user_ls_path
 		template_fn.return_value = self.template_ls_path
-		handlers = lshandler_factory(num=randint(1, 3))
+		handlers = LSHandlerFactory.build_batch(randint(1, 3))
 
 		arguments = ['', '', '', 'set -fut ' + handlers[0].app_id]
 		for handler in handlers:

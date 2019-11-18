@@ -120,15 +120,6 @@ class LSHandlerFactory(factory.Factory):
             return fake_role(all=self.use_all)
         return None
 
-
-def lshandler_factory(num=1, all=True, uti=False, protocol=False):
-    return LSHandlerFactory.build_batch(num,
-        app_id=fake_app_id(),
-        use_all=all,
-        uti_only=uti,
-        protocol_only=protocol,
-    )
-
 # Abstract Classes
 class LaunchServicesTestCase(TestCase):
 
