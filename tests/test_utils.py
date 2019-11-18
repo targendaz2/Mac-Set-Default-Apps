@@ -118,7 +118,7 @@ class LSHandlerFactory(factory.Factory):
     def role(self):
         if '.' in self.uti:
             return fake_role(all=self.use_all)
-        return 'all'
+        return None
 
 
 def lshandler_factory(num=1, all=True, uti=False, protocol=False):

@@ -63,10 +63,11 @@ class TestLSHandlerObject(TestCase):
 		self.assertEqual(dict(sample_lshandler), comparison_dict)
 
 	def test_lshandlers_for_utis_have_role_default_to_all(self):
-		sample_lshandler = LSHandlerFactory.build(uti_only=True)
+		sample_lshandler = LSHandlerFactory.build(uti_only=True, role=None)
 		comparison_dict = uti_lshandler_dict(
 			app_id=sample_lshandler.app_id,
 			uti=sample_lshandler.uti,
+			role='all',
 		)
 		self.assertEqual(dict(sample_lshandler), comparison_dict)
 
@@ -111,7 +112,12 @@ class TestLSHandlerObjectEquality(TestCase):
 	)
 
 	def test_equal_if_same_uti_and_role(self):
-		self.assertEqual(self.html_viewer1, self.html_viewer2)
+		uti = fake_uti()
+		role = fake_role(all=False)
+		self.assertEqual(
+			LSHandlerFactory(uti=uti, role=role),
+			LSHandlerFactory(uti=uti, role=role),
+		)
 
 	def test_not_equal_if_different_uti(self):
 		self.assertNotEqual(self.html_viewer1, self.mailto_protocol)
