@@ -2,7 +2,7 @@ import imp, os
 from random import choice, random
 import shutil
 import tempfile
-from pyfakefs.fake_filesystem_unittest import TestCase
+from unittest import TestCase
 
 import factory
 from faker import Faker
