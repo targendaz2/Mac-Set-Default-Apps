@@ -41,6 +41,7 @@ msda set [-h] [-fut] [-p PROTOCOL] [-u UTI ROLE] app_id
 
 * app_id: The ID of the application to set as a default app
 * -h, --help: Show help for the `set` command
+* -feu: Apply the specified changes to all existing users
 * -fut: Apply the specified changes to the `English.lproj` user template in addition to the currently logged on user (if there is one)
 * -p, --protocol: Specify a protocol that the specified app should handle
 * -u, --uti:
