@@ -33,10 +33,10 @@ msda command -h --version
 ### Set Command Usage
 **Note:** The computer will need to be restarted after using the `set` command in order to apply the changes
 
-**Note:** This command must be run with administrative privileges
+**Note:** The `set` command must be run with administrative privileges
 
 ```
-msda set [-h] [-fut] [-p PROTOCOL] [-u UTI ROLE] app_id
+msda set [-h] [-feu] [-fut] [-p PROTOCOL] [-u UTI ROLE] app_id
 ```
 
 * app_id: The ID of the application to set as a default app
@@ -55,9 +55,9 @@ Set Google Chrome as the default web browser for the current user and the user t
 msda set com.google.chrome -p http -p https -u public.url all -u public.html viewer -u public.xhtml all -fut
 ```
 
-Set Microsoft Outlook as the default email client for the current user and the user template
+Set Microsoft Outlook as the default email client for all existing users and the user template
 ```
-msda set com.microsoft.outlook -p mailto -fut
+msda set com.microsoft.outlook -p mailto -feu -fut
 ```
 
 Set Adobe Acrobat as the default PDF reader for the current user only
