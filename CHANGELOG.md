@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.3] - 2019-11-26
 ### Fixed
-* *Actually* fixed bug where using `-feu` would ignore valid user homes
+* Fixed bug where the wrong directory was targeted instead of the current user's home
 
 ## [1.1.2] - 2019-11-26
 ### Fixed

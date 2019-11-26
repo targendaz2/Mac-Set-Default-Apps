@@ -113,7 +113,7 @@ def get_current_username():
 		('cut', '-d', ' ', '-f1'),
 		stdin=grep_cmd.stdout,
 	)
-	return username
+	return username.strip()
 
 def gather_user_ls_paths():
 	gathered_users = os.listdir(USER_HOMES_LOCATION)
@@ -257,7 +257,7 @@ class LaunchServices(object):
 		if not plist:
 			plist = self.plist
 
-		# create parents directories if they don't exist
+		# create parent directories if they don't exist
 		create_plist_parents(plist)
 
 		with NamedTemporaryFile(prefix=TMP_PREFIX, delete=True) as tmp_plist:

@@ -9,7 +9,7 @@ export PATH=/usr/bin:/bin:/usr/sbin:/sbin
 
 project_folder=$(dirname "$0")
 
-find "${project_folder}/payload" -type f -exec chmod 755 {} \;
+find "${project_folder}/payload" -type f \( ! -iname "*.pyc" \) -exec chmod 755 {} \;
 
 pkgbuild --root "${project_folder}/payload" \
 	--identifier "${IDENTIFIER}" \
