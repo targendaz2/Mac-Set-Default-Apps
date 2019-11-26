@@ -115,8 +115,19 @@ class LaunchServicesTestCase(TestCase):
     def tearDown(self):
         shutil.rmtree(self.tmp)
 
-    def seed_plist(self, plist_name):
+    def seed_plist(self, plist_name, location=None, target_name=None):
+        if location == None:
+            location = self.tmp
+
+        if target_name == None:
+            target_name = plist_name
+
         src = os.path.join(THIS_FILE, 'assets', plist_name)
-        dest = os.path.join(self.tmp, plist_name)
+        dest = os.path.join(location, target_name)
+
+        parent_path = os.path.dirname(dest)
+        if not os.path.exists(parent_path):
+		    os.makedirs(parent_path)
+
         shutil.copy(src, dest)
         return dest

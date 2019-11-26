@@ -304,8 +304,7 @@ def set_command(args):
 	# Collect plists
 	plists = []
 	if args.feu:
-		# plists.extend(gather_user_homes())
-		pass
+		plists.extend(gather_user_ls_paths())
 	elif current_username != '':
 		plists.append(create_user_ls_path(current_username))
 	if args.fut:

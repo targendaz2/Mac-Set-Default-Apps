@@ -277,7 +277,6 @@ class TestLaunchServicesObject(LaunchServicesTestCase):
 		self.assertIn(handler, ls.handlers)
 
 
-@mock.patch('msda.create_user_ls_path')
 class FunctionalTests(LaunchServicesTestCase):
 
 	def setUp(self):
@@ -289,6 +288,7 @@ class FunctionalTests(LaunchServicesTestCase):
 		)
 		self.template_ls = msda.LaunchServices(self.template_ls_path)
 
+	@mock.patch('msda.create_user_ls_path')
 	def test_set_single_uti_handler_for_current_user(self, user_fn):
 		user_fn.return_value = self.user_ls_path
 		handler = LSHandlerFactory(uti_only=True)
@@ -305,6 +305,7 @@ class FunctionalTests(LaunchServicesTestCase):
 		self.user_ls.read()
 		self.assertIn(handler, self.user_ls.handlers)
 
+	@mock.patch('msda.create_user_ls_path')
 	def test_set_single_protocol_handler_for_current_user(self, user_fn):
 		user_fn.return_value = self.user_ls_path
 		handler = LSHandlerFactory(protocol_only=True)
@@ -321,6 +322,7 @@ class FunctionalTests(LaunchServicesTestCase):
 		self.user_ls.read()
 		self.assertIn(handler, self.user_ls.handlers)
 
+	@mock.patch('msda.create_user_ls_path')
 	def test_set_multiple_uti_handlers_for_current_user(self, user_fn):
 		user_fn.return_value = self.user_ls_path
 		handlers = LSHandlerFactory.build_batch(randint(3, 6), uti_only=True)
@@ -338,6 +340,7 @@ class FunctionalTests(LaunchServicesTestCase):
 			self.assertIn(handler, self.user_ls.handlers)
 			self.assertIn(handler.app_id, self.user_ls.app_ids)
 
+	@mock.patch('msda.create_user_ls_path')
 	def test_set_multiple_protocol_handlers_for_current_user(self, user_fn):
 		user_fn.return_value = self.user_ls_path
 		handlers = LSHandlerFactory.build_batch(randint(3, 6), protocol_only=True)
@@ -355,6 +358,7 @@ class FunctionalTests(LaunchServicesTestCase):
 			self.assertIn(handler, self.user_ls.handlers)
 			self.assertIn(handler.app_id, self.user_ls.app_ids)
 
+	@mock.patch('msda.create_user_ls_path')
 	def test_set_multiple_protocol_and_uti_handlers_for_current_user(self, user_fn):
 		user_fn.return_value = self.user_ls_path
 		handlers = LSHandlerFactory.build_batch(randint(3, 6))
@@ -375,6 +379,7 @@ class FunctionalTests(LaunchServicesTestCase):
 			self.assertIn(handler, self.user_ls.handlers)
 			self.assertIn(handler.app_id, self.user_ls.app_ids)
 
+	@mock.patch('msda.create_user_ls_path')
 	@mock.patch('msda.create_template_ls_path')
 	def test_set_handlers_for_current_user_and_template(self, template_fn, user_fn):
 		user_fn.return_value = self.user_ls_path
@@ -402,6 +407,7 @@ class FunctionalTests(LaunchServicesTestCase):
 			self.assertIn(handler, self.template_ls.handlers)
 			self.assertIn(handler.app_id, self.template_ls.app_ids)
 
+	@mock.patch('msda.create_user_ls_path')
 	@mock.patch('msda.create_template_ls_path')
 	@mock.patch('msda.get_current_username', return_value='')
 	def test_set_handlers_for_only_template(self,
@@ -432,6 +438,7 @@ class FunctionalTests(LaunchServicesTestCase):
 			self.assertIn(handler, self.template_ls.handlers)
 			self.assertIn(handler.app_id, self.template_ls.app_ids)
 
+	@mock.patch('msda.create_user_ls_path')
 	@mock.patch('msda.create_template_ls_path')
 	@mock.patch('msda.JAMF', True)
 	def test_set_handlers_for_current_user_and_template_in_Jamf(self,
@@ -462,11 +469,9 @@ class FunctionalTests(LaunchServicesTestCase):
 			self.assertIn(handler, self.template_ls.handlers)
 			self.assertIn(handler.app_id, self.template_ls.app_ids)
 
-	@unittest.skip('')
-	def test_set_handlers_for_all_existing_users(self,
-		user_fn,
-	):
-		fake_user_homes = create_user_homes(randint(1, 3), self.tmp)
+	def test_set_handlers_for_all_existing_users(self,):
+		fake_user_home_location = os.path.join(self.tmp, 'Users')
+		fake_user_homes = create_user_homes(randint(1, 3), fake_user_home_location)
 		handlers = LSHandlerFactory.build_batch(randint(4, 6))
 		arguments = ['set', '-feu', handlers[0].app_id]
 
@@ -479,14 +484,15 @@ class FunctionalTests(LaunchServicesTestCase):
 		for user_home in fake_user_homes:
 			user_ls_path = self.seed_plist(
 				SIMPLE_BINARY_PLIST,
-				os.path.join(user_home, msda.PLIST_RELATIVE_LOCATION)
+				os.path.join(user_home, msda.PLIST_RELATIVE_LOCATION),
+				msda.PLIST_NAME,
 			)
 			user_ls = msda.LaunchServices(user_ls_path)
 			for handler in handlers:
 				self.assertNotIn(handler, user_ls.handlers)
 				self.assertNotIn(handler.app_id, user_ls.app_ids)
 
-		with mock.patch('msda.USER_HOMES_LOCATION', self.tmp):
+		with mock.patch('msda.USER_HOMES_LOCATION', fake_user_home_location):
 			msda.main(arguments)
 
 		for user_home in fake_user_homes:
