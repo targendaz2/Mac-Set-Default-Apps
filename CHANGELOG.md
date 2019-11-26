@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.2] - 2019-11-26
+### Fixed
+* Fixed bug where using `-feu` would ignore valid user homes
+
 ## [1.1.1] - 2019-11-26
 ### Fixed
 * Fixed bug where using `-feu` would attempt to fill invalid user homes
