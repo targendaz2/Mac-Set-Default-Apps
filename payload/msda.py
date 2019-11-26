@@ -115,8 +115,10 @@ def get_current_username():
 	)
 	return username
 
-def gather_users():
-	return os.listdir(USER_HOMES_LOCATION)
+def gather_user_ls_paths():
+	gathered_users = os.listdir(USER_HOMES_LOCATION)
+	ls_paths = [ create_user_ls_path(u) for u in gathered_users ]
+	return ls_paths
 
 
 ###############################################################################

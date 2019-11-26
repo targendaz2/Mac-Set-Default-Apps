@@ -59,15 +59,19 @@ class TestFunctions(TestCase):
 	def tearDown(self):
 		shutil.rmtree(self.tmp)
 
-	def test_gather_users(self):
+	def test_gather_user_ls_paths(self):
 		fake_user_homes = create_user_homes(3, self.tmp)
 
 		with mock.patch('msda.USER_HOMES_LOCATION', self.tmp):
-			gathered_users = msda.gather_users()
+			gathered_ls_paths = msda.gather_user_ls_paths()
 
 		for fake_user_home in fake_user_homes:
-			fake_user = os.path.basename(os.path.normpath(fake_user_home))
-			self.assertIn(fake_user, gathered_users)
+			fake_ls_path = os.path.join(
+				fake_user_home,
+				msda.PLIST_RELATIVE_LOCATION,
+				msda.PLIST_NAME
+			)
+			self.assertIn(fake_ls_path, gathered_ls_paths)
 
 
 class TestLSHandlerObject(TestCase):
