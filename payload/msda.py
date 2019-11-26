@@ -36,7 +36,7 @@ USER_HOMES_LOCATION = '/Users' # Where users' home directories are located
 __author__ = 'David G. Rosenberg'
 __copyright__ = 'Copyright (c), Mac Set Default Apps'
 __license__ = 'MIT'
-__version__ = '1.1.2'
+__version__ = '1.1.3'
 __email__ = 'dgrosenberg@icloud.com'
 
 
@@ -120,11 +120,8 @@ def gather_user_ls_paths():
 	ls_paths = []
 	for user in gathered_users:
 		user_ls_path = create_user_ls_path(user)
-		if not os.path.exists(os.path.dirname(user_ls_path)):
-			continue
-		elif not os.path.exists(user_ls_path):
-			continue
-		ls_paths.append(user_ls_path)
+		if os.path.exists(os.path.dirname(user_ls_path)):
+			ls_paths.append(user_ls_path)
 
 	return ls_paths
 

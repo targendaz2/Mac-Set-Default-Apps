@@ -551,11 +551,12 @@ class FunctionalTests(LaunchServicesTestCase):
 				arguments.extend(['-p', handler.uti])
 
 		for user_home in fake_user_homes[:-num_invalid_users]:
-			user_ls_path = self.seed_plist(
-				SIMPLE_BINARY_PLIST,
-				os.path.join(user_home, msda.PLIST_RELATIVE_LOCATION),
+			user_ls_path = os.path.join(
+				user_home,
+				msda.PLIST_RELATIVE_LOCATION,
 				msda.PLIST_NAME,
 			)
+			os.makedirs(os.path.dirname(user_ls_path))
 			user_ls = msda.LaunchServices(user_ls_path)
 			for handler in handlers:
 				self.assertNotIn(handler, user_ls.handlers)
