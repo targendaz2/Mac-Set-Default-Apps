@@ -501,6 +501,42 @@ class FunctionalTests(LaunchServicesTestCase):
 				self.assertIn(handler, user_ls.handlers)
 				self.assertIn(handler.app_id, user_ls.app_ids)
 
+	@mock.patch('msda.create_template_ls_path')
+	def test_set_handlers_for_all_existing_users_and_user_template(self,
+		template_fn
+	):
+		template_fn.return_value = self.template_ls_path
+		fake_user_home_location = os.path.join(self.tmp, 'Users')
+		fake_user_homes = create_user_homes(randint(1, 3), fake_user_home_location)
+		handlers = LSHandlerFactory.build_batch(randint(4, 6))
+		arguments = ['set', '-feu', '-fut', handlers[0].app_id]
+
+		for handler in handlers:
+			if '.' in handler.uti:
+				arguments.extend(['-u', handler.uti, handler.role])
+			else:
+				arguments.extend(['-p', handler.uti])
+
+		for user_home in fake_user_homes:
+			user_ls_path = self.seed_plist(
+				SIMPLE_BINARY_PLIST,
+				os.path.join(user_home, msda.PLIST_RELATIVE_LOCATION),
+				msda.PLIST_NAME,
+			)
+			user_ls = msda.LaunchServices(user_ls_path)
+			for handler in handlers:
+				self.assertNotIn(handler, user_ls.handlers)
+				self.assertNotIn(handler.app_id, user_ls.app_ids)
+
+		with mock.patch('msda.USER_HOMES_LOCATION', fake_user_home_location):
+			msda.main(arguments)
+
+		for user_home in fake_user_homes:
+			user_ls.read()
+			for handler in handlers:
+				self.assertIn(handler, user_ls.handlers)
+				self.assertIn(handler.app_id, user_ls.app_ids)
+
 
 if __name__ == '__main__':
     unittest.main()
