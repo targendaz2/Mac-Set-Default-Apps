@@ -36,7 +36,7 @@ USER_HOMES_LOCATION = '/Users' # Where users' home directories are located
 __author__ = 'David G. Rosenberg'
 __copyright__ = 'Copyright (c), Mac Set Default Apps'
 __license__ = 'MIT'
-__version__ = '1.1.0'
+__version__ = '1.1.1'
 __email__ = 'dgrosenberg@icloud.com'
 
 
@@ -117,7 +117,12 @@ def get_current_username():
 
 def gather_user_ls_paths():
 	gathered_users = os.listdir(USER_HOMES_LOCATION)
-	ls_paths = [ create_user_ls_path(u) for u in gathered_users ]
+	ls_paths = []
+	for user in gathered_users:
+		user_ls_path = create_user_ls_path(user)
+		if os.path.exists(user_ls_path):
+			ls_paths.append(user_ls_path)
+
 	return ls_paths
 
 
