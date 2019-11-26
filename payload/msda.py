@@ -115,10 +115,8 @@ def get_current_username():
 	)
 	return username
 
-def gather_user_homes():
-	user_homes = os.listdir(USER_HOMES_LOCATION)
-	user_homes = [ os.path.join(USER_HOMES_LOCATION, p) for p in user_homes ]
-	return user_homes
+def gather_users():
+	return os.listdir(USER_HOMES_LOCATION)
 
 
 ###############################################################################
@@ -303,7 +301,10 @@ def set_command(args):
 
 	# Collect plists
 	plists = []
-	if current_username != '':
+	if args.feu:
+		# plists.extend(gather_user_homes())
+		pass
+	elif current_username != '':
 		plists.append(create_user_ls_path(current_username))
 	if args.fut:
 		plists.append(create_template_ls_path())
@@ -374,6 +375,11 @@ def main(arguments=None):
 		'app_id',
 		help='the identifier of the application to set as a default',
 		type=str,
+	)
+	set_parser.add_argument(
+		'-feu',
+		help='updates all existing users\' launch services',
+		action='store_true',
 	)
 	set_parser.add_argument(
 		'-fut',
