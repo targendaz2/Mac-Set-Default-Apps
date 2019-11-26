@@ -65,7 +65,17 @@ def fake_role(all=False):
         roles.append('all')
     return choice(roles)
 
-# LSHandler Factories
+# Factories
+def create_user_homes(num, location):
+    created_user_homes = []
+    for n in range(num):
+        user_home_path = os.path.join(location, fake.user_name())
+        os.makedirs(user_home_path)
+        created_user_homes.append(user_home_path)
+
+    return created_user_homes
+
+
 class LSHandlerFactory(factory.Factory):
 
     class Meta:

@@ -51,6 +51,24 @@ class TestLaunchServicesTestCaseMethods(LaunchServicesTestCase):
         self.assertTrue(os.path.exists(tmp_path))
 
 
+class TestFunctions(TestCase):
+
+	def setUp(self):
+		self.tmp = tempfile.mkdtemp(prefix=msda.TMP_PREFIX)
+
+	def tearDown(self):
+		shutil.rmtree(self.tmp)
+
+	def test_gather_user_homes(self):
+		fake_user_homes = create_user_homes(3, self.tmp)
+
+		with mock.patch('msda.USER_HOMES_LOCATION', self.tmp):
+			gathered_user_homes = msda.gather_user_homes()
+
+		for fake_user_home in fake_user_homes:
+			self.assertIn(fake_user_home, gathered_user_homes)
+
+
 class TestLSHandlerObject(TestCase):
 
 	def test_LSHandler_can_be_converted_to_dict(self):
@@ -438,6 +456,30 @@ class FunctionalTests(LaunchServicesTestCase):
 			self.assertIn(handler.app_id, self.user_ls.app_ids)
 			self.assertIn(handler, self.template_ls.handlers)
 			self.assertIn(handler.app_id, self.template_ls.app_ids)
+
+	@unittest.skip('')
+	def test_set_handlers_for_all_existing_users(self, user_fn):
+		user_homes = msda.gather_user_homes()
+		handlers = LSHandlerFactory.build_batch(randint(4, 6))
+		arguments = ['set', '-feu', handlers[0].app_id]
+
+		for handler in handlers:
+			if '.' in handler.uti:
+				arguments.extend(['-u', handler.uti, handler.role])
+			else:
+				arguments.extend(['-p', handler.uti])
+
+		for user_home in user_homes:
+			user_ls = self.seed_plist(SIMPLE_BINARY_PLIST, user_home)
+			for handler in handlers:
+				self.assertNotIn(handler, user_ls)
+				self.assertNotIn(handler.app_id, user_ls.app_ids)
+
+			user_ls.read()
+
+			for handler in handlers:
+				self.assertIn(handler, user_ls)
+				self.assertIn(handler.app_id, user_ls.app_ids)
 
 
 if __name__ == '__main__':

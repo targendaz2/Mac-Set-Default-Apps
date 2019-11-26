@@ -115,6 +115,11 @@ def get_current_username():
 	)
 	return username
 
+def gather_user_homes():
+	user_homes = os.listdir(USER_HOMES_LOCATION)
+	user_homes = [ os.path.join(USER_HOMES_LOCATION, p) for p in user_homes ]
+	return user_homes
+
 
 ###############################################################################
 #
