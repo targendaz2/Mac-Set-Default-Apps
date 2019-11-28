@@ -683,7 +683,6 @@ class FunctionalTests(LaunchServicesTestCase):
 		msda.main(arguments)
 
 		self.user_ls.read()
-		# print(self.user_ls.handlers[0].extension)
 		self.assertIn(handler, self.user_ls.handlers)
 
 
