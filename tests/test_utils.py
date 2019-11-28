@@ -31,7 +31,7 @@ def fake_app_id():
     return app_id + '.' + fake.word()	# 10% chance: com.company.app.pro
 
 def fake_extension():
-    return fake.file_extension()
+    return str(fake.file_extension())
 
 def fake_protocol():
     protocols = [

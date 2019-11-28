@@ -647,7 +647,6 @@ class FunctionalTests(LaunchServicesTestCase):
 				msda.PLIST_NAME,
 			)))
 
-	@unittest.skip('')
 	@mock.patch('msda.create_user_ls_path')
 	def test_set_single_extension_handler_for_current_user(self, user_fn):
 		user_fn.return_value = self.user_ls_path
@@ -663,6 +662,7 @@ class FunctionalTests(LaunchServicesTestCase):
 		msda.main(arguments)
 
 		self.user_ls.read()
+		# print(self.user_ls.handlers[0].extension)
 		self.assertIn(handler, self.user_ls.handlers)
 
 

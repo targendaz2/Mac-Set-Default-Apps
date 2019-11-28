@@ -148,19 +148,25 @@ class LSHandler(object):
 		self.role = self.role[13:].lower()
 
 		# grab the UTI/protocol/extension
-		if from_dict.get('LSHandlerContentTag'):
+		try:
+			# for if it's a UTI
+			self.uti = from_dict['LSHandlerContentType'].lower()
+			self._type = 'ContentType'
+		except KeyError:
+			pass
+		try:
+			# for if it's an extension
 			self.uti = from_dict['LSHandlerContentTagClass'].lower()
 			self._type = 'ContentTagClass'
 			self.extension = from_dict['LSHandlerContentTag'].lower()
-		else:
-			try:
-				# for if it's a UTI
-				self.uti = from_dict['LSHandlerContentType'].lower()
-				self._type = 'ContentType'
-			except KeyError:
-				# for if it's a protocol
-				self.uti = from_dict['LSHandlerURLScheme'].lower()
-				self._type = 'URLScheme'
+		except KeyError:
+			pass
+		try:
+			# for if it's a protocol
+			self.uti = from_dict['LSHandlerURLScheme'].lower()
+			self._type = 'URLScheme'
+		except KeyError:
+			pass
 
 		# grab the App ID
 		self.app_id = from_dict[self._role_key].lower()
@@ -341,12 +347,10 @@ def set_command(args):
 		# Combine submitted UTIs and protocols
 		if not args.uti:
 			args.uti = []
-		if args.extension:
-			args.uti.extend(args.extension)
 		if args.protocol:
 			args.uti += [ [p, None] for p in args.protocol ]
 
-		# Create and set handlers
+		# Create and set UTI and protocol handlers
 		for uti in args.uti:
 			# if uti[1] != None:
 			# 	print('    for "{}" with role "{}"'.format(uti[0], uti[1]))
@@ -357,6 +361,16 @@ def set_command(args):
 				uti=uti[0],
 				role=uti[1],
 			)
+
+		# Create and set extension handlers
+		if args.extension:
+			for extension in args.extension:
+				ls.set_handler(
+					app_id=args.app_id,
+					uti=EXTENSION_UTI,
+					role=extension[1],
+					extension=extension[0],
+				)
 
 		ls.write()
 	return 0
