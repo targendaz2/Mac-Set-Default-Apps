@@ -30,6 +30,19 @@ def fake_app_id():
         return app_id 					# 90% chance: com.company.app
     return app_id + '.' + fake.word()	# 10% chance: com.company.app.pro
 
+def fake_extension():
+    return fake.file_extension()
+
+def fake_protocol():
+    protocols = [
+        'http',
+        'https',
+        'xml',
+        'xhtml',
+        'ftp',
+    ]
+    return choice(protocols)
+
 def fake_uti():
     if random() > 0.25:
         return 'public.{}'.format(		# 75% chance: public.html
@@ -48,16 +61,6 @@ def fake_uti():
         fake.word(),
         fake.file_extension(),
     )
-
-def fake_protocol():
-    protocols = [
-        'http',
-        'https',
-        'xml',
-        'xhtml',
-        'ftp',
-    ]
-    return choice(protocols)
 
 def fake_role(all=False):
     roles = ['editor', 'viewer']
@@ -83,27 +86,38 @@ class LSHandlerFactory(factory.Factory):
 
     class Params:
         use_all = True
-        uti_only = False
+        extension_only = False
         protocol_only = False
+        uti_only = False
 
     app_id = fake_app_id()
 
     @factory.lazy_attribute
     def uti(self):
         rand_num = random()
-        if self.uti_only:
-            return fake_uti()
+        if self.extension_only:
+            return msda.EXTENSION_UTI
         elif self.protocol_only:
             return fake_protocol()
-        elif rand_num > 0.5:
+        elif self.uti_only:
             return fake_uti()
-        elif rand_num <= 0.5:
+        elif rand_num < 0.1:
+            return fake_extension()
+        elif rand_num <= 0.55:
             return fake_protocol()
+        elif rand_num > 0.55:
+            return fake_uti()
 
     @factory.lazy_attribute
     def role(self):
         if '.' in self.uti:
             return fake_role(all=self.use_all)
+        return None
+
+    @factory.lazy_attribute
+    def extension(self):
+        if self.uti == msda.EXTENSION_UTI:
+            return fake_extension()
         return None
 
 # Abstract Classes

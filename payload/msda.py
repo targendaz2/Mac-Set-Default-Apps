@@ -46,6 +46,7 @@ __email__ = 'dgrosenberg@icloud.com'
 #
 ###############################################################################
 
+EXTENSION_UTI = 'public.filename-extension'
 LSREGISTER_BINARY = '/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'
 OS_VERSION = float(mac_ver()[0][3:])
 PLIST_NAME = 'com.apple.launchservices.secure.plist'
@@ -156,19 +157,28 @@ class LSHandler(object):
 		# grab the App ID
 		self.app_id = from_dict[self._role_key].lower()
 
+		# set the extension if necesary
+		self.extension = ''
+
 	def _from_properties(self, **kwargs):
 		"""
 		Creates an LSHandler from specified properties
 		"""
 		self.app_id = kwargs['app_id'].lower()
 		self.uti = kwargs['uti'].lower()
+		self.extension = None
 
 		# determines if we're working with a UTI or protocol based on the
 		# presence of periods
 		if '.' in self.uti:
-			self._type = 'ContentType'
 			self.role = kwargs.get('role') or 'all'
 			self.role = self.role.lower()
+			self._type = 'ContentType'
+
+			# additionally determine if we're working with a file extension
+			if self.uti == EXTENSION_UTI:
+				self.extension = kwargs['extension'].lower()
+				self._type = 'ContentTagClass'
 		else:
 			self._type = 'URLScheme'
 			self.role = 'all'
@@ -207,6 +217,8 @@ class LSHandler(object):
 		yield ('LSHandler' + self._type, self.uti)
 		yield (self._role_key, self.app_id)
 		yield ('LSHandlerPreferredVersions', { self._role_key: '-' })
+		if self.extension:
+			yield('LSHandlerContentTag', self.extension)
 
 
 class LaunchServices(object):
@@ -323,6 +335,8 @@ def set_command(args):
 		# Combine submitted UTIs and protocols
 		if not args.uti:
 			args.uti = []
+		if args.extension:
+			args.uti.extend(args.extension)
 		if args.protocol:
 			args.uti += [ [p, None] for p in args.protocol ]
 
@@ -391,6 +405,13 @@ def main(arguments=None):
 		'-fut',
 		help='updates the user template\'s launch services',
 		action='store_true',
+	)
+	set_parser.add_argument(
+		'-e', '--extension',
+		help='file extensions to associate with the given app ID',
+		action='append',
+		nargs=2,
+		metavar=('EXTENSION', 'ROLE'),
 	)
 	set_parser.add_argument(
 		'-p', '--protocol',

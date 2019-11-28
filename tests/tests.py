@@ -97,6 +97,20 @@ class TestLSHandlerObject(TestCase):
 		self.assertIn(sample_lshandler.uti, sample_dict.values())
 		self.assertIn('LSHandlerRoleAll', sample_dict.keys())
 
+	def test_can_generate_LSHandler_for_extension(self):
+		sample_lshandler = LSHandlerFactory(extension_only=True)
+		self.assertEqual(sample_lshandler.uti, msda.EXTENSION_UTI)
+
+		sample_dict = dict(sample_lshandler)
+		self.assertIn(sample_lshandler.app_id, sample_dict.values())
+		self.assertIn(sample_lshandler.uti, sample_dict.values())
+		self.assertIn(
+			'LSHandlerRole' + sample_lshandler.role.capitalize(),
+			sample_dict.keys()
+		)
+		self.assertIn('LSHandlerContentTag', sample_dict.keys())
+		self.assertIn(sample_lshandler.extension, sample_dict.values())
+
 
 class TestLSHandlerObjectEquality(TestCase):
 
@@ -577,6 +591,24 @@ class FunctionalTests(LaunchServicesTestCase):
 				msda.PLIST_RELATIVE_LOCATION,
 				msda.PLIST_NAME,
 			)))
+
+	@unittest.skip('')
+	@mock.patch('msda.create_user_ls_path')
+	def test_set_single_extension_handler_for_current_user(self, user_fn):
+		user_fn.return_value = self.user_ls_path
+		handler = LSHandlerFactory(extension_only=True)
+
+		self.assertNotIn(handler, self.user_ls.handlers)
+
+		arguments = [
+			'set',
+			handler.app_id,
+			'-e', handler.extension, 'all',
+		]
+		msda.main(arguments)
+
+		self.user_ls.read()
+		self.assertIn(handler, self.user_ls.handlers)
 
 
 if __name__ == '__main__':
