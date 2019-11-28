@@ -140,25 +140,30 @@ class LSHandler(object):
 		Creates an LSHandler object from a dictionary
 		"""
 
+		# preset extension
+		self.extension = None
+
 		# grab the role from the string containing it
 		self.role = from_dict['LSHandlerPreferredVersions'].keys()[0]
 		self.role = self.role[13:].lower()
 
-		# grab the UTI/protocol
-		try:
-			# for if it's a UTI
-			self.uti = from_dict['LSHandlerContentType'].lower()
-			self._type = 'ContentType'
-		except KeyError:
-			# for if it's a protocol
-			self.uti = from_dict['LSHandlerURLScheme'].lower()
-			self._type = 'URLScheme'
+		# grab the UTI/protocol/extension
+		if from_dict.get('LSHandlerContentTag'):
+			self.uti = from_dict['LSHandlerContentTagClass'].lower()
+			self._type = 'ContentTagClass'
+			self.extension = from_dict['LSHandlerContentTag'].lower()
+		else:
+			try:
+				# for if it's a UTI
+				self.uti = from_dict['LSHandlerContentType'].lower()
+				self._type = 'ContentType'
+			except KeyError:
+				# for if it's a protocol
+				self.uti = from_dict['LSHandlerURLScheme'].lower()
+				self._type = 'URLScheme'
 
 		# grab the App ID
 		self.app_id = from_dict[self._role_key].lower()
-
-		# set the extension if necesary
-		self.extension = ''
 
 	def _from_properties(self, **kwargs):
 		"""
@@ -201,11 +206,12 @@ class LSHandler(object):
 		Two LSHandlers for the same role and UTI would be considered equal
 		"""
 		compare_utis = self.uti == other.uti
+		compare_extensions = self.extension == other.extension
 		if self.role == 'all' or other.role == 'all':
 			compare_roles = True
 		else:
 			compare_roles = self.role == other.role
-		return compare_utis and compare_roles
+		return compare_utis and compare_roles and compare_extensions
 
 	def __ne__(self, other):
 		"""

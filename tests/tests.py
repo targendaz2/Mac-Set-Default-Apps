@@ -149,6 +149,61 @@ class TestLSHandlerObjectEquality(TestCase):
 			LSHandlerFactory(uti=uti, role='all'),
 		)
 
+	def test_not_equal_if_different_extension(self):
+		uti = msda.EXTENSION_UTI
+		self.assertNotEqual(
+			LSHandlerFactory(uti=uti, extension='pdf'),
+			LSHandlerFactory(uti=uti, extension='cr'),
+		)
+
+	def test_not_equal_if_same_extension_and_different_not_all_role(self):
+		uti = msda.EXTENSION_UTI
+		extension = fake_extension()
+		self.assertNotEqual(
+			LSHandlerFactory(
+				uti=uti,
+				extension=extension,
+				role='viewer',
+			),
+			LSHandlerFactory(
+				uti=uti,
+				extension=extension,
+				role='editor',
+			),
+		)
+
+	def test_not_equal_if_same_extension_and_existing_role_is_all(self):
+		uti = msda.EXTENSION_UTI
+		extension = fake_extension()
+		self.assertEqual(
+			LSHandlerFactory(
+				uti=uti,
+				extension=extension,
+				role='all',
+			),
+			LSHandlerFactory(
+				uti=uti,
+				extension=extension,
+				role='editor',
+			),
+		)
+
+	def test_not_equal_if_same_extension_and_replacing_role_is_all(self):
+		uti = msda.EXTENSION_UTI
+		extension = fake_extension()
+		self.assertEqual(
+			LSHandlerFactory(
+				uti=uti,
+				extension=extension,
+				role='viewer',
+			),
+			LSHandlerFactory(
+				uti=uti,
+				extension=extension,
+				role='all',
+			),
+		)
+
 
 class TestLaunchServicesObject(LaunchServicesTestCase):
 
