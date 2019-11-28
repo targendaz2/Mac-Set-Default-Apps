@@ -102,7 +102,7 @@ class LSHandlerFactory(factory.Factory):
         elif self.uti_only:
             return fake_uti()
         elif rand_num < 0.1:
-            return fake_extension()
+            return msda.EXTENSION_UTI
         elif rand_num <= 0.55:
             return fake_protocol()
         elif rand_num > 0.55:

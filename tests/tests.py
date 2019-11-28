@@ -428,7 +428,7 @@ class FunctionalTests(LaunchServicesTestCase):
 			self.assertIn(handler.app_id, self.user_ls.app_ids)
 
 	@mock.patch('msda.create_user_ls_path')
-	def test_set_multiple_protocol_and_uti_handlers_for_current_user(self, user_fn):
+	def test_set_multiple_mixed_handlers_for_current_user(self, user_fn):
 		user_fn.return_value = self.user_ls_path
 		handlers = LSHandlerFactory.build_batch(randint(3, 6))
 
@@ -438,7 +438,10 @@ class FunctionalTests(LaunchServicesTestCase):
 			self.assertNotIn(handler.app_id, self.user_ls.app_ids)
 
 			if '.' in handler.uti:
-				arguments.extend(['-u', handler.uti, handler.role])
+				if handler.uti == msda.EXTENSION_UTI:
+					arguments.extend(['-e', handler.extension, handler.role])
+				else:
+					arguments.extend(['-u', handler.uti, handler.role])
 			else:
 				arguments.extend(['-p', handler.uti])
 		msda.main(arguments)
@@ -463,7 +466,10 @@ class FunctionalTests(LaunchServicesTestCase):
 			self.assertNotIn(handler.app_id, self.template_ls.app_ids)
 
 			if '.' in handler.uti:
-				arguments.extend(['-u', handler.uti, handler.role])
+				if handler.uti == msda.EXTENSION_UTI:
+					arguments.extend(['-e', handler.extension, handler.role])
+				else:
+					arguments.extend(['-u', handler.uti, handler.role])
 			else:
 				arguments.extend(['-p', handler.uti])
 		msda.main(arguments)
@@ -494,7 +500,10 @@ class FunctionalTests(LaunchServicesTestCase):
 			self.assertNotIn(handler.app_id, self.template_ls.app_ids)
 
 			if '.' in handler.uti:
-				arguments.extend(['-u', handler.uti, handler.role])
+				if handler.uti == msda.EXTENSION_UTI:
+					arguments.extend(['-e', handler.extension, handler.role])
+				else:
+					arguments.extend(['-u', handler.uti, handler.role])
 			else:
 				arguments.extend(['-p', handler.uti])
 		msda.main(arguments)
@@ -525,7 +534,10 @@ class FunctionalTests(LaunchServicesTestCase):
 			self.assertNotIn(handler.app_id, self.template_ls.app_ids)
 
 			if '.' in handler.uti:
-				arguments[3] += ' -u ' + handler.uti + ' ' + handler.role
+				if handler.uti == msda.EXTENSION_UTI:
+					arguments[3] += ' -e ' + handler.extension + ' ' + handler.role
+				else:
+					arguments[3] += ' -u ' + handler.uti + ' ' + handler.role
 			else:
 				arguments[3] += ' -p ' + handler.uti
 		msda.main(arguments)
@@ -546,7 +558,10 @@ class FunctionalTests(LaunchServicesTestCase):
 
 		for handler in handlers:
 			if '.' in handler.uti:
-				arguments.extend(['-u', handler.uti, handler.role])
+				if handler.uti == msda.EXTENSION_UTI:
+					arguments.extend(['-e', handler.extension, handler.role])
+				else:
+					arguments.extend(['-u', handler.uti, handler.role])
 			else:
 				arguments.extend(['-p', handler.uti])
 
@@ -582,7 +597,10 @@ class FunctionalTests(LaunchServicesTestCase):
 
 		for handler in handlers:
 			if '.' in handler.uti:
-				arguments.extend(['-u', handler.uti, handler.role])
+				if handler.uti == msda.EXTENSION_UTI:
+					arguments.extend(['-e', handler.extension, handler.role])
+				else:
+					arguments.extend(['-u', handler.uti, handler.role])
 			else:
 				arguments.extend(['-p', handler.uti])
 
@@ -615,7 +633,10 @@ class FunctionalTests(LaunchServicesTestCase):
 
 		for handler in handlers:
 			if '.' in handler.uti:
-				arguments.extend(['-u', handler.uti, handler.role])
+				if handler.uti == msda.EXTENSION_UTI:
+					arguments.extend(['-e', handler.extension, handler.role])
+				else:
+					arguments.extend(['-u', handler.uti, handler.role])
 			else:
 				arguments.extend(['-p', handler.uti])
 
