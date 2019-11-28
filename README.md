@@ -36,13 +36,16 @@ msda command -h --version
 **Note:** The `set` command must be run with administrative privileges
 
 ```
-msda set [-h] [-feu] [-fut] [-p PROTOCOL] [-u UTI ROLE] app_id
+msda set [-h] [-feu] [-fut] [-e EXTENSION ROLE] [-p PROTOCOL] [-u UTI ROLE] app_id
 ```
 
 * app_id: The ID of the application to set as a default app
 * -h, --help: Show help for the `set` command
 * -feu: Apply the specified changes to all existing users
 * -fut: Apply the specified changes to the `English.lproj` user template in addition to the currently logged on user (if there is one)
+* -e, --extension:
+    * EXTENSION: Specifiy a file extension that the specified app should handle
+    * ROLE: The scenario under which the specified app should handle this UTI
 * -p, --protocol: Specify a protocol that the specified app should handle
 * -u, --uti:
     * UTI: Specifiy a UTI that the specified app should handle
