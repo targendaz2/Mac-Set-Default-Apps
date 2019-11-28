@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2019-11-28
+### Added
+* Ability to set default apps by file extension via the `-e` switch
+* Ability to read already set default apps for file extensions
+* Updated README to include `-e` switch
+
 ## [1.1.3] - 2019-11-26
 ### Fixed
 * Fixed bug where the wrong directory was targeted instead of the current user's home
@@ -23,8 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 * Added a change log
 * Ability to modify the default apps of all existing users via the `-feu` switch
-* Updated the README to reflect `-feu` switch
-* Improved the clarity of the README
+* Updated README to reflect `-feu` switch
+* Improved clarity of README
 
 ## [1.0.0] - 2019-11-09
 ### Added
