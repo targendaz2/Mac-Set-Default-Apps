@@ -9,7 +9,7 @@ A somewhat complete list of UTI's can be found here:
 
 from __future__ import print_function
 
-import os, shutil, subprocess, sys
+import os, shutil, subprocess, sys, time
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
 from platform import mac_ver
 from plistlib import readPlist, writePlist
@@ -36,7 +36,7 @@ USER_HOMES_LOCATION = '/Users' # Where users' home directories are located
 __author__ = 'David G. Rosenberg'
 __copyright__ = 'Copyright (c), Mac Set Default Apps'
 __license__ = 'MIT'
-__version__ = '1.2.0'
+__version__ = '1.3.0'
 __email__ = 'dgrosenberg@icloud.com'
 
 
@@ -47,7 +47,7 @@ __email__ = 'dgrosenberg@icloud.com'
 ###############################################################################
 
 EXTENSION_UTI = 'public.filename-extension'
-LSREGISTER_BINARY = '/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'
+LSREGISTER_BINARY = '/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister'
 OS_VERSION = float(mac_ver()[0][3:])
 PLIST_NAME = 'com.apple.launchservices.secure.plist'
 PLIST_RELATIVE_LOCATION = 'Library/Preferences/com.apple.LaunchServices/'
@@ -460,13 +460,24 @@ def main(arguments=None):
 if __name__ == '__main__':
 	exit_code = main(sys.argv[1:])
 
-	# Rebuild launch services
+	# Determine whether to run as a user or as root
+	username = get_current_username()
+	if username != '':
+		sudo_command = '/usr/bin/sudo -u ' + username
+		domains = 'user,local,system'
+	else:
+		sudo_command = '/usr/bin/sudo -u root'
+		domains = 'local,system'
+
+	# Kill any running launchservice processes
+	kill_command = '/usr/bin/killall lsd'
+	subprocess.check_output(sudo_command.split() + kill_command.split())
+
+	# Rebuild the launchservices database
 	rebuild_command = [LSREGISTER_BINARY,
-		'-kill', '-r',
-		'-domain', 'local',
-		'-domain', '-system',
-		'-domain', '-user',
+		'-kill', '-r', '-f',
+		'-all', domains,
 	]
-	subprocess.check_output(rebuild_command)
+	subprocess.check_output(sudo_command.split() + rebuild_command)
 
 	sys.exit(exit_code)
