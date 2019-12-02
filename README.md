@@ -31,8 +31,6 @@ msda command -h --version
 * --version: Print the current version of MSDA
 
 ### Set Command Usage
-**Note:** The computer will need to be restarted after using the `set` command in order to apply the changes
-
 **Note:** The `set` command must be run with administrative privileges
 
 ```

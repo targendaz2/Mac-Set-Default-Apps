@@ -7,10 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2019-12-02
+### Changed
+* A restart is no longer needed to apply changes
+* Removed instructions to restart after using `set` command from README
+
 ## [1.2.0] - 2019-11-28
 ### Added
 * Ability to set default apps by file extension via the `-e` switch
 * Ability to read already set default apps for file extensions
+
+### Changed
 * Updated README to include `-e` switch
 
 ## [1.1.3] - 2019-11-26
@@ -29,6 +36,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 * Added a change log
 * Ability to modify the default apps of all existing users via the `-feu` switch
+
+### Changed
 * Updated README to reflect `-feu` switch
 * Improved clarity of README
 
