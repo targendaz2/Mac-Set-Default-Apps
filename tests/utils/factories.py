@@ -3,7 +3,7 @@ import imp, os
 import factory
 
 from fake.lshandler_properties import *
-from test_settings import *
+from settings import *
 
 msda = imp.load_source('msda', os.path.join(
     THIS_FILE, '../payload/msda.py')

@@ -4,7 +4,7 @@ import tempfile
 from unittest import TestCase
 
 from factories import *
-from test_settings import *
+from settings import *
 
 msda = imp.load_source('msda', os.path.join(
     THIS_FILE, '../payload/msda.py')
