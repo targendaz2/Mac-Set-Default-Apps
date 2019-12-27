@@ -14,23 +14,30 @@ fake.add_provider(internet)
 TMP_PREFIX = 'fake_fs_'
 USER_HOMES_DIR_NAME = 'Users'
 
-BASE_DIRS = (
+BASE_PATHS = (
 	os.path.join(USER_HOMES_DIR_NAME, '.localized'),
 	os.path.join(USER_HOMES_DIR_NAME, 'Shared', '.localized'),
 )
 
+BASE_USER_PATHS = (
+	os.path.join('Library', 'Preferences', 'com.apple.launchservices'),
+)
+
 class FakeFileSystem(object):
 
-	def create_base_fs(self):
-		for path in BASE_DIRS:
+	def create_base_fs(self, paths, root=None):
+		if not root:
+			root = self.ROOT_DIR
+
+		for path in paths:
 			os.makedirs(os.path.join(
-				self.ROOT_DIR,
+				root,
 				path,
 			))
 
 	def __init__(self):
 		self.ROOT_DIR = tempfile.mkdtemp(prefix=TMP_PREFIX)
-		self.create_base_fs()
+		self.create_base_fs(BASE_PATHS)
 
 	def __del__(self):
 		shutil.rmtree(self.ROOT_DIR)
@@ -49,6 +56,6 @@ class FakeFileSystem(object):
 				self.USER_HOMES_DIR,
 				fake.user_name(),
 			)
-			os.makedirs(user_home_path)
+			self.create_base_fs(BASE_USER_PATHS, root=user_home_path)
 			created_user_homes.append(user_home_path)
 		return created_user_homes
