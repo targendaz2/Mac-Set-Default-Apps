@@ -25,7 +25,10 @@ class TestFakeFileSystemFunctions(TestCase):
 
 	def test_complete_Users_folder_is_created(self):
 		for path in BASE_PATHS:
-			self.assertTrue(os.path.exists(path))
+			self.assertTrue(os.path.exists(os.path.join(
+				self.fs.ROOT_DIR,
+				path,
+			)))
 
 	def test_can_create_single_user_home(self):
 		user_homes = self.fs.create_user_homes(1)
