@@ -83,7 +83,7 @@ Are there commands other than `set`?
 > At the moment, no. Please [create an issue](https://github.com/targendaz2/Mac-Set-Default-Apps/issues/new) on this app's GitHub page if there are commands you'd find useful.
 
 Why aren't there any examples of setting a default app for a file extension?
-> I don't believe that this is used to set default apps on Macs anymore. Typically, you'd use UTIs and protocols. This feature was included to prevent MSDA from malfunctioning when being used on a Mac where a default app was assigned to a file extension. If I'm wrong about this not being used anymore, please [create an issue](https://github.com/targendaz2/Mac-Set-Default-Apps/issues/new) on this app's GitHub page and I'll add examples as necesary.
+> I haven't found any apps that require this to be set as a default app. This feature was included solely to prevent MSDA from malfunctioning when being used on a Mac where a default app was already assigned to a file extension.
 
 Where can I go for help with this app?
 > If you need help with this app specifically, please feel free to [create an issue](https://github.com/targendaz2/Mac-Set-Default-Apps/issues/new) on this app's GitHub page. I'll try to either respond, or implement changes to the app as soon as possible.
