@@ -23,10 +23,24 @@ class TestFakeFileSystemFunctions(TestCase):
 	def setUp(self):
 		self.fs = FakeFileSystem()
 
-	def test_complete_Users_folder_is_created(self):
+	def test_all_base_folders_are_created(self):
 		for path in BASE_PATHS:
 			self.assertTrue(os.path.exists(os.path.join(
 				self.fs.ROOT_DIR,
+				path,
+			)))
+
+	def test_creates_English_user_template_by_default(self):
+		self.assertTrue(os.path.exists(os.path.join(
+			self.fs.ROOT_DIR,
+			USER_TEMPLATE_PATH,
+		)))
+
+	def test_base_user_folders_are_created_in_English_user_template(self):
+		for path in BASE_USER_PATHS:
+			self.assertTrue(os.path.exists(os.path.join(
+				self.fs.ROOT_DIR,
+				USER_TEMPLATE_PATH,
 				path,
 			)))
 

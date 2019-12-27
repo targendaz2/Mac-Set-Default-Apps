@@ -13,15 +13,25 @@ fake.add_provider(internet)
 
 TMP_PREFIX = 'fake_fs_'
 USER_HOMES_DIR_NAME = 'Users'
+USER_TEMPLATE_PATH = os.path.join(
+	'Library',
+	'User Template',
+	'English.lproj',
+)
 
-BASE_PATHS = (
+BASE_PATHS = [
 	os.path.join(USER_HOMES_DIR_NAME, '.localized'),
 	os.path.join(USER_HOMES_DIR_NAME, 'Shared', '.localized'),
-)
+]
 
 BASE_USER_PATHS = (
 	os.path.join('Library', 'Preferences', 'com.apple.launchservices'),
 )
+
+for path in BASE_USER_PATHS:
+	BASE_PATHS.append(os.path.join(
+		USER_TEMPLATE_PATH, path,
+	))
 
 class FakeFileSystem(object):
 
