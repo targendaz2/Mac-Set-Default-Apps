@@ -14,10 +14,13 @@ FAKE_FS_ROOT = tempfile.mkdtemp()
 USER_HOMES_DIR = 'Users'
 
 def create_user_homes(number=1):
-	user_home_path = os.path.join(
-		FAKE_FS_ROOT,
-		USER_HOMES_DIR,
-		fake.user_name(),
-	)
-	os.makedirs(user_home_path)
-	return [user_home_path]
+	created_user_homes = []
+	for n in range(number):
+		user_home_path = os.path.join(
+			FAKE_FS_ROOT,
+			USER_HOMES_DIR,
+			fake.user_name(),
+		)
+		os.makedirs(user_home_path)
+		created_user_homes.append(user_home_path)
+	return created_user_homes
