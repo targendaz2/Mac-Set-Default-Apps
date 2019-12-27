@@ -23,6 +23,14 @@ class TestFakeFileSystemFunctions(TestCase):
 	def setUp(self):
 		self.fs = FakeFileSystem()
 
+	def test_complete_Users_folder_is_created(self):
+		self.assertTrue(os.path.exists(os.path.join(
+			self.fs.USER_HOMES_DIR, 'Shared', '.localized'
+		)))
+		self.assertTrue(os.path.exists(os.path.join(
+			self.fs.USER_HOMES_DIR, '.localized'
+		)))
+
 	def test_can_create_single_user_home(self):
 		user_homes = self.fs.create_user_homes(1)
 		self.assertTrue(os.path.exists(user_homes[0]))
@@ -34,8 +42,11 @@ class TestFakeFileSystemFunctions(TestCase):
 		for user_home in user_homes:
 			self.assertTrue(os.path.exists(user_home))
 
-	def test_contents_dont_persist_between_tests(self):
-		self.assertFalse(os.listdir(self.fs.ROOT_DIR))
+	def test_user_homes_dont_persist_between_tests(self):
+		self.assertEqual(
+			os.listdir(self.fs.USER_HOMES_DIR),
+			['.localized', 'Shared'],
+		)
 
 
 if __name__ == '__main__':
