@@ -6,6 +6,7 @@ import unittest
 from unittest import TestCase
 
 import imp
+import os
 
 import mock
 
@@ -19,7 +20,9 @@ msda = imp.load_source('msda', os.path.join(
 
 class TestFakeFileSystemFunctions(TestCase):
 
-	pass
+	def test_can_create_single_user_home(self):
+		user_homes = fs.create_user_homes(1)
+		self.assertTrue(os.path.exists(user_homes[0]))
 
 
 if __name__ == '__main__':
