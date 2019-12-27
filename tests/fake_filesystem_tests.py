@@ -11,7 +11,10 @@ from random import randint
 
 import mock
 
-from fake.filesystem import *
+from fake.filesystem import (
+	BASE_PATHS, BASE_USER_PATHS, FakeFileSystem, USER_HOMES_DIR_NAME,
+	USER_TEMPLATE_PATH,
+)
 from utils.settings import *
 
 msda = imp.load_source('msda', os.path.join(
