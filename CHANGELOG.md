@@ -7,35 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-* Created module to create fake file system for local tests
+* Created module to mock the macOS file system for local tests
 
 ### Changed
-* CI tests are run using actual macOS file system
+* CI tests are run against an actual macOS file system
 
 ## [1.3.0] - 2019-12-02
 ### Changed
 * A restart is no longer needed to apply changes
-* Removed instructions to restart after using `set` command from README
+* Updated README to remove instructions to restart after using `set` command
 
 ## [1.2.0] - 2019-11-28
 ### Added
 * Ability to set default apps by file extension via the `-e` switch
-* Ability to read already set default apps for file extensions
+* Ability to read already set default apps via file extension
 
 ### Changed
-* Updated README to include `-e` switch
+* Documented `-e` switch in README
 
 ## [1.1.3] - 2019-11-26
 ### Fixed
-* Fixed bug where the wrong directory was targeted instead of the current user's home
+* The wrong directory was targeted instead of the current user's home
 
 ## [1.1.2] - 2019-11-26
 ### Fixed
-* Fixed bug where using `-feu` would ignore valid user homes
+* Using the `-feu` switch would ignore valid user homes
 
 ## [1.1.1] - 2019-11-26
 ### Fixed
-* Fixed bug where using `-feu` would attempt to fill invalid user homes
+* Using the `-feu` switch would attempt to fill invalid user homes
 
 ## [1.1.0] - 2019-11-26
 ### Added
@@ -43,7 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Ability to modify the default apps of all existing users via the `-feu` switch
 
 ### Changed
-* Updated README to reflect `-feu` switch
+* Documented `-feu` switch in README
 * Improved clarity of README
 
 ## [1.0.0] - 2019-11-09
