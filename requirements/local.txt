@@ -1,1 +1,2 @@
 -r ci.txt
+coverage==5.0.1
