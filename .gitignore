@@ -2,6 +2,7 @@
 __pycache__
 *.pkg
 *.pyc
+*.coverage
 payload/*c
 /env/
 /tmp/
