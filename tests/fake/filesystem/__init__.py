@@ -4,6 +4,7 @@ import imp
 import os
 import shutil
 import tempfile
+from unittest import TestCase
 
 from faker import Faker
 from faker.providers import internet
@@ -33,7 +34,7 @@ for path in BASE_USER_PATHS:
 		USER_TEMPLATE_PATH, path,
 	))
 
-class FakeFileSystem(object):
+class FakeFSTestCase(TestCase):
 
 	def create_base_fs(self, paths, root=None):
 		if not root:
@@ -45,11 +46,11 @@ class FakeFileSystem(object):
 				path,
 			))
 
-	def __init__(self):
+	def setUp(self):
 		self.ROOT_DIR = tempfile.mkdtemp(prefix=TMP_PREFIX)
 		self.create_base_fs(BASE_PATHS)
 
-	def __del__(self):
+	def tearDown(self):
 		shutil.rmtree(self.ROOT_DIR)
 
 	@property
