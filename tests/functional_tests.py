@@ -3,7 +3,6 @@
 from __future__ import print_function
 
 import unittest
-from unittest import TestCase
 
 import imp
 import os
