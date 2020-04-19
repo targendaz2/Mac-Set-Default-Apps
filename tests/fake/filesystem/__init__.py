@@ -1,7 +1,7 @@
 from __future__ import print_function
 
 import imp
-import os
+import os as real_os
 import shutil
 import tempfile
 from unittest import TestCase
@@ -14,25 +14,31 @@ fake.add_provider(internet)
 
 TMP_PREFIX = 'fake_fs_'
 USER_HOMES_DIR_NAME = 'Users'
-USER_TEMPLATE_PATH = os.path.join(
+USER_TEMPLATE_PATH = real_os.path.join(
 	'Library',
 	'User Template',
 	'English.lproj',
 )
 
 BASE_PATHS = [
-	os.path.join(USER_HOMES_DIR_NAME, '.localized'),
-	os.path.join(USER_HOMES_DIR_NAME, 'Shared', '.localized'),
+	real_os.path.join(USER_HOMES_DIR_NAME, '.localized'),
+	real_os.path.join(USER_HOMES_DIR_NAME, 'Shared', '.localized'),
 ]
 
 BASE_USER_PATHS = (
-	os.path.join('Library', 'Preferences', 'com.apple.launchservices'),
+	real_os.path.join('Library', 'Preferences', 'com.apple.launchservices'),
 )
 
 for path in BASE_USER_PATHS:
-	BASE_PATHS.append(os.path.join(
+	BASE_PATHS.append(real_os.path.join(
 		USER_TEMPLATE_PATH, path,
 	))
+
+class MockOS(object):
+
+	def __getattr__(self, attr):
+		print('mock os call')
+		return getattr(real_os, attr)
 
 class FakeFSTestCase(TestCase):
 
@@ -41,7 +47,7 @@ class FakeFSTestCase(TestCase):
 			root = self.ROOT_DIR
 
 		for path in paths:
-			os.makedirs(os.path.join(
+			real_os.makedirs(real_os.path.join(
 				root,
 				path,
 			))
@@ -55,7 +61,7 @@ class FakeFSTestCase(TestCase):
 
 	@property
 	def USER_HOMES_DIR(self):
-		return os.path.join(
+		return real_os.path.join(
 			self.ROOT_DIR,
 			USER_HOMES_DIR_NAME,
 		)
@@ -63,7 +69,7 @@ class FakeFSTestCase(TestCase):
 	def create_user_homes(self, number=1):
 		created_user_homes = []
 		for n in range(number):
-			user_home_path = os.path.join(
+			user_home_path = real_os.path.join(
 				self.USER_HOMES_DIR,
 				fake.user_name(),
 			)

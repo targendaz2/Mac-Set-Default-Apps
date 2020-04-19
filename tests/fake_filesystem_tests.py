@@ -13,7 +13,7 @@ import mock
 
 from fake.filesystem import (
 	BASE_PATHS, BASE_USER_PATHS, FakeFSTestCase, USER_HOMES_DIR_NAME,
-	USER_TEMPLATE_PATH,
+	USER_TEMPLATE_PATH, MockOS
 )
 from utils.settings import *
 
@@ -69,11 +69,10 @@ class TestFakeFileSystemFunctions(FakeFSTestCase):
 					user_home, path
 				)))
 
-# class TestMockOSFunctions(TestCase):
+class TestMockOSFunctions(TestCase):
 
-# 	def test_pass_through(self):
-# 		func = getattr(os.path, 'exists')
-# 		print(func('/boop'))
+	def test_pass_through(self):
+		print(MockOS().path.exists('/'))
 
 
 if __name__ == '__main__':
