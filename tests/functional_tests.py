@@ -11,8 +11,8 @@ from random import randint, random
 
 import mock
 
+from utils.classes import *
 from utils.settings import *
-from utils.utils import *
 
 msda = imp.load_source('msda', os.path.join(
 	THIS_FILE, '../payload/msda.py')
