@@ -458,8 +458,6 @@ def main(arguments=None):
 
 
 if __name__ == '__main__':
-	exit_code = main(sys.argv[1:])
-
 	# Determine whether to run as a user or as root
 	username = get_current_username()
 	if username != '':
@@ -468,6 +466,9 @@ if __name__ == '__main__':
 	else:
 		sudo_command = '/usr/bin/sudo -u root'
 		domains = 'local,system'
+	
+	# Do the thing
+	exit_code = main(sys.argv[1:])
 
 	# Kill any running launchservice processes
 	kill_command = '/usr/bin/killall lsd'
