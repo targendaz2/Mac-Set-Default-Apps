@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 * CI tests are run against an actual macOS file system
 
+## [1.3.1] - 2021-04-24
+### Fixed
+* MSDA would try to run as multiple users if run during macOS Setup Assistant
+
 ## [1.3.0] - 2019-12-02
 ### Changed
 * A restart is no longer needed to apply changes
