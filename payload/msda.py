@@ -460,7 +460,7 @@ def main(arguments=None):
 if __name__ == '__main__':
 	# Determine whether to run as a user or as root
 	username = get_current_username()
-	if username == '':
+	if username in ['', 'root', '_mbsetupuser']:
 		sudo_command = '/usr/bin/sudo -u root'
 		domains = 'local,system'
 	else:
