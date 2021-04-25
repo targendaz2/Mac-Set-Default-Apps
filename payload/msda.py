@@ -110,9 +110,13 @@ def get_current_username():
 		('grep', 'console'),
 		stdin=who_cmd.stdout, stdout=subprocess.PIPE,
 	)
-	username = subprocess.check_output(
+	usernames_cmd = subprocess.Popen(
 		('cut', '-d', ' ', '-f1'),
-		stdin=grep_cmd.stdout,
+		stdin=grep_cmd.stdout, stdout=subprocess.PIPE
+	)
+	username = subprocess.check_output(
+		('head', '-n', '1'),
+		stdin=usernames_cmd.stdout,
 	)
 	return username.strip()
 
