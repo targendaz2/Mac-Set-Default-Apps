@@ -3,8 +3,8 @@
 MSDA provides an easy way to silently change the default applications used by macOS. There are no pop-ups or prompts and, even better, it works for Google Chrome!
 
 ## Requirements
-* macOS 10.14.0 or newer
-* Python 2 (which, for now, comes pre-installed on macOS)
+* macOS 10.14.0 - macOS 12.2.1
+* macOS 12.3.0 or newer with Python installed
 
 ## Deploying
 ### As a Local Installation
@@ -14,11 +14,11 @@ MSDA provides an easy way to silently change the default applications used by ma
 ### As a Jamf Script
 **Note:** I assume these instructions will also work for MDM services other than Jamf, I just only have familiarity with Jamf
 
-1. Copy the contents of [payload/msda.py](https://github.com/targendaz2/Mac-Set-Default-Apps/blob/master/payload/msda.py) into a new Jamf script
-2. Set the `JAMF` variable to `True` in the User-Editable Settings section
+1. Copy the contents of [payload/msda.py](https://github.com/targendaz2/Mac-Set-Default-Apps/blob/master/payload/msda.py) into a new Jamf script.
+2. In the script's User-Editable Settings section, set the `JAMF` variable to `True`.
 
 ## Usage
-**Note:** If using MSDA as a Jamf script, you would add these arguments in the Parameter 4 text field when assigning the script to a policy, excluding the initial `msda`
+**Note:** If using MSDA as a Jamf script, add these arguments in the Parameter 4 text field when assigning the script to a policy, excluding the initial `msda`
 
 ### Base Usage
 ```
