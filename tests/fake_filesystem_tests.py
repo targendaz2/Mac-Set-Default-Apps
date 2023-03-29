@@ -1,12 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from __future__ import print_function
 
 import unittest
 from unittest import TestCase
 
-import imp
 import os
+import sys
 from random import randint
 
 import mock
@@ -17,9 +17,11 @@ from fake.filesystem import (
 )
 from utils.settings import *
 
-msda = imp.load_source('msda', os.path.join(
-	THIS_FILE, '../payload/msda.py')
-)
+module_path = os.path.abspath(os.path.join(THIS_FILE, '../payload'))
+if module_path not in sys.path:
+    sys.path.append(module_path)
+
+import msda
 
 class TestFakeFileSystemFunctions(FakeFSTestCase):
 
