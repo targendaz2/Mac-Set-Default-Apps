@@ -1,13 +1,17 @@
-import imp, os
+import os
+import sys
 
 import factory
 
 from fake.lshandler_properties import *
-from settings import *
+from .settings import *
 
-msda = imp.load_source('msda', os.path.join(
-    THIS_FILE, '../payload/msda.py')
-)
+module_path = os.path.abspath(os.path.join(__file__, '../../../payload'))
+if module_path not in sys.path:
+    sys.path.append(module_path)
+
+import msda
+
 
 def create_user_homes(num, location):
     created_user_homes = []

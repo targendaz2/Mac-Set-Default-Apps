@@ -1,14 +1,17 @@
-import imp, os
+import os
 import shutil
+import sys
 import tempfile
 from unittest import TestCase
 
-from factories import *
-from settings import *
+from .factories import *
+from .settings import *
 
-msda = imp.load_source('msda', os.path.join(
-    THIS_FILE, '../payload/msda.py')
-)
+module_path = os.path.abspath(os.path.join(THIS_FILE, '../payload'))
+if module_path not in sys.path:
+    sys.path.append(module_path)
+
+import msda
 
 
 # Abstract Classes
@@ -32,7 +35,7 @@ class LaunchServicesTestCase(TestCase):
 
         parent_path = os.path.dirname(dest)
         if not os.path.exists(parent_path):
-		    os.makedirs(parent_path)
+            os.makedirs(parent_path)
 
         shutil.copy(src, dest)
         return dest
