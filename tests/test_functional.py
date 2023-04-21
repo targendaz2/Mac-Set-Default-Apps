@@ -11,7 +11,7 @@ runner = CliRunner()
 
 class TestFunctional:
 
-    def test_set_chrome_as_default_browser_for_current_user(self, monkeypatch):
+    def test_set_chrome_as_default_browser_for_current_user(self):
         # Confirm initial OS state for testing purposes
 
         # Safari is not running
@@ -35,8 +35,9 @@ class TestFunctional:
         # Begin testing
 
         # User runs MSDA command to set Google Chrome as the default browser
-        result = runner.invoke(app, ['set', 'Google Chrome.app', 'browser'])
-        assert result.returncode == 0
+        result = runner.invoke(app, ['set', '"Google Chrome.app"', 'browser'])
+        print(result.stdout)
+        assert result.exit_code == 0
 
         # Confirm resulting state
 
