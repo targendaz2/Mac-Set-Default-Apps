@@ -13,14 +13,15 @@ msda = "msda.main:app"
 
 [tool.poetry.dependencies]
 python = "^3.11"
+dynaconf = "^3.1.12"
 pydantic = "^1.10.7"
 typer = "^0.7.0"
 
-
 [tool.poetry.group.dev.dependencies]
 autopep8 = "^2.0.2"
-pyfakefs = "^5.2.2"
 pytest = "^7.3.1"
+pytest-custom-exit-code = "^0.3.0"
+pytest-html = "^3.2.0"
 
 [build-system]
 requires = ["poetry-core"]
