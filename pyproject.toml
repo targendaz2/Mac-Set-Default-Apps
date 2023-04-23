@@ -16,6 +16,7 @@ python = "^3.11"
 dynaconf = "^3.1.12"
 pydantic = "^1.10.7"
 typer = "^0.7.0"
+pyobjc = "^9.1.1"
 
 [tool.poetry.group.dev.dependencies]
 autopep8 = "^2.0.2"
