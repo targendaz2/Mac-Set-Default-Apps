@@ -35,7 +35,7 @@ class TestFunctional:
         # Begin testing
 
         # User runs MSDA command to set Google Chrome as the default browser
-        result = runner.invoke(app, ['set', '"Google Chrome"', 'browser'])
+        result = runner.invoke(app, ['set', 'com.google.Chrome', 'browser'])
         print(result.stdout)
         assert result.exit_code == 0
 
