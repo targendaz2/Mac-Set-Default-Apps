@@ -1,3 +1,5 @@
+import subprocess
+
 # from Cocoa import NSWorkspace
 
 import typer
@@ -14,7 +16,10 @@ def callback():
 app = typer.Typer(callback=callback)
 
 def _get_app_url(app_id: str):
-    return f'/Applications/Google Chrome.app'
+    command = f'mdfind kMDItemCFBundleIdentifier = {app_id}'
+    result = subprocess.run(command.split(), capture_output=True)
+    app_path = result.stdout.decode().strip()
+    return app_path or None
 
 @app.command('set')
 def set_command(application: str, role: str):
