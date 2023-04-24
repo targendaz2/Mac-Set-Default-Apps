@@ -22,7 +22,7 @@ def _get_app_url(app_id: str):
     return app_path or None
 
 @app.command('set')
-def set_command(application: str, role: str):
+def set_command(app_id: str, role: str):
     pass
 
 if __name__ == '__main__':
