@@ -2,15 +2,12 @@ import os
 import subprocess
 
 import yaml
+import typer
 
 # from Cocoa import NSWorkspace
 from UniformTypeIdentifiers import UTType, UTTypeURL
 
-from pprint import pprint
-
-import typer
-
-from . import errors
+from . import errors, models
 
 # workspace = NSWorkspace.sharedWorkspace()
 # setDefaultApplicationAtURL_toOpenContentType_completionHandler_
@@ -24,14 +21,6 @@ def callback():
     pass
 
 app = typer.Typer(callback=callback)
-
-def _get_app_url(app_id: str):
-    command = f'mdfind kMDItemCFBundleIdentifier = {app_id}'
-    result = subprocess.run(command.split(), capture_output=True)
-    app_path = result.stdout.decode().strip()
-    if not app_path:
-        raise errors.AppNotFoundError
-    return app_path
 
 def _get_app_role(role: str):
     global app_role_settings

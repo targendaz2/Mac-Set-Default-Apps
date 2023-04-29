@@ -1,6 +1,6 @@
 import pytest
 
-from msda import errors, main
+from msda import errors, main, models
 
 class TestAppLookups:
 
@@ -9,10 +9,10 @@ class TestAppLookups:
         app_id = 'com.apple.Safari'
 
         # When that app ID is submitted
-        app_url = main._get_app_url(app_id)
+        app = models.App(id=app_id)
 
         # Then the app's URL should be returned
-        assert app_url == '/Applications/Safari.app'
+        assert app.url == '/Applications/Safari.app'
 
     def test_cant_find_app_url_from_app_id_if_not_installed(self):
         # Given the ID of an app that isn't installed
@@ -21,7 +21,7 @@ class TestAppLookups:
         # When that app ID is submitted
         # Then an appropriate error should be raised
         with pytest.raises(errors.AppNotFoundError):
-            main._get_app_url(app_id)
+            models.App(id=app_id)
 
 class TestAppRoleLoading:
 
