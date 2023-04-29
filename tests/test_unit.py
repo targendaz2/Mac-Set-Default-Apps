@@ -1,7 +1,6 @@
 import pytest
 
-from msda import errors
-from msda.main import _get_app_url, _get_role_utis
+from msda import errors, main
 
 class TestAppLookups:
 
@@ -10,7 +9,7 @@ class TestAppLookups:
         app_id = 'com.apple.Safari'
 
         # When that app ID is submitted
-        app_url = _get_app_url(app_id)
+        app_url = main._get_app_url(app_id)
 
         # Then the app's URL should be returned
         assert app_url == '/Applications/Safari.app'
@@ -22,7 +21,7 @@ class TestAppLookups:
         # When that app ID is submitted
         # Then an appropriate error should be raised
         with pytest.raises(errors.AppNotFoundError):
-            _get_app_url(app_id)
+            main._get_app_url(app_id)
 
 class TestAppRoleLoading:
 
@@ -31,7 +30,7 @@ class TestAppRoleLoading:
         app_role = 'browser'
 
         # When that app role is submitted
-        _get_role_utis(app_role)
+        main._get_app_role(app_role)
 
         # The corresponding role file should be loaded
         from msda.main import app_role_file
@@ -44,4 +43,4 @@ class TestAppRoleLoading:
         # When that app role is submitted
         # Then an appropriate error should be raised
         with pytest.raises(errors.UnknownRoleError):
-            _get_role_utis(app_role)
+            main._get_app_role(app_role)
