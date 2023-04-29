@@ -19,8 +19,8 @@ class App:
 
     class AppNotFoundError(Exception):
         pass
-    
-    def __post_init__(self):
+
+    def _get_url(self):
         # Get app URL from identifier
         command = f'mdfind kMDItemCFBundleIdentifier = {self.id}'
         result = subprocess.run(command.split(), capture_output=True)
@@ -29,12 +29,23 @@ class App:
             raise self.AppNotFoundError
         self.url = NSURL.fileURLWithPath_isDirectory_(url, True)
 
+    def _get_bundle(self):
         # Get app bundle from URL
+        if not hasattr(self, 'url'):
+            self._get_url()
+
         self._bundle = NSBundle.bundleWithURL_(self.url)
 
+    def _get_protocols(self):
         # Parse supported protocols from bundle
-        bundle_url_types = self._bundle.objectForInfoDictionaryKey_('CFBundleURLTypes')
-        self._protocols = [ scheme for item in bundle_url_types for scheme in item['CFBundleURLSchemes'] ]
+        bundle_url_types = self._bundle.objectForInfoDictionaryKey_(
+            'CFBundleURLTypes')
+        self._protocols = [
+            scheme for item in bundle_url_types for scheme in item['CFBundleURLSchemes']]
+    
+    def __post_init__(self):
+        self._get_bundle()
+        self._get_protocols()
 
 @dataclass
 class Role:
@@ -45,7 +56,6 @@ class Role:
 
     class UnknownRoleError(Exception):
         pass
-
 
     def __post_init__(self):
         self.file = f'config/roles/{self.name}.yml'
