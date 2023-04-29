@@ -1,5 +1,5 @@
 protocols:
   - webcal
 utis:
-  com.apple.ical.ics: all
-  com.apple.ical.vcs: all
+  com.apple.ical.ics: All
+  com.apple.ical.vcs: All
