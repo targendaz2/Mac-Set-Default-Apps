@@ -26,7 +26,6 @@ class TestAppModel:
         with pytest.raises(models.App.AppNotFoundError):
             models.App(id=app_id)
 
-    @pytest.mark.skip(reason="Changing model to handle NSURLs")
     def test_loads_supported_protocols(self):
         # Given the ID of an installed app
         app_id = 'com.apple.Safari'
@@ -35,7 +34,8 @@ class TestAppModel:
         app = models.App(id=app_id)
 
         # Then the app's supported protocols should be available
-        assert 'html' in app._protocols
+        for protocol in ('http', 'https'):
+            assert protocol in app._protocols
 
 class TestRoleModel:
 

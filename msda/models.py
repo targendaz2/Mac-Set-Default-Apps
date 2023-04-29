@@ -14,18 +14,27 @@ from UniformTypeIdentifiers import UTType
 class App:
     id: str
     url: NSURL = field(init=False)
+    _bundle: NSBundle = field(init=False)
     _protocols: list = field(init=False)
 
     class AppNotFoundError(Exception):
         pass
     
     def __post_init__(self):
+        # Get app URL from identifier
         command = f'mdfind kMDItemCFBundleIdentifier = {self.id}'
         result = subprocess.run(command.split(), capture_output=True)
         url = result.stdout.decode().strip()
         if not url:
             raise self.AppNotFoundError
         self.url = NSURL.fileURLWithPath_isDirectory_(url, True)
+
+        # Get app bundle from URL
+        self._bundle = NSBundle.bundleWithURL_(self.url)
+
+        # Parse supported protocols from bundle
+        bundle_url_types = self._bundle.objectForInfoDictionaryKey_('CFBundleURLTypes')
+        self._protocols = [ scheme for item in bundle_url_types for scheme in item['CFBundleURLSchemes'] ]
 
 @dataclass
 class Role:
