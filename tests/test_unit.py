@@ -15,7 +15,7 @@ class TestAppModel:
         app = models.App(id=app_id)
 
         # Then the app's URL should be returned
-        assert app._url == NSURL.fileURLWithPath_isDirectory_('/Applications/Safari.app', True)
+        assert app.url == NSURL.fileURLWithPath_isDirectory_('/Applications/Safari.app', True)
 
     def test_cant_find_app_from_app_id_if_not_installed(self):
         # Given the ID of an app that isn't installed
@@ -35,7 +35,7 @@ class TestAppModel:
 
         # Then the app's supported protocols should be available
         for protocol in ('http', 'https'):
-            assert protocol in app._protocols
+            assert protocol in app.protocols
 
 class TestRoleModel:
 
@@ -59,7 +59,7 @@ class TestRoleModel:
         uttype_xhtml = UTType.typeWithIdentifier_('public.xhtml')
 
         for uttype in (UTTypeHTML, UTTypeURL, uttype_xhtml):
-            assert uttype in role._utis
+            assert uttype in role.utis
 
     def test_loads_appropriate_protocols_from_known_role(self):
         # Given the name of an app role
@@ -70,4 +70,4 @@ class TestRoleModel:
 
         # The appropriate protocols should set
         for protocol in ('http', 'https'):
-            assert protocol in role._protocols
+            assert protocol in role.protocols
