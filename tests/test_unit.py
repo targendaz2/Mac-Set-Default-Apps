@@ -2,7 +2,7 @@ import pytest
 
 from msda import models
 
-class TestAppLookups:
+class TestAppModel:
 
     def test_can_find_app_url_from_app_id_if_installed(self):
         # Given the ID of an installed app
@@ -23,7 +23,7 @@ class TestAppLookups:
         with pytest.raises(models.App.AppNotFoundError):
             models.App(id=app_id)
 
-class TestAppRoleLoading:
+class TestRoleModel:
 
     def test_cant_find_config_for_an_unknown_app_role(self):
         # Given the name of an unknown app role
