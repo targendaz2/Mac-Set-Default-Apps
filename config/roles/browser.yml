@@ -2,6 +2,6 @@ protocols:
   - http
   - https
 utis:
-  - public.url: all
-  - public.html: viewer
-  - public.xhtml: all
+  public.url: all
+  public.html: viewer
+  public.xhtml: all
