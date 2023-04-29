@@ -36,19 +36,7 @@ class TestRoleModel:
         with pytest.raises(models.Role.UnknownRoleError):
             models.Role(name=app_role)
 
-    def test_loads_specified_app_role_if_it_exists(self):
-        # Given the name of an app role
-        app_role = 'browser'
-
-        # When that app role is submitted
-        role = models.Role(name=app_role)
-
-        # The corresponding role file should be loaded
-        from msda.main import app_role_settings
-        assert 'protocols' in role.settings
-        assert 'utis' in role.settings
-
-    def test_loads_appropriate_UTTypes_from_identifiers(self):
+    def test_loads_appropriate_UTTypes_from_known_role(self):
         # Given the name of an app role
         app_role = 'browser'
 
@@ -62,7 +50,7 @@ class TestRoleModel:
         assert UTTypeURL in role._utis
         assert uttype_xhtml in role._utis
 
-    def test_loads_appropriate_protocols_from_role_definition(self):
+    def test_loads_appropriate_protocols_from_known_role(self):
         # Given the name of an app role
         app_role = 'browser'
 
