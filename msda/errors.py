@@ -1,0 +1,2 @@
+class UnknownRoleError(Exception):
+    pass

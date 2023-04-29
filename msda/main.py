@@ -1,3 +1,4 @@
+import os
 import subprocess
 
 # from Cocoa import NSWorkspace
@@ -6,6 +7,8 @@ from UniformTypeIdentifiers import UTType, UTTypeURL
 from pprint import pprint
 
 import typer
+
+from .errors import UnknownRoleError
 
 # workspace = NSWorkspace.sharedWorkspace()
 # setDefaultApplicationAtURL_toOpenContentType_completionHandler_
@@ -28,7 +31,9 @@ def _get_app_url(app_id: str):
 
 def _get_role_utis(role: str):
     global app_role_file
-    app_role_file = 'config/roles/browser.yml'
+    app_role_file = f'config/roles/{role}.yml'
+    if not os.path.isfile(app_role_file):
+        raise UnknownRoleError
     # UTType.typeWithIdentifier_('public.html')
 
 @app.command('set')
