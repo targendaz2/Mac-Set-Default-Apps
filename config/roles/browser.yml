@@ -1,0 +1,7 @@
+protocols:
+  - http
+  - https
+utis:
+  - public.url: all
+  - public.html: viewer
+  - public.xhtml: all
