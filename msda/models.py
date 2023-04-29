@@ -6,15 +6,15 @@ import yaml
 
 from pprint import pprint
 
-from Cocoa import NSURL
-from Foundation import NSBundle
+from Cocoa import NSBundle, NSURL, NSWorkspace
 from UniformTypeIdentifiers import UTType
 
 @dataclass
 class App:
     id: str
     url: NSURL = field(init=False)
-    protocols: list = field(init=False)
+    utis: list = field(init=False, default_factory=list)
+    protocols: list[str] = field(init=False, default_factory=list)
     _bundle: NSBundle = field(init=False)
 
     class AppNotFoundError(Exception):
@@ -22,12 +22,9 @@ class App:
 
     def _get_url(self):
         # Get app URL from identifier
-        command = f'mdfind kMDItemCFBundleIdentifier = {self.id}'
-        result = subprocess.run(command.split(), capture_output=True)
-        url = result.stdout.decode().strip()
-        if not url:
+        self.url = NSWorkspace.new().URLForApplicationWithBundleIdentifier_(self.id)
+        if not self.url:
             raise self.AppNotFoundError
-        self.url = NSURL.fileURLWithPath_isDirectory_(url, True)
 
     def _get_bundle(self):
         # Get app bundle from URL
@@ -36,16 +33,35 @@ class App:
 
         self._bundle = NSBundle.bundleWithURL_(self.url)
 
+    def _get_utis(self):
+        doc_types = self._bundle.objectForInfoDictionaryKey_(
+            'CFBundleDocumentTypes')
+
+        for item in doc_types:
+            if 'LSItemContentTypes' in item.keys():
+                uttype = UTType.typeWithIdentifier_(
+                    item['LSItemContentTypes'][0])
+            elif 'CFBundleTypeMIMETypes' in item.keys():
+                uttype = UTType.typeWithMIMEType_(
+                    item['CFBundleTypeMIMETypes'][0])
+            elif 'CFBundleTypeExtensions' in item.keys():
+                uttype = UTType.typeWithFilenameExtension_(
+                    item['CFBundleTypeExtensions'][0])
+
+            self.utis.append((uttype, item['CFBundleTypeRole']))
+
     def _get_protocols(self):
         # Parse supported protocols from bundle
         bundle_url_types = self._bundle.objectForInfoDictionaryKey_(
             'CFBundleURLTypes')
-        self.protocols = [
-            scheme for item in bundle_url_types for scheme in item['CFBundleURLSchemes']]
+        self.protocols = [scheme for item in bundle_url_types for scheme in item['CFBundleURLSchemes']]
     
     def __post_init__(self):
         self._get_bundle()
+        self._get_utis()
         self._get_protocols()
+
+
 
 @dataclass
 class Role:

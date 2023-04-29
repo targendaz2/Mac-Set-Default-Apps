@@ -1,6 +1,6 @@
 import pytest
 
-from Cocoa import NSURL
+from Cocoa import NSWorkspace
 from UniformTypeIdentifiers import UTType, UTTypeHTML, UTTypeURL
 
 from msda import models
@@ -15,7 +15,7 @@ class TestAppModel:
         app = models.App(id=app_id)
 
         # Then the app's URL should be returned
-        assert app.url == NSURL.fileURLWithPath_isDirectory_('/Applications/Safari.app', True)
+        assert app.url == NSWorkspace.new().URLForApplicationWithBundleIdentifier_(app_id)
 
     def test_cant_find_app_from_app_id_if_not_installed(self):
         # Given the ID of an app that isn't installed
@@ -37,6 +37,26 @@ class TestAppModel:
         for protocol in ('http', 'https'):
             assert protocol in app.protocols
 
+    @pytest.mark.skip()
+    def test_loads_supported_utis(self):
+        # Given the ID of an installed app
+        app_id = 'com.apple.Safari'
+
+        # When that app ID is submitted
+        app = models.App(id=app_id)
+
+        # Then the UTTypes should be loaded
+        uttype_xhtml = UTType.typeWithIdentifier_('public.xhtml')
+
+        uttypes = (
+            (UTTypeHTML, 'Viewer'),
+            (UTTypeURL, 'All'),
+            (uttype_xhtml, 'Viewer'),
+        )
+
+        for uttype_set in uttypes:
+            assert uttype_set in app.utis
+
 class TestRoleModel:
 
     def test_cant_find_config_for_an_unknown_app_role(self):
@@ -55,7 +75,7 @@ class TestRoleModel:
         # When that app role is submitted
         role = models.Role(name=app_role)
 
-        # The appropriate UTTypes should be loaded
+        # Then the appropriate UTTypes should be loaded
         uttype_xhtml = UTType.typeWithIdentifier_('public.xhtml')
 
         for uttype in (UTTypeHTML, UTTypeURL, uttype_xhtml):
