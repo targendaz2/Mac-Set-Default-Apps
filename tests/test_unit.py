@@ -69,7 +69,6 @@ class TestRoleModel:
         # When that app role is submitted
         role = models.Role(name=app_role)
 
-        # The appropriate UTTypes should be loaded
-
+        # The appropriate protocols should set
         assert 'http' in role._protocols
         assert 'https' in role._protocols
