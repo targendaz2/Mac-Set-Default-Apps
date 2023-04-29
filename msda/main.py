@@ -18,7 +18,6 @@ from . import errors
 # setDefaultApplicationAtURL_toOpenFileAtURL_completionHandler_
 # setDefaultApplicationAtURL_toOpenURLsWithScheme_completionHandler_
 
-app_role_file = ''
 app_role_settings = {}
 
 def callback():
@@ -35,10 +34,9 @@ def _get_app_url(app_id: str):
     return app_path
 
 def _get_app_role(role: str):
-    global app_role_file
     global app_role_settings
     app_role_file = f'config/roles/{role}.yml'
-    
+
     if not os.path.isfile(app_role_file):
         raise errors.UnknownRoleError
 
