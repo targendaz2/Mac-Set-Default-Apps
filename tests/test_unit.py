@@ -1,5 +1,6 @@
 import pytest
 
+from Cocoa import NSURL
 from UniformTypeIdentifiers import UTType, UTTypeHTML, UTTypeURL
 
 from msda import models
@@ -14,7 +15,7 @@ class TestAppModel:
         app = models.App(id=app_id)
 
         # Then the app's URL should be returned
-        assert app.url == '/Applications/Safari.app'
+        assert app.url == NSURL.fileURLWithPath_isDirectory_('/Applications/Safari.app', True)
 
     def test_cant_find_app_url_from_app_id_if_not_installed(self):
         # Given the ID of an app that isn't installed
@@ -24,6 +25,17 @@ class TestAppModel:
         # Then an appropriate error should be raised
         with pytest.raises(models.App.AppNotFoundError):
             models.App(id=app_id)
+
+    @pytest.mark.skip(reason="Changing model to handle NSURLs")
+    def test_loads_supported_protocols(self):
+        # Given the ID of an installed app
+        app_id = 'com.apple.Safari'
+
+        # When that app ID is submitted
+        app = models.App(id=app_id)
+
+        # Then the app's supported protocols should be available
+        assert 'html' in app._protocols
 
 class TestRoleModel:
 

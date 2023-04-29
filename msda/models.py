@@ -4,12 +4,17 @@ import subprocess
 
 import yaml
 
+from pprint import pprint
+
+from Cocoa import NSURL
+from Foundation import NSBundle
 from UniformTypeIdentifiers import UTType
 
 @dataclass
 class App:
     id: str
-    url: str = field(init=False)
+    url: NSURL = field(init=False)
+    _protocols: list = field(init=False)
 
     class AppNotFoundError(Exception):
         pass
@@ -17,9 +22,10 @@ class App:
     def __post_init__(self):
         command = f'mdfind kMDItemCFBundleIdentifier = {self.id}'
         result = subprocess.run(command.split(), capture_output=True)
-        self.url = result.stdout.decode().strip()
-        if not self.url:
+        url = result.stdout.decode().strip()
+        if not url:
             raise self.AppNotFoundError
+        self.url = NSURL.fileURLWithPath_isDirectory_(url, True)
 
 @dataclass
 class Role:
