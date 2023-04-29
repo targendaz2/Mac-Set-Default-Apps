@@ -61,3 +61,15 @@ class TestRoleModel:
         assert UTTypeHTML in role._utis
         assert UTTypeURL in role._utis
         assert uttype_xhtml in role._utis
+
+    def test_loads_appropriate_protocols_from_role_definition(self):
+        # Given the name of an app role
+        app_role = 'browser'
+
+        # When that app role is submitted
+        role = models.Role(name=app_role)
+
+        # The appropriate UTTypes should be loaded
+
+        assert 'http' in role._protocols
+        assert 'https' in role._protocols

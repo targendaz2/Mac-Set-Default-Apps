@@ -26,6 +26,7 @@ class Role:
     name: str
     file: str = field(init=False)
     settings: dict = field(init=False)
+    _protocols: list[str] = field(init=False, default_factory=list)
     _utis: list = field(init=False, default_factory=list)
 
     class UnknownRoleError(Exception):
@@ -39,6 +40,9 @@ class Role:
 
         with open(self.file, 'r') as file:
             self.settings = yaml.load(file, Loader=yaml.FullLoader)
+
+        for protocol in self.settings['protocols']:
+            self._protocols.append(protocol)
 
         for uti in self.settings['utis'].keys():
             self._utis.append(UTType.typeWithIdentifier_(uti))
