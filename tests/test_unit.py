@@ -15,9 +15,9 @@ class TestAppModel:
         app = models.App(id=app_id)
 
         # Then the app's URL should be returned
-        assert app.url == NSURL.fileURLWithPath_isDirectory_('/Applications/Safari.app', True)
+        assert app._url == NSURL.fileURLWithPath_isDirectory_('/Applications/Safari.app', True)
 
-    def test_cant_find_app_url_from_app_id_if_not_installed(self):
+    def test_cant_find_app_from_app_id_if_not_installed(self):
         # Given the ID of an app that isn't installed
         app_id = 'com.dgrdev.fakebrowser'
 

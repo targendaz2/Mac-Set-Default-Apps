@@ -13,7 +13,7 @@ from UniformTypeIdentifiers import UTType
 @dataclass
 class App:
     id: str
-    url: NSURL = field(init=False)
+    _url: NSURL = field(init=False)
     _bundle: NSBundle = field(init=False)
     _protocols: list = field(init=False)
 
@@ -27,14 +27,14 @@ class App:
         url = result.stdout.decode().strip()
         if not url:
             raise self.AppNotFoundError
-        self.url = NSURL.fileURLWithPath_isDirectory_(url, True)
+        self._url = NSURL.fileURLWithPath_isDirectory_(url, True)
 
     def _get_bundle(self):
         # Get app bundle from URL
-        if not hasattr(self, 'url'):
+        if not hasattr(self, '_url'):
             self._get_url()
 
-        self._bundle = NSBundle.bundleWithURL_(self.url)
+        self._bundle = NSBundle.bundleWithURL_(self._url)
 
     def _get_protocols(self):
         # Parse supported protocols from bundle
