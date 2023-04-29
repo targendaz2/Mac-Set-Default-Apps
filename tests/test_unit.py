@@ -25,18 +25,18 @@ class TestAppLookups:
 
 class TestAppRoleLoading:
 
-    def test_can_load_appropriate_config_for_a_known_app_role(self):
+    def test_can_find_appropriate_config_for_a_known_app_role(self):
         # Given the name of an app role
         app_role = 'browser'
 
         # When that app role is submitted
         main._get_app_role(app_role)
 
-        # The corresponding role file should be loaded
+        # The corresponding role file should be set
         from msda.main import app_role_file
         assert 'browser.yml' in app_role_file
 
-    def test_cant_load_config_for_an_unknown_app_role(self):
+    def test_cant_find_config_for_an_unknown_app_role(self):
         # Given the name of an unknown app role
         app_role = 'scuba'
 
@@ -44,3 +44,15 @@ class TestAppRoleLoading:
         # Then an appropriate error should be raised
         with pytest.raises(errors.UnknownRoleError):
             main._get_app_role(app_role)
+
+    def test_loads_specified_app_role_if_it_exists(self):
+        # Given the name of an app role
+        app_role = 'browser'
+
+        # When that app role is submitted
+        main._get_app_role(app_role)
+
+        # The corresponding role file should be loaded
+        from msda.main import app_role_settings
+        assert 'protocols' in app_role_settings
+        assert 'utis' in app_role_settings

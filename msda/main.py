@@ -1,6 +1,8 @@
 import os
 import subprocess
 
+import yaml
+
 # from Cocoa import NSWorkspace
 from UniformTypeIdentifiers import UTType, UTTypeURL
 
@@ -17,6 +19,7 @@ from . import errors
 # setDefaultApplicationAtURL_toOpenURLsWithScheme_completionHandler_
 
 app_role_file = ''
+app_role_settings = {}
 
 def callback():
     pass
@@ -33,9 +36,15 @@ def _get_app_url(app_id: str):
 
 def _get_app_role(role: str):
     global app_role_file
+    global app_role_settings
     app_role_file = f'config/roles/{role}.yml'
+    
     if not os.path.isfile(app_role_file):
         raise errors.UnknownRoleError
+
+    with open(app_role_file, 'r') as file:
+        app_role_settings = yaml.load(file, Loader=yaml.FullLoader)
+    
     # UTType.typeWithIdentifier_('public.html')
 
 @app.command('set')
