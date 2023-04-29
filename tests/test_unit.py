@@ -1,6 +1,6 @@
 import pytest
 
-from msda import errors, main, models
+from msda import models
 
 class TestAppLookups:
 
@@ -20,7 +20,7 @@ class TestAppLookups:
 
         # When that app ID is submitted
         # Then an appropriate error should be raised
-        with pytest.raises(errors.AppNotFoundError):
+        with pytest.raises(models.App.AppNotFoundError):
             models.App(id=app_id)
 
 class TestAppRoleLoading:
@@ -31,7 +31,7 @@ class TestAppRoleLoading:
 
         # When that app role is submitted
         # Then an appropriate error should be raised
-        with pytest.raises(errors.UnknownRoleError):
+        with pytest.raises(models.Role.UnknownRoleError):
             models.Role(name=app_role)
 
     def test_loads_specified_app_role_if_it_exists(self):
