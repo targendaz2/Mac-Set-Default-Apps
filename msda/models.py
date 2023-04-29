@@ -27,7 +27,7 @@ class Role:
     file: str = field(init=False)
     settings: dict = field(init=False)
     _protocols: list[str] = field(init=False, default_factory=list)
-    _utis: list = field(init=False, default_factory=list)
+    _utis: list[UTType] = field(init=False, default_factory=list)
 
     class UnknownRoleError(Exception):
         pass
