@@ -1,6 +1,6 @@
 import pytest
 
-from msda.errors import UnknownRoleError
+from msda import errors
 from msda.main import _get_app_url, _get_role_utis
 
 class TestUnit:
@@ -20,10 +20,9 @@ class TestUnit:
         app_id = 'com.dgrdev.fakebrowser'
 
         # When that app ID is submitted
-        app_url = _get_app_url(app_id)
-
-        # Then nothing should be returned
-        assert app_url == None
+        # Then an appropriate error should be raised
+        with pytest.raises(errors.AppNotFoundError):
+            _get_app_url(app_id)
 
     def test_can_load_appropriate_config_for_a_known_app_role(self):
         # Given the name of an app role
@@ -41,6 +40,6 @@ class TestUnit:
         app_role = 'scuba'
 
         # When that app role is submitted
-        # An appropriate error should be raised
-        with pytest.raises(UnknownRoleError):
+        # Then an appropriate error should be raised
+        with pytest.raises(errors.UnknownRoleError):
             _get_role_utis(app_role)

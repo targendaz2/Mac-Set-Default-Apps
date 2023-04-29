@@ -8,7 +8,7 @@ from pprint import pprint
 
 import typer
 
-from .errors import UnknownRoleError
+from . import errors
 
 # workspace = NSWorkspace.sharedWorkspace()
 # setDefaultApplicationAtURL_toOpenContentType_completionHandler_
@@ -27,13 +27,15 @@ def _get_app_url(app_id: str):
     command = f'mdfind kMDItemCFBundleIdentifier = {app_id}'
     result = subprocess.run(command.split(), capture_output=True)
     app_path = result.stdout.decode().strip()
-    return app_path or None
+    if not app_path:
+        raise errors.AppNotFoundError
+    return app_path
 
 def _get_role_utis(role: str):
     global app_role_file
     app_role_file = f'config/roles/{role}.yml'
     if not os.path.isfile(app_role_file):
-        raise UnknownRoleError
+        raise errors.UnknownRoleError
     # UTType.typeWithIdentifier_('public.html')
 
 @app.command('set')
