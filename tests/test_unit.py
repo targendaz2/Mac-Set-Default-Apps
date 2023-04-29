@@ -32,16 +32,16 @@ class TestAppRoleLoading:
         # When that app role is submitted
         # Then an appropriate error should be raised
         with pytest.raises(errors.UnknownRoleError):
-            main._get_app_role(app_role)
+            models.Role(name=app_role)
 
     def test_loads_specified_app_role_if_it_exists(self):
         # Given the name of an app role
         app_role = 'browser'
 
         # When that app role is submitted
-        main._get_app_role(app_role)
+        role = models.Role(name=app_role)
 
         # The corresponding role file should be loaded
         from msda.main import app_role_settings
-        assert 'protocols' in app_role_settings
-        assert 'utis' in app_role_settings
+        assert 'protocols' in role.settings
+        assert 'utis' in role.settings
