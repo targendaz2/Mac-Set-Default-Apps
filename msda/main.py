@@ -31,7 +31,7 @@ def _get_app_url(app_id: str):
         raise errors.AppNotFoundError
     return app_path
 
-def _get_role_utis(role: str):
+def _get_app_role(role: str):
     global app_role_file
     app_role_file = f'config/roles/{role}.yml'
     if not os.path.isfile(app_role_file):
