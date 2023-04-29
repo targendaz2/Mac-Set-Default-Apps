@@ -4,7 +4,7 @@ import subprocess
 
 import yaml
 
-# from UniformTypeIdentifiers import UTType, UTTypeURL
+from UniformTypeIdentifiers import UTType
 
 @dataclass
 class App:
@@ -26,16 +26,19 @@ class Role:
     name: str
     file: str = field(init=False)
     settings: dict = field(init=False)
+    _utis: list = field(init=False, default_factory=list)
 
     class UnknownRoleError(Exception):
         pass
 
 
     def __post_init__(self):
-        # UTType.typeWithIdentifier_('public.html')
         self.file = f'config/roles/{self.name}.yml'
         if not os.path.isfile(self.file):
             raise self.UnknownRoleError
 
         with open(self.file, 'r') as file:
             self.settings = yaml.load(file, Loader=yaml.FullLoader)
+
+        for uti in self.settings['utis'].keys():
+            self._utis.append(UTType.typeWithIdentifier_(uti))

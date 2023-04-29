@@ -1,5 +1,7 @@
 import pytest
 
+from UniformTypeIdentifiers import UTType, UTTypeHTML, UTTypeURL
+
 from msda import models
 
 class TestAppModel:
@@ -45,3 +47,17 @@ class TestRoleModel:
         from msda.main import app_role_settings
         assert 'protocols' in role.settings
         assert 'utis' in role.settings
+
+    def test_loads_appropriate_UTTypes_from_identifiers(self):
+        # Given the name of an app role
+        app_role = 'browser'
+
+        # When that app role is submitted
+        role = models.Role(name=app_role)
+
+        # The appropriate UTTypes should be loaded
+        uttype_xhtml = UTType.typeWithIdentifier_('public.xhtml')
+
+        assert UTTypeHTML in role._utis
+        assert UTTypeURL in role._utis
+        assert uttype_xhtml in role._utis
