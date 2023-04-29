@@ -1,6 +1,9 @@
 import subprocess
 
 # from Cocoa import NSWorkspace
+from UniformTypeIdentifiers import UTType, UTTypeURL
+
+from pprint import pprint
 
 import typer
 
@@ -9,6 +12,8 @@ import typer
 # setDefaultApplicationAtURL_toOpenContentTypeOfFileAtURL_completionHandler
 # setDefaultApplicationAtURL_toOpenFileAtURL_completionHandler_
 # setDefaultApplicationAtURL_toOpenURLsWithScheme_completionHandler_
+
+app_role_file = ''
 
 def callback():
     pass
@@ -20,6 +25,11 @@ def _get_app_url(app_id: str):
     result = subprocess.run(command.split(), capture_output=True)
     app_path = result.stdout.decode().strip()
     return app_path or None
+
+def _get_role_utis(role: str):
+    global app_role_file
+    app_role_file = 'config/roles/browser.yml'
+    # UTType.typeWithIdentifier_('public.html')
 
 @app.command('set')
 def set_command(app_id: str, role: str):

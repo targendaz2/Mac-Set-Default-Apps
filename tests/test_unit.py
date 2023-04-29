@@ -1,4 +1,4 @@
-from msda.main import _get_app_url
+from msda.main import _get_app_url, _get_role_utis
 
 class TestUnit:
 
@@ -21,3 +21,14 @@ class TestUnit:
 
         # Then nothing should be returned
         assert app_url == None
+
+    def test_can_loads_appropriate_config_for_a_known_app_role(self):
+        # Given the name of an app role
+        app_role = 'browser'
+
+        # When that app role is submitted
+        _get_role_utis(app_role)
+
+        # The corresponding role file should be loaded
+        from msda.main import app_role_file
+        assert 'browser.yml' in app_role_file
