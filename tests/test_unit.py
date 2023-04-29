@@ -3,7 +3,7 @@ import pytest
 from msda import errors
 from msda.main import _get_app_url, _get_role_utis
 
-class TestUnit:
+class TestAppLookups:
 
     def test_can_find_app_url_from_app_id_if_installed(self):
         # Given the ID of an installed app
@@ -23,6 +23,8 @@ class TestUnit:
         # Then an appropriate error should be raised
         with pytest.raises(errors.AppNotFoundError):
             _get_app_url(app_id)
+
+class TestAppRoleLoading:
 
     def test_can_load_appropriate_config_for_a_known_app_role(self):
         # Given the name of an app role
