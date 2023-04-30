@@ -19,11 +19,12 @@ class Role:
     class UnknownRoleError(Exception):
         pass
 
-    def __post_init__(self):
+    def _get_file(self):
         self.file = f'config/roles/{self.name}.yml'
         if not os.path.isfile(self.file):
             raise self.UnknownRoleError
 
+    def _get_settings(self):
         with open(self.file, 'r') as file:
             settings = yaml.load(file, Loader=yaml.FullLoader)
 
@@ -32,6 +33,10 @@ class Role:
         for uti, role in settings.get('utis', {}).items():
             uttype = UTType.typeWithIdentifier_(uti)
             self.utis.append((uttype, role))
+
+    def __post_init__(self):
+        self._get_file()
+        self._get_settings()
 
 @dataclass
 class App:
