@@ -90,4 +90,6 @@ class App:
         self._get_protocols()
 
     def supports(self, role: Role):
-        return True
+        supports_protocols = set(role.protocols).issubset(set(self.protocols))
+        supports_utis = set(role.utis).issubset(set(self.utis))
+        return supports_protocols and supports_utis

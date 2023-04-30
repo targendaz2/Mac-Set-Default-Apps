@@ -69,7 +69,6 @@ class TestAppModel:
         # Then the function should return true
         assert result == True
 
-    @pytest.mark.skip()
     def test_supports_method_returns_false_for_unsupported_role(self):
         # Given an App object
         app = models.App(id='com.apple.Safari')
