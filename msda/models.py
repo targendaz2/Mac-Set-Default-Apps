@@ -27,7 +27,7 @@ class Role:
         with open(self.file, 'r') as file:
             settings = yaml.load(file, Loader=yaml.FullLoader)
 
-        self.protocols = settings['protocols']
+        self.protocols = settings.get('protocols', [])
 
         self.utis = [UTType.typeWithIdentifier_(
             uti) for uti in settings['utis'].keys()]

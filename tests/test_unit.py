@@ -69,6 +69,20 @@ class TestAppModel:
         # Then the function should return true
         assert result == True
 
+    @pytest.mark.skip()
+    def test_supports_method_returns_false_for_unsupported_role(self):
+        # Given an App object
+        app = models.App(id='com.apple.Safari')
+
+        # And a Role object that app shouldn't support
+        role = models.Role(name='mail')
+
+        # When the app is asked to check if it supports the role
+        result = app.supports(role)
+
+        # Then the function should return false
+        assert result == False
+
 class TestRoleModel:
 
     def test_cant_find_config_for_an_unknown_app_role(self):
@@ -103,3 +117,13 @@ class TestRoleModel:
         # The appropriate protocols should set
         for protocol in ('http', 'https'):
             assert protocol in role.protocols
+
+    def test_can_load_role_definition_if_missing_protocols(self):
+        # Given the name of an app role that doesn't have protocols
+        app_role = 'pdf'
+
+        # When that app role is submitted
+        role = models.Role(name=app_role)
+
+        # Then the Role object should be created without errors
+        assert isinstance(role, models.Role)
