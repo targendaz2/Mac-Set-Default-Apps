@@ -37,7 +37,6 @@ class TestAppModel:
         for protocol in ('http', 'https'):
             assert protocol in app.protocols
 
-    @pytest.mark.skip()
     def test_loads_supported_utis(self):
         # Given the ID of an installed app
         app_id = 'com.apple.Safari'
@@ -50,7 +49,7 @@ class TestAppModel:
 
         uttypes = (
             (UTTypeHTML, 'Viewer'),
-            (UTTypeURL, 'All'),
+            (UTTypeURL, 'Viewer'),
             (uttype_xhtml, 'Viewer'),
         )
 

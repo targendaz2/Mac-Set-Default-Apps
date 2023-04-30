@@ -7,7 +7,7 @@ import yaml
 from pprint import pprint
 
 from Cocoa import NSBundle, NSURL, NSWorkspace
-from UniformTypeIdentifiers import UTType
+from UniformTypeIdentifiers import UTType, UTTypeURL
 
 @dataclass
 class App:
@@ -45,8 +45,12 @@ class App:
                 uttype = UTType.typeWithMIMEType_(
                     item['CFBundleTypeMIMETypes'][0])
             elif 'CFBundleTypeExtensions' in item.keys():
-                uttype = UTType.typeWithFilenameExtension_(
-                    item['CFBundleTypeExtensions'][0])
+                extension = item['CFBundleTypeExtensions'][0]
+                if extension == 'url':
+                    uttype = UTTypeURL
+                else:
+                    uttype = UTType.typeWithFilenameExtension_(
+                    extension)
 
             self.utis.append((uttype, item['CFBundleTypeRole']))
 
