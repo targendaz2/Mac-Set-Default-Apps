@@ -127,3 +127,13 @@ class TestRoleModel:
 
         # Then the Role object should be created without errors
         assert isinstance(role, models.Role)
+
+    def test_can_load_role_definition_if_missing_utis(self):
+        # Given the name of an app role that doesn't have UTIs
+        app_role = 'mail'
+
+        # When that app role is submitted
+        role = models.Role(name=app_role)
+
+        # Then the Role object should be created without errors
+        assert isinstance(role, models.Role)

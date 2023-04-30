@@ -29,8 +29,12 @@ class Role:
 
         self.protocols = settings.get('protocols', [])
 
-        self.utis = [UTType.typeWithIdentifier_(
-            uti) for uti in settings['utis'].keys()]
+        if 'utis' in settings:
+            utis = [UTType.typeWithIdentifier_(uti) for uti in settings['utis'].keys()]
+        else:
+            utis = []
+
+        self.utis = utis
 
 @dataclass
 class App:
