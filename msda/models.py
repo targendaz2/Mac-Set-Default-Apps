@@ -29,19 +29,16 @@ class Role:
 
         self.protocols = settings.get('protocols', [])
 
-        if 'utis' in settings:
-            utis = [UTType.typeWithIdentifier_(uti) for uti in settings['utis'].keys()]
-        else:
-            utis = []
-
-        self.utis = utis
+        for uti, role in settings.get('utis', {}).items():
+            uttype = UTType.typeWithIdentifier_(uti)
+            self.utis.append((uttype, role))
 
 @dataclass
 class App:
     id: str
     url: NSURL = field(init=False)
-    utis: list = field(init=False, default_factory=list)
     protocols: list[str] = field(init=False, default_factory=list)
+    utis: list = field(init=False, default_factory=list)
     _bundle: NSBundle = field(init=False)
 
     class AppNotFoundError(Exception):

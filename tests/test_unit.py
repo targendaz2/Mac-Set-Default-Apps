@@ -104,7 +104,13 @@ class TestRoleModel:
         # Then the appropriate UTTypes should be loaded
         uttype_xhtml = UTType.typeWithIdentifier_('public.xhtml')
 
-        for uttype in (UTTypeHTML, UTTypeURL, uttype_xhtml):
+        uttypes = (
+            (UTTypeHTML, 'Viewer'),
+            (UTTypeURL, 'Viewer'),
+            (uttype_xhtml, 'Viewer'),
+        )
+
+        for uttype in uttypes:
             assert uttype in role.utis
 
     def test_loads_appropriate_protocols_from_known_role(self):
