@@ -56,6 +56,19 @@ class TestAppModel:
         for uttype_set in uttypes:
             assert uttype_set in app.utis
 
+    def test_supports_method_returns_true_for_supported_role(self):
+        # Given an App object
+        app = models.App(id='com.apple.Safari')
+
+        # And a Role object that app should support
+        role = models.Role(name='browser')
+
+        # When the app is asked to check if it supports the role
+        result = app.supports(role)
+
+        # Then the function should return true
+        assert result == True
+
 class TestRoleModel:
 
     def test_cant_find_config_for_an_unknown_app_role(self):
