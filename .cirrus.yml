@@ -1,0 +1,15 @@
+run_tests_task:
+  macos_instance:
+    image: ghcr.io/cirruslabs/macos-ventura-xcode:latest
+
+  chrome_cache:
+    folder: /Applications/Google Chrome.app
+    populate_script:
+      - brew install --force google-chrome
+
+  run_tests_script:
+    - poetry run pytest --html=$RESULTS_FILENAME --self-contained-html --suppress-tests-failed-exit-code
+
+  always:
+    results_artifacts:
+      path: ./*.html
