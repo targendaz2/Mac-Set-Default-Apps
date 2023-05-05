@@ -1,15 +1,15 @@
 setup() {
-    load '../includes/bats-support/load'
-    load '../includes/bats-assert/load'
+    load '../node_modules/bats-support/load'
+    load '../node_modules/bats-assert/load'
 
-    source 'tests/utils.sh'
+    load '../tests/utils'
 
     # get the containing directory of this file
     # use $BATS_TEST_FILENAME instead of ${BASH_SOURCE[0]} or $0,
     # as those will point to the bats executable's location or the preprocessed file respectively
     PROJECT_ROOT="$( cd "$( dirname "$BATS_TEST_FILENAME" )/.." >/dev/null 2>&1 && pwd )"
     # make executables in src/ visible to PATH
-    PATH="$PROJECT_ROOT/../src:$PATH"
+    PATH="$PROJECT_ROOT/src:$PATH"
 }
 
 teardown() {
@@ -40,7 +40,7 @@ teardown() {
     # Execute functional test
 
     # - User runs msda to set Google Chrome as the default browser
-    run msda.zsh
+    run msda.sh --browser com.google.Chrome
 
     # Confirm resulting OS state
 

@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 is_running() {
     # Set variables from args
     local APP="$1"
@@ -7,7 +5,7 @@ is_running() {
     # Ensure an app name is provided
     if [ -z "$APP" ]; then
         echo 'You must provide an application name.' >&2
-        exit 1
+        return
     fi
 
     # Check app running state
@@ -25,7 +23,7 @@ close() {
     # Ensure an app name is provided
     if [ -z "$APP" ]; then
         echo 'You must provide an application name.' >&2
-        exit 1
+        return
     fi
 
     # Check app running state

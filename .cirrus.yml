@@ -2,25 +2,54 @@ run_tests_task:
   macos_instance:
     image: ghcr.io/cirruslabs/macos-ventura-xcode:latest
 
-  acrobat_cache:
-    folder: /Applications/Adobe Acrobat Reader.app
-    populate_script: brew install --force adobe-acrobat-reader
-    
-  chrome_cache:
-    folder: /Applications/Google Chrome.app
-    populate_script: brew install --force google-chrome
+  # adobe_acrobat_pro_cache:
+  #   folder: /Applications/Adobe Acrobat DC
+  #   populate_script: brew install --force adobe-acrobat-pro
 
-  outlook_cache:
-    folder: /Applications/Microsoft Outlook.app
-    populate_script: brew install --force microsoft-outlook
+  # adobe_acrobat_reader_cache:
+  #   folder: /Applications/Adobe Acrobat Reader.app
+  #   populate_script: brew install --force adobe-acrobat-reader
+
+  # brave_browser_cache:
+  #   folder: /Applications/Brave Browser.app
+  #   populate_script: brew install --force brave-browser
+
+  # firefox_cache:
+  #   folder: /Applications/Firefox.app
+  #   populate_script: brew install --force firefox
+    
+  # google_chrome_cache:
+  #   folder: /Applications/Google Chrome.app
+  #   populate_script: brew install --force google-chrome
+
+  # microsoft_edge_cache:
+  #   folder: /Applications/Microsoft Edge.app
+  #   populate_script: brew install --force microsoft-edge
+
+  # microsoft_outlook_cache:
+  #   folder: /Applications/Microsoft Outlook.app
+  #   populate_script: brew install --force microsoft-outlook
+
+  # thunderbird_cache:
+  #   folder: /Applications/Thunderbird.app
+  #   populate_script: brew install --force thunderbird
+
+  # vlc_cache:
+  #   folder: /Applications/VLC.app
+  #   populate_script: brew install --force vlc
+
+  install_dependencies_script:
+    - npm install
 
   run_tests_script:
-    - for f in ./tests/functional_tests/*.sh; do; bash "$f"; done
-    - for f in ./tests/unit_tests/*.sh; do; bash "$f"; done
+    - npm run bats --recursive --show-output-of-passing-tests --output test_reports/ tests/ || true
+    - ls -ahl tests
+    - ls -ahl includes
+    - sleep 60
 
   before_cache_script:
     - brew cleanup
 
-  always:
-    results_artifacts:
-      path: ./*.txt
+  # always:
+  #   results_artifacts:
+  #     path: ./*.txt
