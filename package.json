@@ -12,7 +12,8 @@
     "test": "tests"
   },
   "scripts": {
-    "bats": "node_modules/.bin/bats"
+    "bats": "bats",
+    "test": "bats tests/unit_tests.bats"
   },
   "repository": {
     "type": "git",
