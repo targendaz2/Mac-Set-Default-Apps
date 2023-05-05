@@ -6,34 +6,41 @@ function print_help() {
     print -rC1 --      \
         "msda.sh [-h|--help]" \
         "msda.sh [set]"
-    exit
+    return 0
 }
 
 function set_command() {
     print command is set
-    exit
+    return 1
 }
 
-# Parse keyword args
-zparseopts -D -E -F -- \
-    {h,-help}=help \
-    || exit
+if [[ "$ZSH_EVAL_CONTEXT" == 'toplevel' ]]; then
+    # Parse keyword args
+    zparseopts -D -E -F -- \
+        {h,-help}=help \
+        -browser=browser \
+        || return
 
-# Get positional args
-command=$1
+    # Get positional args
+    command=$1
 
-# Parse positional args
-case $command in
-    set)
-        set_command
-        ;;
-    *)
-        print_help "\"$command\" is not a valid command"
-        ;;
-esac
+    # Parse positional args
+    case $command in
+        set)
+            set_command
+            ;;
+        '')
+            print_help
+            ;;
+        *)
+            print_help "\"$command\" is not a valid command"
+            ;;
+    esac
 
 
-if (( $#help )); then
-    print_help
-    return
+    if (( $#help )); then
+        print_help
+        return
+    fi
+    exit 0
 fi
