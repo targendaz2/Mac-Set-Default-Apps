@@ -40,7 +40,7 @@ teardown() {
     # Execute functional test
 
     # - User runs msda to set Google Chrome as the default browser
-    run msda.sh --browser com.google.Chrome
+    msda.sh set --browser com.google.Chrome
 
     # Confirm resulting OS state
 
