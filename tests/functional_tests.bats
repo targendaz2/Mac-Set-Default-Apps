@@ -14,14 +14,24 @@ teardown() {
     :
 }
 
-@test "Show welcome message on first invocation" {
-    if [[ -e /tmp/bats-tutorial-project-ran ]]; then
-        skip 'The FIRST_RUN_FILE already exists'
-    fi
+@test "Set Chrome as the default browser for the current user" {
+    # Confirm expected initial OS state
 
-    run msda.zsh
-    assert_output --partial 'Welcome to our project!'
+    # - Safari is not running
 
-    run msda.zsh
-    refute_output --partial 'Welcome to our project!'
+    # - Google Chrome is not running
+
+    # - Opening a URL opens Safari
+
+    # Return to the initial OS state
+
+    # - Close Safari
+
+    # Execute functional test
+
+    # - User runs msda to set Google Chrome as the default browser
+
+    # Confirm resulting OS state
+
+    # - Opening a URL opens Google Chrome
 }
