@@ -2,14 +2,25 @@ run_tests_task:
   macos_instance:
     image: ghcr.io/cirruslabs/macos-ventura-xcode:latest
 
+  acrobat_cache:
+    folder: /Applications/Adobe Acrobat Reader.app
+    populate_script: brew install --force adobe-acrobat-reader
+    
   chrome_cache:
     folder: /Applications/Google Chrome.app
-    populate_script:
-      - brew install --force google-chrome
+    populate_script: brew install --force google-chrome
+
+  outlook_cache:
+    folder: /Applications/Microsoft Outlook.app
+    populate_script: brew install --force microsoft-outlook
 
   run_tests_script:
-    - poetry run pytest --html=$RESULTS_FILENAME --self-contained-html --suppress-tests-failed-exit-code
+    - for f in ./tests/functional_tests/*.sh; do; bash "$f"; done
+    - for f in ./tests/unit_tests/*.sh; do; bash "$f"; done
+
+  before_cache_script:
+    - brew cleanup
 
   always:
     results_artifacts:
-      path: ./*.html
+      path: ./*.txt
