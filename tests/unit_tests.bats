@@ -20,8 +20,8 @@ teardown() {
     # Given the bundle ID of an app that is installed
     bundle_id='com.apple.Safari'
 
-    # When that bundle ID is submitted to msda
-    run $PROJECT_ROOT/tests/utils/zsh_wrapper.sh set_command $bundle_id
+    # When that bundle ID is submitted
+    run $PROJECT_ROOT/tests/utils/zsh_wrapper.sh app_is_installed $bundle_id
 
     # The app should succeed
     assert_success
@@ -31,8 +31,8 @@ teardown() {
     # Given the bundle ID of an app that isn't installed
     bundle_id='com.dgrdev.FakeBrowser'
 
-    # When that bundle ID is submitted to msda
-    run $PROJECT_ROOT/tests/utils/zsh_wrapper.sh set_command $bundle_id
+    # When that bundle ID is submitted
+    run $PROJECT_ROOT/tests/utils/zsh_wrapper.sh app_is_installed $bundle_id
 
     # The app should fail
     assert_failure
