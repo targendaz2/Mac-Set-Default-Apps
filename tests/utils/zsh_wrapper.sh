@@ -2,6 +2,9 @@
 
 source src/msda.sh
 
-eval "$@"
+output=$(eval "$@")
+exit_code=$?
 
-exit $?
+echo "$output"
+
+exit $exit_code
