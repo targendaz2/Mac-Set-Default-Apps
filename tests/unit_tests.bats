@@ -21,9 +21,9 @@ teardown() {
     bundle_id='com.apple.Safari'
 
     # When that bundle ID is submitted
-    run $PROJECT_ROOT/tests/utils/zsh_wrapper.sh app_is_installed $bundle_id
+    run $PROJECT_ROOT/tests/utils/zsh_wrapper.sh _app_is_installed $bundle_id
 
-    # The app should succeed
+    # The function should succeed
     assert_success
 }
 
@@ -32,8 +32,20 @@ teardown() {
     bundle_id='com.dgrdev.FakeBrowser'
 
     # When that bundle ID is submitted
-    run $PROJECT_ROOT/tests/utils/zsh_wrapper.sh app_is_installed $bundle_id
+    run $PROJECT_ROOT/tests/utils/zsh_wrapper.sh _app_is_installed $bundle_id
 
-    # The app should fail
+    # The function should fail
     assert_failure
+}
+
+@test "Converts existing UTI to its MIME type" {
+    # Given a known UTI
+    uti='public.html'
+
+    # When that UTI is submitted
+    run $PROJECT_ROOT/tests/utils/zsh_wrapper.sh _uti_to_mime $uti
+
+    # The function should succeed and return the MIME type
+    assert_success
+    assert_equal "$output" "text/html"
 }

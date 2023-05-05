@@ -1,9 +1,14 @@
 #!/usr/bin/env zsh
 
-function app_is_installed() {
+function _app_is_installed() {
     local app_id="$1"
     app_path=$(mdfind kMDItemCFBundleIdentifier = $app_id)
     [ -z "$app_path" ] && return 1
+    return 0
+}
+
+function _uti_to_mime() {
+    echo 'text/html'
     return 0
 }
 
@@ -17,7 +22,10 @@ function print_help() {
 }
 
 function set_command() {
-    :
+    local app_id="$1"
+    app_path=$(mdfind kMDItemCFBundleIdentifier = $app_id)
+    [ -z "$app_path" ] && return 1
+    return 0
 }
 
 if [[ "$ZSH_EVAL_CONTEXT" == 'toplevel' ]]; then
