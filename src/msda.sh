@@ -1,14 +1,22 @@
 #!/usr/bin/env zsh
 
+# Aliases
+lsregister='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'
+
 function _app_is_installed() {
     local app_id="$1"
-    app_path=$(mdfind kMDItemCFBundleIdentifier = $app_id)
+    local app_path=$(mdfind kMDItemCFBundleIdentifier = $app_id)
     [ -z "$app_path" ] && return 1
     return 0
 }
 
 function _uti_to_mime() {
-    echo 'text/html'
+    local uti="$1"
+    local mime_type="$($lsregister -gc -dump MIMEBinding | awk -F ':' "/$uti/ {print \$1}")"
+
+    [ -z "$mime_type" ] && return 1
+    
+    echo "$mime_type"
     return 0
 }
 

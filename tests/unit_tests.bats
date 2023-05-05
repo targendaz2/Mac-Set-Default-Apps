@@ -16,7 +16,7 @@ teardown() {
     :
 }
 
-@test "Succeeds if the submitted app is installed" {
+@test "_app_is_installed succeeds for installed apps" {
     # Given the bundle ID of an app that is installed
     bundle_id='com.apple.Safari'
 
@@ -27,7 +27,7 @@ teardown() {
     assert_success
 }
 
-@test "Fails if the submitted app is not installed" {
+@test "_app_is_installed fails for apps that aren't installed" {
     # Given the bundle ID of an app that isn't installed
     bundle_id='com.dgrdev.FakeBrowser'
 
@@ -38,7 +38,7 @@ teardown() {
     assert_failure
 }
 
-@test "Converts existing UTI to its MIME type" {
+@test "_uti_to_mime converts an existing UTI to its MIME type" {
     # Given a known UTI
     uti='public.html'
 
@@ -48,4 +48,15 @@ teardown() {
     # The function should succeed and return the MIME type
     assert_success
     assert_equal "$output" "text/html"
+}
+
+@test "_uti_to_mime fails for nonexistent UTIs" {
+    # Given a nonexistent UTI
+    uti='dgrdev.fake'
+
+    # When that UTI is submitted
+    run $PROJECT_ROOT/tests/utils/zsh_wrapper.sh _uti_to_mime $uti
+
+    # The function should fail
+    assert_failure
 }
