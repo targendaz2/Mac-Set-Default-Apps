@@ -10,8 +10,10 @@ function print_help() {
 }
 
 function set_command() {
-    print command is set
-    return 1
+    local app_id="$1"
+    app_path=$(mdfind kMDItemCFBundleIdentifier = $app_id)
+    [ -z "$app_path" ] && return 1
+    return 0
 }
 
 if [[ "$ZSH_EVAL_CONTEXT" == 'toplevel' ]]; then

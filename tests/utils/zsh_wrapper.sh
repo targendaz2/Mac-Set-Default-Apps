@@ -2,8 +2,6 @@
 
 source src/msda.sh
 
-eval $1
+eval "$@"
 
-result=$?
-
-exit $result
+exit $?
