@@ -1,0 +1,3 @@
+[submodule "includes/assert.sh"]
+	path = includes/assert.sh
+	url = https://github.com/torokmark/assert.sh.git
