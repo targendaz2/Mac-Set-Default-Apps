@@ -35,12 +35,19 @@ teardown() {
     # Return to the initial OS state
 
     # - Close Safari
+    assert close 'Safari'
 
     # Execute functional test
 
     # - User runs msda to set Google Chrome as the default browser
+    run msda.zsh
 
     # Confirm resulting OS state
 
     # - Opening a URL opens Google Chrome
+    open "$TEST_URL"
+    assert is_running 'Google Chrome'
+
+    # - Safari is still not running
+    refute is_running 'Safari'
 }
