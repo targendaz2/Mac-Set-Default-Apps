@@ -1,6 +1,7 @@
 setup() {
     load '../node_modules/bats-support/load'
     load '../node_modules/bats-assert/load'
+    load '../node_modules/bats-zsh/load'
 
     load '../tests/utils/utils'
 
@@ -21,7 +22,8 @@ teardown() {
     bundle_id='com.apple.Safari'
 
     # When that bundle ID is submitted
-    run $PROJECT_ROOT/tests/utils/zsh_wrapper.sh _app_is_installed $bundle_id
+    zsource src/msda.sh
+    zrun _app_is_installed $bundle_id
 
     # The function should succeed
     assert_success
@@ -32,7 +34,8 @@ teardown() {
     bundle_id='com.dgrdev.FakeBrowser'
 
     # When that bundle ID is submitted
-    run $PROJECT_ROOT/tests/utils/zsh_wrapper.sh _app_is_installed $bundle_id
+    zsource src/msda.sh
+    zrun _app_is_installed $bundle_id
 
     # The function should fail
     assert_failure
@@ -43,7 +46,8 @@ teardown() {
     uti='public.html'
 
     # When that UTI is submitted
-    run $PROJECT_ROOT/tests/utils/zsh_wrapper.sh _uti_to_mime $uti
+    zsource src/msda.sh
+    zrun _uti_to_mime $uti
 
     # The function should succeed and return the MIME type
     assert_success
@@ -55,7 +59,8 @@ teardown() {
     uti='dgrdev.fake'
 
     # When that UTI is submitted
-    run $PROJECT_ROOT/tests/utils/zsh_wrapper.sh _uti_to_mime $uti
+    zsource src/msda.sh
+    zrun _uti_to_mime $uti
 
     # The function should fail
     assert_failure

@@ -1,9 +1,4 @@
 {
-  "devDependencies": {
-    "bats": "github:bats-core/bats-core",
-    "bats-assert": "github:bats-core/bats-assert",
-    "bats-support": "github:bats-core/bats-support"
-  },
   "name": "mac-set-default-apps",
   "description": "MSDA provides an easy way to silently change the default applications used by macOS. There are no pop-ups or prompts and, even better, it works for Google Chrome!",
   "version": "2.0.0",
@@ -29,5 +24,11 @@
   "bugs": {
     "url": "https://github.com/targendaz2/Mac-Set-Default-Apps/issues"
   },
-  "homepage": "https://github.com/targendaz2/Mac-Set-Default-Apps#readme"
+  "homepage": "https://github.com/targendaz2/Mac-Set-Default-Apps#readme",
+  "devDependencies": {
+    "bats-assert": "github:bats-core/bats-assert"
+  },
+  "dependencies": {
+    "bats-zsh": "github:targendaz2/bats-zsh"
+  }
 }
