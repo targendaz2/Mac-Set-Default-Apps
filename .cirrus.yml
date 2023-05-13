@@ -39,13 +39,14 @@ run_tests_task:
   #   populate_script: brew install --force vlc
 
   install_dependencies_script:
+    - rm -rf node_modules
     - npm install
 
+  fix_permissions_script:
+    - chmod +x src/msda.sh
+
   run_tests_script:
-    - npm run bats --recursive --show-output-of-passing-tests --output test_reports/ tests/ || true
-    - ls -ahl tests
-    - ls -ahl includes
-    - sleep 60
+    - npm run bats ${CI+-t} --recursive tests/ || true
 
   before_cache_script:
     - brew cleanup

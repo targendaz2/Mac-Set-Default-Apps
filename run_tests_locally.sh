@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-mkdir -p test_reports
+# mkdir -p test_reports
 
 # results_filename="$(date '+results_%Y%m%d%H%M%S.txt')"
 
