@@ -1,6 +1,32 @@
 #!/usr/bin/env zsh
 # shellcheck shell=bash
 
+# Role definitions
+case $role_name in
+    browser)
+        ;;
+    calendar)
+        ;;
+    mail)
+        ;;
+    pdf)
+        ;;
+    *)
+        ;;
+esac
+
+# App definitions
+case $bundle_id in
+    com.google.Chrome)
+        ;;
+    com.microsoft.edgemac)
+        ;;
+    com.microsoft.Outlook)
+        ;;
+    *)
+        ;;
+esac
+
 # App Settings
 CACHE='/Library/Caches/msda'
 
