@@ -35,7 +35,7 @@ function _app_supports_uti() {
     local uti="$2"
 
     local supported_mime_types="$(_get_supported_mime_types $bundle_id)"
-    local mime_type="$(_uti_to_mime $uti)"
+    local mime_type="$(_uti_to_mime_type $uti)"
     [ -z "$mime_type" ] && return 1
 
     [[ "$supported_mime_types" == *"$mime_type"* ]] && return 0
@@ -105,7 +105,7 @@ function _parse_document_types() {
 }
 
 # Converts a UTI to a MIME type
-function _uti_to_mime() {
+function _uti_to_mime_type() {
     local uti="$1"
     local mime_type="$($lsregister -gc -dump MIMEBinding | awk -F ':' "/$uti/ {print \$1}")"
 

@@ -151,26 +151,26 @@ teardown() {
     assert_failure
 }
 
-@test "_uti_to_mime converts an existing UTI to its MIME type" {
+@test "_uti_to_mime_type converts an existing UTI to its MIME type" {
     # Given a known UTI
     uti='public.html'
 
     # When that UTI is submitted
     zsource src/msda.sh
-    zrun _uti_to_mime $uti
+    zrun _uti_to_mime_type $uti
 
     # Then the function should succeed and return the MIME type
     assert_success
     assert_equal "$output" "text/html"
 }
 
-@test "_uti_to_mime fails for nonexistent UTIs" {
+@test "_uti_to_mime_type fails for nonexistent UTIs" {
     # Given a nonexistent UTI
     uti='dgrdev.fake'
 
     # When that UTI is submitted
     zsource src/msda.sh
-    zrun _uti_to_mime $uti
+    zrun _uti_to_mime_type $uti
 
     # Then the function should fail
     assert_failure
