@@ -116,6 +116,30 @@ teardown() {
     assert_failure
 }
 
+@test "_get_supported_mime_types returns an array of supported UTI's for an installed app" {
+    # Given an installed app's bundle ID
+    bundle_id='com.apple.Safari'
+
+    # When that bundle ID is submitted
+    zsource src/msda.sh
+    zrun _get_supported_mime_types $bundle_id
+    
+    # Then an array of supported UTI's should be returned
+    assert_output 'text/css application/pdf application/x-webarchive application/x-safari-extension image/gif text/html application/x-javascript image/jpeg image/jp2 text/plain image/png image/tiff image/x-icon application/xhtml+xml application/xml text/xml image/svg+xml image/avif image/webp'
+}
+
+@test "_get_supported_mime_types fails for unknown apps" {
+    # Given an unknown app's bundle ID
+ bundle_id='com.dgrdev.FakeBrowser'
+
+    # When that bundle ID is submitted
+    zsource src/msda.sh
+    zrun _get_supported_mime_types $bundle_id
+    
+    # Then the function should fail
+    assert_failure
+}
+
 @test "_uti_to_mime converts an existing UTI to its MIME type" {
     # Given a known UTI
     uti='public.html'
