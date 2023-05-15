@@ -7,8 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "bats": "bats",
-    "test": "bats tests/unit_tests.bats"
+    "test": "bats"
   },
   "repository": {
     "type": "git",
