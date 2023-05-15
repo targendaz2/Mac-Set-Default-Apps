@@ -1,9 +1,9 @@
 setup() {
-    load '../node_modules/bats-support/load'
-    load '../node_modules/bats-assert/load'
-    load '../node_modules/bats-zsh/load'
+    load '../../node_modules/bats-support/load'
+    load '../../node_modules/bats-assert/load'
+    load '../../node_modules/bats-zsh/load'
 
-    load '../tests/utils/utils'
+    load '../utils/utils'
 
     # get the containing directory of this file
     # use $BATS_TEST_FILENAME instead of ${BASH_SOURCE[0]} or $0,
