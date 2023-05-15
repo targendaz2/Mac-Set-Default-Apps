@@ -120,11 +120,19 @@ function _app_supports_uti() {
     local uti=$(echo $uti_and_role | cut -d ":" -f 1)
     local uti_role=$(echo $uti_and_role | cut -d ":" -f 2)
 
-    local mime_type="$(_uti_to_mime_type $uti)"
-    if [ ! -z $mime_type ]; then
-        local supported_mime_types="$(_get_supported_mime_types $bundle_id)"
-        [[ "$supported_mime_types" == *"$mime_type:$uti_role"* ]] && return 0
-    fi
+    local supported_mime_types="$(_get_supported_mime_types $bundle_id)"
+    local supported_extensions="$(_get_supported_extensions $bundle_id)"
+
+    local tags="$(_convert_uti $uti)"
+    tags=( $(echo ${tags}) )
+
+    for tag in ${tags[@]}; do
+        if [ "$tag" = *'/'* ]; then
+            [[ "$supported_mime_types" == *"$tag:$uti_role"* ]] && return 0
+        else
+            [[ "$supported_extensions" == *"$tag"* ]] && return 0
+        fi
+    done
     
     return 1
 }
@@ -211,7 +219,7 @@ function _parse_supported_types() {
 # Gets file extensions and MIME types assciated with a UTI
 function _convert_uti() {
     local uti="$1"
-    local tags="$($lsregister -gc -dump Type | \
+    local tags=$($lsregister -gc -dump Type | \
         awk -F ':' "{ \
             if (\$1 == \"type id\" && \$2 ~ \"$uti\") { \
                 check=\"yes\" \
@@ -221,11 +229,11 @@ function _convert_uti() {
                 print \$2 \
             } \
         }" \
-    )"
+    )
 
     [ -z "$tags" ] && return 1
 
-    tags="$(echo "$tags" | sed -r "s/('.*')|(\"[A-z ]*\")|([\.\,])//g" | tr -s ' ' | xargs)"
+    tags="$(echo "$tags" | sed -r "s/('[A-Z]*')|(\"[A-z ]*\")|(['\.\,])//g" | tr -s ' ' | xargs)"
 
     echo "$tags"
     return 0

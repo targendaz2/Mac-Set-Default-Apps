@@ -94,7 +94,6 @@ teardown() {
 }
 
 @test "_app_supports_uti succeeds if the app supports the UTI" {
-    skip
     # Given an app's bundle ID and a UTI it supports
     bundle_id='com.apple.Safari'
     uti='public.url:Viewer'
@@ -251,30 +250,5 @@ teardown() {
     zrun _get_supported_url_schemes $bundle_id
     
     # Then an array of supported file extensions should be returned
-    assert_failure
-}
-
-@test "_uti_to_mime_type converts an existing UTI to its MIME type" {
-    # Given a known UTI
-    uti='public.html'
-
-    # When that UTI is submitted
-    zsource src/msda.sh
-    zrun _uti_to_mime_type $uti
-
-    # Then the function should succeed and return the MIME type
-    assert_success
-    assert_equal "$output" "text/html"
-}
-
-@test "_uti_to_mime_type fails for nonexistent UTIs" {
-    # Given a nonexistent UTI
-    uti='dgrdev.fake'
-
-    # When that UTI is submitted
-    zsource src/msda.sh
-    zrun _uti_to_mime_type $uti
-
-    # Then the function should fail
     assert_failure
 }
