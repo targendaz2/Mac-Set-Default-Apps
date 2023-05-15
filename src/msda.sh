@@ -3,6 +3,7 @@
 # Aliases
 lsregister='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'
 
+# Checks if an app with the specified ID is installed
 function _app_is_installed() {
     local app_id="$1"
     local app_path=$(mdfind kMDItemCFBundleIdentifier = $app_id)
@@ -10,6 +11,15 @@ function _app_is_installed() {
     return 0
 }
 
+function _app_id_to_path() {
+    local app_id="$1"
+    local app_path=$(mdfind kMDItemCFBundleIdentifier = $app_id)
+    [ -z "$app_path" ] && return 1
+    echo "$app_path"
+    return 0
+}
+
+# Converts a UTI to a MIME type
 function _uti_to_mime() {
     local uti="$1"
     local mime_type="$($lsregister -gc -dump MIMEBinding | awk -F ':' "/$uti/ {print \$1}")"

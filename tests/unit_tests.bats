@@ -41,6 +41,30 @@ teardown() {
     assert_failure
 }
 
+@test "_app_id_to_path converts an installed app's ID to its path" {
+    # Given the bundle ID of an app that is installed
+    bundle_id='com.apple.Safari'
+
+    # When that bundle ID is submitted
+    zsource src/msda.sh
+    zrun _app_id_to_path $bundle_id
+
+    # The app's path should be returned
+    assert_output '/Applications/Safari.app'
+}
+
+@test "_app_id_to_path fails for unknown app ID's" {
+    # Given the bundle ID of an app that isn't installed
+    bundle_id='com.dgrdev.FakeBrowser'
+
+    # When that bundle ID is submitted
+    zsource src/msda.sh
+    zrun _app_id_to_path $bundle_id
+
+    # The function should fail
+    assert_failure
+}
+
 @test "_uti_to_mime converts an existing UTI to its MIME type" {
     # Given a known UTI
     uti='public.html'
