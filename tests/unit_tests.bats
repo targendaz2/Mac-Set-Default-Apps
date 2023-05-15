@@ -79,7 +79,6 @@ teardown() {
 }
 
 @test "_app_supports_uti fails if the app doesn't support the UTI" {
-    skip
     # Given an app's bundle ID and a UTI it doesn't support
     bundle_id='com.apple.Safari'
     uti='dgrdev.fake'

@@ -34,7 +34,12 @@ function _app_supports_uti() {
     local bundle_id="$1"
     local uti="$2"
 
-    local app_path=$(_app_id_to_path $bundle_id)
+    local supported_mime_types="$(_get_supported_mime_types $bundle_id)"
+    local mime_type="$(_uti_to_mime $uti)"
+    [ -z "$mime_type" ] && return 1
+
+    [[ "$supported_mime_types" == *"$mime_type"* ]] && return 0
+    return 1
 }
 
 # Gets the path to an app's Info.plist
