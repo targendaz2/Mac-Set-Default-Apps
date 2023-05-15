@@ -4,26 +4,34 @@
 # Role definitions
 case $role_name in
     browser)
+        role_url_schemes=(
+            http
+            https
+        )
+        role_utis=(
+            public.html:Viewer
+            public.url:Viewer
+            public.xhtml:Viewer
+        )
         ;;
     calendar)
+        role_url_schemes=(
+            webcal
+        )
+        role_utis=(
+            com.apple.ical.ics:All
+            com.apple.ical.vcs:All
+        )
         ;;
     mail)
+        role_url_schemes=(
+            mailto
+        )
         ;;
     pdf)
-        ;;
-    *)
-        ;;
-esac
-
-# App definitions
-case $bundle_id in
-    com.google.Chrome)
-        ;;
-    com.microsoft.edgemac)
-        ;;
-    com.microsoft.Outlook)
-        ;;
-    *)
+        role_utis=(
+            com.adobe.pdf:All
+        )
         ;;
 esac
 
