@@ -1,8 +1,16 @@
 #!/usr/bin/env zsh
 
+# Settings
+CACHE='/Library/Caches/msda'
+
 # Aliases
 lsregister='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'
 PlistBuddy='/usr/libexec/PlistBuddy'
+
+# Initializes the app
+function _init() {
+    mkdir -p "$CACHE"
+}
 
 # Gets an app's path from its ID
 function _app_id_to_path() {
