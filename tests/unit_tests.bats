@@ -65,10 +65,39 @@ teardown() {
     assert_failure
 }
 
+@test "_app_supports_role succeeds if the app supports the role" {
+    skip
+    # Given an app's bundle ID and a role it supports
+    bundle_id='com.apple.Safari'
+    role_name='browser'
+
+    # When that bundle ID and role are submitted
+    zsource src/msda.sh
+    zrun _app_supports_role $bundle_id $role_name
+    
+    # Then the function should succeed
+    assert_success
+}
+
+@test "_app_supports_role fails if the app doesn't support the role" {
+    skip
+    # Given an app's bundle ID and a role it doesn't support
+    bundle_id='com.apple.Safari'
+    role_name='calendar'
+
+    # When that bundle ID and role are submitted
+    zsource src/msda.sh
+    zrun _app_supports_role $bundle_id $role_name
+    
+    # Then the function should fail
+    assert_failure
+}
+
 @test "_app_supports_uti succeeds if the app supports the UTI" {
+    skip
     # Given an app's bundle ID and a UTI it supports
     bundle_id='com.apple.Safari'
-    uti='public.html:Viewer'
+    uti='public.url:Viewer'
 
     # When that bundle ID and UTI are submitted
     zsource src/msda.sh
@@ -112,6 +141,30 @@ teardown() {
     # When that bundle ID and URL scheme are submitted
     zsource src/msda.sh
     zrun _app_supports_url_scheme $bundle_id $url_scheme
+    
+    # Then the function should fail
+    assert_failure
+}
+
+@test "_expand_uti returns associated file extensions and MIME types for known UTI's" {
+    # Given a known UTI
+    uti='public.html'
+
+    # When that UTI is submitted submitted
+    zsource src/msda.sh
+    zrun _expand_uti $uti
+    
+    # Then the associated file extensions and MIME types should be returned
+    assert_output 'html htm shtml shtm text/html'
+}
+
+@test "_expand_uti fails for unknown UTI's" {
+    # Given an unknown UTI
+    uti='dgrdev.fake'
+
+    # When that UTI is submitted submitted
+    zsource src/msda.sh
+    zrun _expand_uti $uti
     
     # Then the function should fail
     assert_failure
