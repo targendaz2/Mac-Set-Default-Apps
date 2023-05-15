@@ -43,58 +43,50 @@ function _get_app_info_plist() {
 # Gets all file extensions supported by an app
 function _get_supported_extensions() {
     local bundle_id="$1"
-    local info_plist=$(_get_app_info_plist "$bundle_id")
-    local file_line_count=$(wc -l < $info_plist | xargs)
 
-    local extension_array=''
-    for (( i=0; i<$file_line_count; i++ )); do
-        local document_type=$($PlistBuddy $info_plist -c "print :CFBundleDocumentTypes:$i:CFBundleTypeExtensions" 2>/dev/null)
-        local result=$?
-        
-        [ $result = 1 ] && continue
+    local result="$(_parse_document_types $bundle_id Extensions)"
 
-        local array_line_count=$(($(echo $document_type | wc -l | xargs) - 2))
+    [ -z "$result" ] && return 1
 
-        for (( n=0; n<$array_line_count; n++ )); do
-            local extension=$($PlistBuddy $info_plist -c "print :CFBundleDocumentTypes:$i:CFBundleTypeExtensions:$n")
-
-            extension_array+="$extension "
-        done
-    done
-
-    [ -z "$extension_array" ] && return 1
-
-    extension_array=$(echo "$extension_array" | xargs)
-    echo "$extension_array"
+    echo "$result"
     return 0
 }
 
 # Gets all MIME types supported by an app
 function _get_supported_mime_types() {
     local bundle_id="$1"
-    local info_plist=$(_get_app_info_plist "$bundle_id")
-    local file_line_count=$(wc -l < $info_plist | xargs)
+    
+    local result="$(_parse_document_types $bundle_id MIMETypes)"
 
-    local mime_type_array=''
+    [ -z "$result" ] && return 1
+
+    echo "$result"
+    return 0
+}
+
+function _parse_document_types() {
+    local bundle_id="$1"
+    local info_plist=$(_get_app_info_plist "$bundle_id")
+    local type_name="$2"
+    local file_line_count=$(wc -l < $info_plist | xargs)
+    local type_array=''
+
     for (( i=0; i<$file_line_count; i++ )); do
-        local document_type=$($PlistBuddy $info_plist -c "print :CFBundleDocumentTypes:$i:CFBundleTypeMIMETypes" 2>/dev/null)
+        local document_type=$($PlistBuddy $info_plist -c "print :CFBundleDocumentTypes:$i:CFBundleType$type_name" 2>/dev/null)
         local result=$?
-        
+
         [ $result = 1 ] && continue
 
-        local array_line_count=$(($(echo $document_type | wc -l | xargs) - 2))
+        local array_line_count=$(echo $document_type | wc -l | xargs)
 
-        for (( n=0; n<$array_line_count; n++ )); do
-            local mime_type=$($PlistBuddy $info_plist -c "print :CFBundleDocumentTypes:$i:CFBundleTypeMIMETypes:$n")
+        for (( n=0; n<(($array_line_count-2)); n++ )); do
+            local item=$($PlistBuddy $info_plist -c "print :CFBundleDocumentTypes:$i:CFBundleType$type_name:$n")
 
-            mime_type_array+="$mime_type "
+            type_array+="$item "
         done
     done
 
-    [ -z "$mime_type_array" ] && return 1
-
-    mime_type_array=$(echo "$mime_type_array" | xargs)
-    echo "$mime_type_array"
+    echo "$type_array" | xargs
     return 0
 }
 
