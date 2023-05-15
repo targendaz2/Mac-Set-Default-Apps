@@ -1,4 +1,5 @@
 #!/usr/bin/env zsh
+# shellcheck shell=bash
 
 # Settings
 CACHE='/Library/Caches/msda'
