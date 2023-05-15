@@ -78,6 +78,33 @@ function _get_supported_mime_types() {
     return 0
 }
 
+function _get_supported_url_schemes() {
+    local bundle_id="$1"
+    local info_plist=$(_get_app_info_plist "$bundle_id")
+    local file_line_count=$(wc -l < $info_plist | xargs)
+    local url_scheme_array=''
+
+    for (( i=0; i<$file_line_count; i++ )); do
+        local url_type=$($PlistBuddy $info_plist -c "print :CFBundleURLTypes:$i:CFBundleURLSchemes" 2>/dev/null)
+        local result=$?
+
+        [ $result = 1 ] && continue
+
+        local array_line_count=$(echo $url_type | wc -l | xargs)
+
+        for (( n=0; n<(($array_line_count-2)); n++ )); do
+            local item=$($PlistBuddy $info_plist -c "print :CFBundleURLTypes:$i:CFBundleURLSchemes:$n")
+
+            url_scheme_array+="$item "
+        done
+    done
+
+    [ -z "$url_scheme_array" ] && return 1
+
+    echo "$url_scheme_array" | xargs
+    return 0
+}
+
 function _parse_document_types() {
     local bundle_id="$1"
     local info_plist=$(_get_app_info_plist "$bundle_id")

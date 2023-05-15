@@ -141,13 +141,37 @@ teardown() {
 
 @test "_get_supported_mime_types fails for unknown apps" {
     # Given an unknown app's bundle ID
- bundle_id='com.dgrdev.FakeBrowser'
+    bundle_id='com.dgrdev.FakeBrowser'
 
     # When that bundle ID is submitted
     zsource src/msda.sh
     zrun _get_supported_mime_types $bundle_id
     
     # Then the function should fail
+    assert_failure
+}
+
+@test "_get_supported_url_schemes returns an array of supported URL schemes for an installed app" {
+    # Given an installed app's bundle ID
+    bundle_id='com.apple.Safari'
+
+    # When that bundle ID is submitted
+    zsource src/msda.sh
+    zrun _get_supported_url_schemes $bundle_id
+    
+    # Then an array of supported file extensions should be returned
+    assert_output 'http https file x-safari-https prefs x-webkit-app-launch'
+}
+
+@test "_get_supported_url_schemes fails for unknown apps" {
+    # Given an unknown app's bundle ID
+    bundle_id='com.dgrdev.FakeBrowser'
+
+    # When that bundle ID is submitted
+    zsource src/msda.sh
+    zrun _get_supported_url_schemes $bundle_id
+    
+    # Then an array of supported file extensions should be returned
     assert_failure
 }
 
