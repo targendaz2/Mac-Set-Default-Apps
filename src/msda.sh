@@ -7,8 +7,7 @@ lsregister='/System/Library/Frameworks/CoreServices.framework/Versions/A/Framewo
 function _app_is_installed() {
     local app_id="$1"
     _app_id_to_path $app_id
-    result=$?
-    return $result
+    return $?
 }
 
 function _app_id_to_path() {
@@ -41,9 +40,8 @@ function print_help() {
 
 function set_command() {
     local app_id="$1"
-    app_path=$(mdfind kMDItemCFBundleIdentifier = $app_id)
-    [ -z "$app_path" ] && return 1
-    return 0
+    _app_is_installed $app_id
+    return $?
 }
 
 if [[ "$ZSH_EVAL_CONTEXT" == 'toplevel' ]]; then
