@@ -209,7 +209,7 @@ function _parse_supported_types() {
 }
 
 # Gets file extensions and MIME types assciated with a UTI
-function _expand_uti() {
+function _convert_uti() {
     local uti="$1"
     local tags="$($lsregister -gc -dump Type | \
         awk -F ':' "{ \
