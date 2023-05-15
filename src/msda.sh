@@ -5,14 +5,14 @@ lsregister='/System/Library/Frameworks/CoreServices.framework/Versions/A/Framewo
 
 # Checks if an app with the specified ID is installed
 function _app_is_installed() {
-    local app_id="$1"
-    _app_id_to_path $app_id
+    local bundle_id="$1"
+    _app_id_to_path $bundle_id
     return $?
 }
 
 function _app_id_to_path() {
-    local app_id="$1"
-    local app_path=$(mdfind kMDItemCFBundleIdentifier = $app_id)
+    local bundle_id="$1"
+    local app_path=$(mdfind kMDItemCFBundleIdentifier = $bundle_id)
     [ -z "$app_path" ] && return 1
     echo "$app_path"
     return 0
@@ -29,6 +29,10 @@ function _uti_to_mime() {
     return 0
 }
 
+function _app_supports_uti() {
+    local 
+}
+
 function print_help() {
     local message="$1"
     [ ! -z "$message" ] && print "$message\n"
@@ -39,8 +43,8 @@ function print_help() {
 }
 
 function set_command() {
-    local app_id="$1"
-    _app_is_installed $app_id
+    local bundle_id="$1"
+    _app_is_installed $bundle_id
     return $?
 }
 
