@@ -116,6 +116,18 @@ teardown() {
     assert_failure
 }
 
+@test "_get_supported_extensions returns an array of supported file extensions for an installed app" {
+    # Given an installed app's bundle ID
+    bundle_id='com.apple.Safari'
+
+    # When that bundle ID is submitted
+    zsource src/msda.sh
+    zrun _get_supported_extensions $bundle_id
+    
+    # Then an array of supported file extensions should be returned
+    assert_output 'css pdf webarchive webbookmark webhistory webloc download safariextz gif html htm shtml jhtml js jpg jpeg jp2 txt text png tiff tif url ico xhtml xht xhtm xht xml xbl xsl xslt svg avif webp'
+}
+
 @test "_get_supported_mime_types returns an array of supported UTI's for an installed app" {
     # Given an installed app's bundle ID
     bundle_id='com.apple.Safari'

@@ -40,7 +40,36 @@ function _get_app_info_plist() {
     return 0
 }
 
-# Gets all UTI's supported by an app
+# Gets all file extensions supported by an app
+function _get_supported_extensions() {
+    local bundle_id="$1"
+    local info_plist=$(_get_app_info_plist "$bundle_id")
+    local file_line_count=$(wc -l < $info_plist | xargs)
+
+    local extension_array=''
+    for (( i=0; i<$file_line_count; i++ )); do
+        local document_type=$($PlistBuddy $info_plist -c "print :CFBundleDocumentTypes:$i:CFBundleTypeExtensions" 2>/dev/null)
+        local result=$?
+        
+        [ $result = 1 ] && continue
+
+        local array_line_count=$(($(echo $document_type | wc -l | xargs) - 2))
+
+        for (( n=0; n<$array_line_count; n++ )); do
+            local extension=$($PlistBuddy $info_plist -c "print :CFBundleDocumentTypes:$i:CFBundleTypeExtensions:$n")
+
+            extension_array+="$extension "
+        done
+    done
+
+    [ -z "$extension_array" ] && return 1
+
+    extension_array=$(echo "$extension_array" | xargs)
+    echo "$extension_array"
+    return 0
+}
+
+# Gets all MIME types supported by an app
 function _get_supported_mime_types() {
     local bundle_id="$1"
     local info_plist=$(_get_app_info_plist "$bundle_id")
