@@ -68,7 +68,7 @@ teardown() {
 @test "_app_supports_uti succeeds if the app supports the UTI" {
     # Given an app's bundle ID and a UTI it supports
     bundle_id='com.apple.Safari'
-    uti='public.html'
+    uti='public.html:Viewer'
 
     # When that bundle ID and UTI are submitted
     zsource src/msda.sh
@@ -81,7 +81,7 @@ teardown() {
 @test "_app_supports_uti fails if the app doesn't support the UTI" {
     # Given an app's bundle ID and a UTI it doesn't support
     bundle_id='com.apple.Safari'
-    uti='dgrdev.fake'
+    uti='dgrdev.fake:Viewer'
 
     # When that bundle ID and UTI are submitted
     zsource src/msda.sh
@@ -150,7 +150,7 @@ teardown() {
     zrun _get_supported_extensions $bundle_id
     
     # Then an array of supported file extensions should be returned
-    assert_output 'css pdf webarchive webbookmark webhistory webloc download safariextz gif html htm shtml jhtml js jpg jpeg jp2 txt text png tiff tif url ico xhtml xht xhtm xht xml xbl xsl xslt svg avif webp'
+    assert_output 'css:Viewer pdf:Viewer webarchive:Viewer webbookmark:Viewer webhistory:Viewer webloc:Viewer download:Editor safariextz:Viewer gif:Viewer html:Viewer htm:Viewer shtml:Viewer jhtml:Viewer js:Viewer jpg:Viewer jpeg:Viewer jp2:Viewer txt:Viewer text:Viewer png:Viewer tiff:Viewer tif:Viewer url:Viewer ico:Viewer xhtml:Viewer xht:Viewer xhtm:Viewer xht:Viewer xml:Viewer xbl:Viewer xsl:Viewer xslt:Viewer svg:Viewer avif:Viewer webp:Viewer'
 }
 
 @test "_get_supported_mime_types returns an array of supported UTI's for an installed app" {
@@ -162,7 +162,7 @@ teardown() {
     zrun _get_supported_mime_types $bundle_id
     
     # Then an array of supported UTI's should be returned
-    assert_output 'text/css application/pdf application/x-webarchive application/x-safari-extension image/gif text/html application/x-javascript image/jpeg image/jp2 text/plain image/png image/tiff image/x-icon application/xhtml+xml application/xml text/xml image/svg+xml image/avif image/webp'
+    assert_output 'text/css:Viewer application/pdf:Viewer application/x-webarchive:Viewer application/x-safari-extension:Viewer image/gif:Viewer text/html:Viewer application/x-javascript:Viewer image/jpeg:Viewer image/jp2:Viewer text/plain:Viewer image/png:Viewer image/tiff:Viewer image/x-icon:Viewer application/xhtml+xml:Viewer application/xml:Viewer text/xml:Viewer image/svg+xml:Viewer image/avif:Viewer image/webp:Viewer'
 }
 
 @test "_get_supported_mime_types fails for unknown apps" {

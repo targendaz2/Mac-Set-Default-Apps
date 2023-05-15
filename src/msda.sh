@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 # shellcheck shell=bash
 
-# Settings
+# App Settings
 CACHE='/Library/Caches/msda'
 
 # Aliases
@@ -43,13 +43,15 @@ function _app_supports_url_scheme() {
 # Check if an app supports a UTI
 function _app_supports_uti() {
     local bundle_id="$1"
-    local uti="$2"
+    local uti_and_role="$2"
+    local uti=$(echo $uti_and_role | cut -d ":" -f 1)
+    local uti_role=$(echo $uti_and_role | cut -d ":" -f 2)
 
     local supported_mime_types="$(_get_supported_mime_types $bundle_id)"
     local mime_type="$(_uti_to_mime_type $uti)"
     [ -z "$mime_type" ] && return 1
 
-    [[ "$supported_mime_types" == *"$mime_type"* ]] && return 0
+    [[ "$supported_mime_types" == *"$mime_type:$uti_role"* ]] && return 0
     return 1
 }
 
@@ -119,6 +121,10 @@ function _parse_supported_types() {
 
         for (( n=0; n<(($array_line_count-2)); n++ )); do
             local item=$($PlistBuddy $info_plist -c "print :CFBundle${type_name}Types:$i:CFBundle${subtype_name}:$n")
+
+            local role=$($PlistBuddy $info_plist -c "print :CFBundle${type_name}Types:$i:CFBundleTypeRole" 2>/dev/null)
+
+            [ ! -z $role ] && item+=":$role"
 
             type_array+="$item "
         done
