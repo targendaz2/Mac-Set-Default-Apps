@@ -68,8 +68,10 @@ function _app_id_to_path() {
 # Checks if an app with the specified ID is installed
 function _app_is_installed() {
     local bundle_id="$1"
-    _app_id_to_path $bundle_id
-    return $?
+    path="$(_app_id_to_path $bundle_id)"
+
+    [ -z "$path" ] && return 1
+    return 0
 }
 
 # Check if an app supports a role
@@ -262,7 +264,8 @@ function print_help() {
 function set_command() {
     local bundle_id="$1"
     _app_is_installed $bundle_id
-    return $?
+    [ $? = 1 ] && return 1
+    return 0
 }
 
 if [[ "$ZSH_EVAL_CONTEXT" == 'toplevel' ]]; then
