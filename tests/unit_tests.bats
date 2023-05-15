@@ -66,7 +66,6 @@ teardown() {
 }
 
 @test "_app_supports_role succeeds if the app supports the role" {
-    skip
     # Given an app's bundle ID and a role it supports
     bundle_id='com.apple.Safari'
     role_name='browser'
@@ -80,7 +79,6 @@ teardown() {
 }
 
 @test "_app_supports_role fails if the app doesn't support the role" {
-    skip
     # Given an app's bundle ID and a role it doesn't support
     bundle_id='com.apple.Safari'
     role_name='calendar'

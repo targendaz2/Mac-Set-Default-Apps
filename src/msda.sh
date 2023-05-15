@@ -83,7 +83,7 @@ function _app_supports_role() {
         return 1
     fi
 
-    if [ ${#role_url_schemes[@]} > 0 ]; then
+    if [ ${#role_url_schemes[@]} -gt 0 ]; then
         for url_scheme in ${role_url_schemes[@]}; do
             _app_supports_url_scheme $bundle_id $url_scheme
             result=$?
@@ -91,7 +91,7 @@ function _app_supports_role() {
         done
     fi
 
-    if [ ${#role_utis[@]} > 0 ]; then
+    if [ ${#role_utis[@]} -gt 0 ]; then
         for uti in ${role_utis[@]}; do
             _app_supports_uti $bundle_id $uti
             result=$?
