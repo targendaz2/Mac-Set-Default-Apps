@@ -29,6 +29,17 @@ function _app_is_installed() {
     return $?
 }
 
+# Check if an app supports a URL scheme
+function _app_supports_url_scheme() {
+    local bundle_id="$1"
+    local url_scheme="$2"
+
+    local supported_url_schemes="$(_get_supported_url_schemes $bundle_id)"
+
+    [[ "$supported_url_schemes" == *"$url_scheme"* ]] && return 0
+    return 1
+}
+
 # Check if an app supports a UTI
 function _app_supports_uti() {
     local bundle_id="$1"
@@ -58,7 +69,7 @@ function _get_app_info_plist() {
 function _get_supported_extensions() {
     local bundle_id="$1"
 
-    local result="$(_parse_document_types $bundle_id Extensions)"
+    local result="$(_parse_supported_types $bundle_id Document TypeExtensions)"
 
     [ -z "$result" ] && return 1
 
@@ -70,7 +81,7 @@ function _get_supported_extensions() {
 function _get_supported_mime_types() {
     local bundle_id="$1"
     
-    local result="$(_parse_document_types $bundle_id MIMETypes)"
+    local result="$(_parse_supported_types $bundle_id Document TypeMIMETypes)"
 
     [ -z "$result" ] && return 1
 
@@ -80,48 +91,34 @@ function _get_supported_mime_types() {
 
 function _get_supported_url_schemes() {
     local bundle_id="$1"
-    local info_plist=$(_get_app_info_plist "$bundle_id")
-    local file_line_count=$(wc -l < $info_plist | xargs)
-    local url_scheme_array=''
+    
+    local result="$(_parse_supported_types $bundle_id URL URLSchemes)"
 
-    for (( i=0; i<$file_line_count; i++ )); do
-        local url_type=$($PlistBuddy $info_plist -c "print :CFBundleURLTypes:$i:CFBundleURLSchemes" 2>/dev/null)
-        local result=$?
+    [ -z "$result" ] && return 1
 
-        [ $result = 1 ] && continue
-
-        local array_line_count=$(echo $url_type | wc -l | xargs)
-
-        for (( n=0; n<(($array_line_count-2)); n++ )); do
-            local item=$($PlistBuddy $info_plist -c "print :CFBundleURLTypes:$i:CFBundleURLSchemes:$n")
-
-            url_scheme_array+="$item "
-        done
-    done
-
-    [ -z "$url_scheme_array" ] && return 1
-
-    echo "$url_scheme_array" | xargs
+    echo "$result"
     return 0
 }
 
-function _parse_document_types() {
+# Returns a list of types supported by the specified app
+function _parse_supported_types() {
     local bundle_id="$1"
     local info_plist=$(_get_app_info_plist "$bundle_id")
     local type_name="$2"
+    local subtype_name="$3"
     local file_line_count=$(wc -l < $info_plist | xargs)
     local type_array=''
 
     for (( i=0; i<$file_line_count; i++ )); do
-        local document_type=$($PlistBuddy $info_plist -c "print :CFBundleDocumentTypes:$i:CFBundleType$type_name" 2>/dev/null)
+        local supported_type=$($PlistBuddy $info_plist -c "print :CFBundle${type_name}Types:$i:CFBundle${subtype_name}" 2>/dev/null)
         local result=$?
 
         [ $result = 1 ] && continue
 
-        local array_line_count=$(echo $document_type | wc -l | xargs)
+        local array_line_count=$(echo $supported_type | wc -l | xargs)
 
         for (( n=0; n<(($array_line_count-2)); n++ )); do
-            local item=$($PlistBuddy $info_plist -c "print :CFBundleDocumentTypes:$i:CFBundleType$type_name:$n")
+            local item=$($PlistBuddy $info_plist -c "print :CFBundle${type_name}Types:$i:CFBundle${subtype_name}:$n")
 
             type_array+="$item "
         done

@@ -91,6 +91,32 @@ teardown() {
     assert_failure
 }
 
+@test "_app_supports_url_scheme succeeds if the app supports the URL scheme" {
+    # Given an app's bundle ID and a URL scheme it supports
+    bundle_id='com.apple.Safari'
+    url_scheme='https'
+
+    # When that bundle ID and URL scheme are submitted
+    zsource src/msda.sh
+    zrun _app_supports_url_scheme $bundle_id $url_scheme
+    
+    # Then the function should succeed
+    assert_success
+}
+
+@test "_app_supports_url_scheme fails if the app doesn't support the URL scheme" {
+    # Given an app's bundle ID and a URL scheme it doesn't support
+    bundle_id='com.apple.Safari'
+    url_scheme='fakeappscheme'
+
+    # When that bundle ID and URL scheme are submitted
+    zsource src/msda.sh
+    zrun _app_supports_url_scheme $bundle_id $url_scheme
+    
+    # Then the function should fail
+    assert_failure
+}
+
 @test "_get_app_info_plist returns the path to an installed app's Info.plist" {
     # Given an installed app's bundle ID
     bundle_id='com.apple.Safari'
