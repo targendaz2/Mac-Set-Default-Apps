@@ -17,30 +17,6 @@ teardown() {
     :
 }
 
-@test "_app_is_installed succeeds for installed apps" {
-    # Given the bundle ID of an app that is installed
-    bundle_id='com.apple.Safari'
-
-    # When that bundle ID is submitted
-    zsource src/msda.sh
-    zrun _app_is_installed $bundle_id
-
-    # The function should succeed
-    assert_success
-}
-
-@test "_app_is_installed fails for apps that aren't installed" {
-    # Given the bundle ID of an app that isn't installed
-    bundle_id='com.dgrdev.FakeBrowser'
-
-    # When that bundle ID is submitted
-    zsource src/msda.sh
-    zrun _app_is_installed $bundle_id
-
-    # The function should fail
-    assert_failure
-}
-
 @test "_app_id_to_path converts an installed app's ID to its path" {
     # Given the bundle ID of an app that is installed
     bundle_id='com.apple.Safari'
@@ -49,7 +25,7 @@ teardown() {
     zsource src/msda.sh
     zrun _app_id_to_path $bundle_id
 
-    # The app's path should be returned
+    # Then the app's path should be returned
     assert_output '/Applications/Safari.app'
 }
 
@@ -61,7 +37,82 @@ teardown() {
     zsource src/msda.sh
     zrun _app_id_to_path $bundle_id
 
-    # The function should fail
+    # Then the function should fail
+    assert_failure
+}
+
+@test "_app_is_installed succeeds for installed apps" {
+    # Given the bundle ID of an app that is installed
+    bundle_id='com.apple.Safari'
+
+    # When that bundle ID is submitted
+    zsource src/msda.sh
+    zrun _app_is_installed $bundle_id
+
+    # Then the function should succeed
+    assert_success
+}
+
+@test "_app_is_installed fails for apps that aren't installed" {
+    # Given the bundle ID of an app that isn't installed
+    bundle_id='com.dgrdev.FakeBrowser'
+
+    # When that bundle ID is submitted
+    zsource src/msda.sh
+    zrun _app_is_installed $bundle_id
+
+    # Then the function should fail
+    assert_failure
+}
+
+@test "_app_supports_uti succeeds if the app supports the UTI" {
+    # Given an app's bundle ID and a UTI it supports
+    bundle_id='com.apple.Safari'
+    uti='public.html'
+
+    # When that bundle ID and UTI are submitted
+    zsource src/msda.sh
+    zrun _app_supports_uti $bundle_id $uti
+    
+    # Then the function should succeed
+    assert_success
+}
+
+@test "_app_supports_uti fails if the app doesn't support the UTI" {
+    skip
+    # Given an app's bundle ID and a UTI it doesn't support
+    bundle_id='com.apple.Safari'
+    uti='dgrdev.fake'
+
+    # When that bundle ID and UTI are submitted
+    zsource src/msda.sh
+    zrun _app_supports_uti $bundle_id $uti
+    
+    # Then the function should fail
+    assert_failure
+}
+
+@test "_get_app_info_plist returns the path to an installed app's Info.plist" {
+    # Given an installed app's bundle ID
+    bundle_id='com.apple.Safari'
+
+    # When that bundle ID is submitted
+    zsource src/msda.sh
+    zrun _get_app_info_plist $bundle_id
+    
+    # Then the path to the app's Info.plist should be returned
+    assert_output '/Applications/Safari.app/Contents/Info.plist'
+}
+
+@test "_get_app_info_plist fails if the app's Info.plist doesn't exist" {
+    # Given an unknown app's bundle ID
+    bundle_id='com.dgrdev.FakeBrowser'
+
+    # When that bundle ID is submitted
+    zsource src/msda.sh
+    zrun _get_app_info_plist $bundle_id
+    
+    # Then the function should fail
     assert_failure
 }
 
@@ -73,7 +124,7 @@ teardown() {
     zsource src/msda.sh
     zrun _uti_to_mime $uti
 
-    # The function should succeed and return the MIME type
+    # Then the function should succeed and return the MIME type
     assert_success
     assert_equal "$output" "text/html"
 }
@@ -86,6 +137,6 @@ teardown() {
     zsource src/msda.sh
     zrun _uti_to_mime $uti
 
-    # The function should fail
+    # Then the function should fail
     assert_failure
 }

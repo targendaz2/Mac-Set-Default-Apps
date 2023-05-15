@@ -2,6 +2,16 @@
 
 # Aliases
 lsregister='/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister'
+PlistBuddy='/usr/libexec/PlistBuddy'
+
+# Gets an app's path from its ID
+function _app_id_to_path() {
+    local bundle_id="$1"
+    local app_path=$(mdfind kMDItemCFBundleIdentifier = $bundle_id)
+    [ -z "$app_path" ] && return 1
+    echo "$app_path"
+    return 0
+}
 
 # Checks if an app with the specified ID is installed
 function _app_is_installed() {
@@ -10,11 +20,23 @@ function _app_is_installed() {
     return $?
 }
 
-function _app_id_to_path() {
+# Check if an app supports a UTI
+function _app_supports_uti() {
     local bundle_id="$1"
-    local app_path=$(mdfind kMDItemCFBundleIdentifier = $bundle_id)
-    [ -z "$app_path" ] && return 1
-    echo "$app_path"
+    local uti="$2"
+
+    local app_path=$(_app_id_to_path $bundle_id)
+}
+
+# Gets the path to an app's Info.plist
+function _get_app_info_plist() {
+    local bundle_id="$1"
+    local app_path=$(_app_id_to_path $bundle_id)
+    local info_plist_path=$app_path/Contents/Info.plist
+
+    [ ! -f "$info_plist_path" ] && return 1
+
+    echo "$info_plist_path"
     return 0
 }
 
@@ -27,10 +49,6 @@ function _uti_to_mime() {
     
     echo "$mime_type"
     return 0
-}
-
-function _app_supports_uti() {
-    local 
 }
 
 function print_help() {
