@@ -56,6 +56,8 @@ function _get_role_definition() {
     return 0
 }
 
+# App lookup functions
+
 # Gets an app's path from its ID
 function _app_id_to_path() {
     local bundle_id="$1"
@@ -74,71 +76,6 @@ function _app_is_installed() {
     return 0
 }
 
-# Check if an app supports a role
-function _app_supports_role() {
-    local bundle_id="$1"
-    local role_name="$2"
-
-    _get_role_definition $role_name
-
-    if [ ${#role_url_schemes[@]} = 0 ] && [ ${#role_utis[@]} = 0 ]; then
-        return 1
-    fi
-
-    if [ ${#role_url_schemes[@]} -gt 0 ]; then
-        for url_scheme in ${role_url_schemes[@]}; do
-            _app_supports_url_scheme $bundle_id $url_scheme
-            result=$?
-            [ $result = 1 ] && return 1
-        done
-    fi
-
-    if [ ${#role_utis[@]} -gt 0 ]; then
-        for uti in ${role_utis[@]}; do
-            _app_supports_uti $bundle_id $uti
-            result=$?
-            [ $result = 1 ] && return 1
-        done
-    fi
-
-    return 0
-}
-
-# Check if an app supports a URL scheme
-function _app_supports_url_scheme() {
-    local bundle_id="$1"
-    local url_scheme="$2"
-
-    local supported_url_schemes="$(_get_supported_url_schemes $bundle_id)"
-
-    [[ "$supported_url_schemes" == *"$url_scheme"* ]] && return 0
-    return 1
-}
-
-# Check if an app supports a UTI
-function _app_supports_uti() {
-    local bundle_id="$1"
-    local uti_and_role="$2"
-    local uti=$(echo $uti_and_role | cut -d ":" -f 1)
-    local uti_role=$(echo $uti_and_role | cut -d ":" -f 2)
-
-    local supported_mime_types="$(_get_supported_mime_types $bundle_id)"
-    local supported_extensions="$(_get_supported_extensions $bundle_id)"
-
-    local tags="$(_convert_uti $uti)"
-    tags=( $(echo ${tags}) )
-
-    for tag in ${tags[@]}; do
-        if [ "$tag" = *'/'* ]; then
-            [[ "$supported_mime_types" == *"$tag:$uti_role"* ]] && return 0
-        else
-            [[ "$supported_extensions" == *"$tag"* ]] && return 0
-        fi
-    done
-    
-    return 1
-}
-
 # Gets the path to an app's Info.plist
 function _get_app_info_plist() {
     local bundle_id="$1"
@@ -151,70 +88,47 @@ function _get_app_info_plist() {
     return 0
 }
 
-# Gets all file extensions supported by an app
-function _get_supported_extensions() {
+# Cache functions
+
+# Caches an app's supported UTI's
+function _cache_supported_utis() {
     local bundle_id="$1"
 
-    local result="$(_parse_supported_types $bundle_id Document TypeExtensions)"
+    local info_plist="$(_get_app_info_plist $bundle_id)"
 
-    [ -z "$result" ] && return 1
+    local cache_file="$CACHE/$bundle_id.txt"
 
-    echo "$result"
-    return 0
-}
+    local document_type_count=$($PlistBuddy $info_plist -c "print :CFBundleDocumentTypes" | grep CFBundleTypeName | wc -l | xargs)
 
-# Gets all MIME types supported by an app
-function _get_supported_mime_types() {
-    local bundle_id="$1"
-    
-    local result="$(_parse_supported_types $bundle_id Document TypeMIMETypes)"
+    echo '' > "$cache_file"
 
-    [ -z "$result" ] && return 1
+    for (( i=0; i<$document_type_count; i++ )); do
+        local role="$($PlistBuddy $info_plist -c "print :CFBundleDocumentTypes:$i:CFBundleTypeRole")"
 
-    echo "$result"
-    return 0
-}
+        local mime_type_count=$(($($PlistBuddy $info_plist -c "print :CFBundleDocumentTypes:$i:CFBundleTypeMIMETypes" 2>/dev/null | wc -l | xargs) - 2))
 
-function _get_supported_url_schemes() {
-    local bundle_id="$1"
-    
-    local result="$(_parse_supported_types $bundle_id URL URLSchemes)"
+        if [ $mime_type_count -gt 0 ]; then
+            for (( m=0; m<$mime_type_count; m++ )); do
+                local mime_type="$($PlistBuddy $info_plist -c "print :CFBundleDocumentTypes:$i:CFBundleTypeMIMETypes:$m")"
 
-    [ -z "$result" ] && return 1
+                echo "$mime_type:$role" >> "$cache_file"
+            done
+            continue
+        fi
 
-    echo "$result"
-    return 0
-}
+        local extension_count=$(($($PlistBuddy $info_plist -c "print :CFBundleDocumentTypes:$i:CFBundleTypeExtensions" 2>/dev/null | wc -l | xargs) - 2))
 
-# Returns a list of types supported by the specified app
-function _parse_supported_types() {
-    local bundle_id="$1"
-    local info_plist=$(_get_app_info_plist "$bundle_id")
-    local type_name="$2"
-    local subtype_name="$3"
-    local file_line_count=$(wc -l < $info_plist | xargs)
-    local type_array=''
+        if [ $extension_count -gt 0 ]; then
+            for (( e=0; e<$extension_count; e++ )); do
+                local extension="$($PlistBuddy $info_plist -c "print :CFBundleDocumentTypes:$i:CFBundleTypeExtensions:$e")"
 
-    for (( i=0; i<$file_line_count; i++ )); do
-        local supported_type=$($PlistBuddy $info_plist -c "print :CFBundle${type_name}Types:$i:CFBundle${subtype_name}" 2>/dev/null)
-        local result=$?
-
-        [ $result = 1 ] && continue
-
-        local array_line_count=$(echo $supported_type | wc -l | xargs)
-
-        for (( n=0; n<(($array_line_count-2)); n++ )); do
-            local item=$($PlistBuddy $info_plist -c "print :CFBundle${type_name}Types:$i:CFBundle${subtype_name}:$n")
-
-            local role=$($PlistBuddy $info_plist -c "print :CFBundle${type_name}Types:$i:CFBundleTypeRole" 2>/dev/null)
-
-            [ ! -z $role ] && item+=":$role"
-
-            type_array+="$item "
-        done
+                echo "$extension:$role" >> "$cache_file"
+            done
+        else
+            return 0
+        fi
     done
 
-    echo "$type_array" | xargs
     return 0
 }
 
@@ -241,17 +155,6 @@ function _convert_uti() {
     return 0
 }
 
-# Converts a UTI to a MIME type
-function _uti_to_mime_type() {
-    local uti="$1"
-    local mime_type="$($lsregister -gc -dump MIMEBinding | awk -F ':' "/$uti/ {print \$1}")"
-
-    [ -z "$mime_type" ] && return 1
-    
-    echo "$mime_type"
-    return 0
-}
-
 function print_help() {
     local message="$1"
     [ ! -z "$message" ] && print "$message\n"
@@ -263,8 +166,8 @@ function print_help() {
 
 function set_command() {
     local bundle_id="$1"
-    _app_is_installed $bundle_id
-    [ $? = 1 ] && return 1
+    local role="$2"
+
     return 0
 }
 
