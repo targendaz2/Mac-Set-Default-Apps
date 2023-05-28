@@ -26,6 +26,6 @@
   "homepage": "https://github.com/targendaz2/Mac-Set-Default-Apps#readme",
   "devDependencies": {
     "bats-assert": "github:bats-core/bats-assert",
-    "bats-zsh": "github:targendaz2/bats-zsh"
+    "bats-zsh": "^1.2.0"
   }
 }
