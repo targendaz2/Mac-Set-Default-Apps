@@ -1353,15 +1353,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jxa/run@npm:^1.3.6":
-  version: 1.3.6
-  resolution: "@jxa/run@npm:1.3.6"
-  dependencies:
-    macos-version: "npm:^5.2.0"
-  checksum: b16ae6fa27a9232fbdb66834dfb843f677dba6eccfd0db5983b91dd7d07945a7c46a79bdb6ec355256eb4aba1723d368671091ce2b73f273ed5d3b1a64a636ba
-  languageName: node
-  linkType: hard
-
 "@jxa/types@npm:^1.3.6":
   version: 1.3.6
   resolution: "@jxa/types@npm:1.3.6"
@@ -4940,7 +4931,6 @@ __metadata:
   dependencies:
     "@jest/globals": "npm:^29.7.0"
     "@jxa/global-type": "npm:^1.3.6"
-    "@jxa/run": "npm:^1.3.6"
     "@trivago/prettier-plugin-sort-imports": "npm:^4.3.0"
     "@types/node": "npm:^20.12.7"
     cspell: "npm:^8.6.1"
@@ -4959,15 +4949,6 @@ __metadata:
     webpack-cli: "npm:^5.1.4"
   languageName: unknown
   linkType: soft
-
-"macos-version@npm:^5.2.0":
-  version: 5.2.1
-  resolution: "macos-version@npm:5.2.1"
-  dependencies:
-    semver: "npm:^5.6.0"
-  checksum: 85544b1477c9e391e2649865c1e275f76ac78798b7d976c774edf0e7d1dccbe2eafc15bc2971720ea06ebc67dbd472702a3d6b1a310775f497a2ab18a0537567
-  languageName: node
-  linkType: hard
 
 "make-dir@npm:^1.0.0":
   version: 1.3.0
@@ -5912,15 +5893,6 @@ __metadata:
   version: 1.0.0
   resolution: "semver-compare@npm:1.0.0"
   checksum: 9ef4d8b81847556f0865f46ddc4d276bace118c7cb46811867af82e837b7fc473911981d5a0abc561fa2db487065572217e5b06e18701c4281bcdd2a1affaff1
-  languageName: node
-  linkType: hard
-
-"semver@npm:^5.6.0":
-  version: 5.7.2
-  resolution: "semver@npm:5.7.2"
-  bin:
-    semver: bin/semver
-  checksum: e4cf10f86f168db772ae95d86ba65b3fd6c5967c94d97c708ccb463b778c2ee53b914cd7167620950fc07faf5a564e6efe903836639e512a1aa15fbc9667fa25
   languageName: node
   linkType: hard
 
