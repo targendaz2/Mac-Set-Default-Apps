@@ -5,7 +5,7 @@ export default class App {
     readonly path: string;
     documentTypes?: string[];
 
-    constructor(public bundleId: string) {
+    constructor(bundleId: string) {
         const app = Application(bundleId);
         app.includeStandardAdditions = true;
 

@@ -4,7 +4,7 @@ import App from '../src/models/App';
 import { run } from './helpers/jxaRun';
 
 describe('App model tests', () => {
-    test('gets app name on instantiation', async () => {
+    test('stores app name on instantiation', async () => {
         const result = await run<string>((AppClass: typeof App) => {
             const app = new AppClass('com.apple.Safari');
             return app.name;
@@ -22,7 +22,7 @@ describe('App model tests', () => {
         expect(result).toBe('com.apple.Safari');
     });
 
-    test('gets app version on instantiation', async () => {
+    test('stores app version on instantiation', async () => {
         const result = await run<string>((AppClass: typeof App) => {
             const app = new AppClass('com.apple.Safari');
             return app.version;
@@ -31,7 +31,7 @@ describe('App model tests', () => {
         expect(result).toMatch(/\d{1,2}\.\d{1,2}/);
     });
 
-    test('gets path to app on instantiation', async () => {
+    test('stores path to app on instantiation', async () => {
         const result = await run<PathLike>((AppClass: typeof App) => {
             const app = new AppClass('com.apple.Safari');
             return app.path;
