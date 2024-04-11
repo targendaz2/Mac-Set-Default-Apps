@@ -1,0 +1,28 @@
+{
+  "version": "0.2",
+  "ignorePaths": [".prettierrc*", ".vscode/*", "*.lock", "node_modules/"],
+  "dictionaryDefinitions": [],
+  "dictionaries": [],
+  "words": [
+    "Cryptexes",
+    "dgrdev",
+    "Jamf",
+    "ical",
+    "Intune",
+    "MSDA",
+    "Munki",
+    "Preboot",
+    "UTI",
+    "webcal"
+  ],
+  "ignoreWords": [
+    "edgemac",
+    "lproj",
+    "osascript",
+    "shellcheck",
+    "targendaz2",
+    "trivago",
+    "utis"
+  ],
+  "import": []
+}

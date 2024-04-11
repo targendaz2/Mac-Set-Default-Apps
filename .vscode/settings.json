@@ -1,3 +1,31 @@
 {
-	"python.pythonPath": "env/bin/python2.7"
+  "[javascript]": {
+    "editor.tabSize": 4
+  },
+  "[json]": {
+    "editor.tabSize": 2
+  },
+  "[markdown]": {
+    "editor.tabSize": 2
+  },
+  "[shellscript]": {
+    "editor.insertSpaces": false,
+    "editor.tabSize": 4
+  },
+  "[typescript]": {
+    "editor.tabSize": 4
+  },
+  "[yaml]": {
+    "editor.tabSize": 2
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "material-icon-theme.files.associations": {
+    ".markdownlintrc": "Settings",
+    ".shellcheckrc": "Settings",
+    "cspell.json": "Settings"
+  },
+  "markdownlint.config": {
+    "extends": "./.markdownlintrc"
+  }
 }

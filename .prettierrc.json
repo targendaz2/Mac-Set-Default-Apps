@@ -1,0 +1,34 @@
+{
+  "importOrder": ["^(node:)", "^(@.*)", "<THIRD_PARTY_MODULES>", "^[./]"],
+  "importOrderSortSpecifiers": true,
+  "overrides": [
+    {
+      "files": ["*.config.ts", "*.json", ".markdownlintrc", ".parcelrc"],
+      "options": {
+        "tabWidth": 2
+      }
+    },
+    {
+      "files": ["*.md"],
+      "options": {
+        "tabWidth": 2
+      }
+    },
+    {
+      "files": "*.sh",
+      "options": {
+        "functionNextLine": false,
+        "indent": 4,
+        "parser": "sh",
+        "switchCaseIndent": true,
+        "tabWidth": 4,
+        "variant": 0,
+        "useTabs": true
+      }
+    }
+  ],
+  "plugins": ["@trivago/prettier-plugin-sort-imports", "prettier-plugin-sh"],
+  "singleQuote": true,
+  "tabWidth": 4,
+  "trailingComma": "all"
+}
