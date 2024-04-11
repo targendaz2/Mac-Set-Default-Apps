@@ -7,7 +7,7 @@ const CFBundleDocumentType = z.object({
 });
 
 const CFBundleURLType = z.object({
-    CFBundleURLSchemes: z.string(),
+    CFBundleURLSchemes: z.string().array(),
 });
 
 const InfoPlist = z.object({

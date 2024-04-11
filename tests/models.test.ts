@@ -4,45 +4,33 @@ import App from '../src/models/App';
 import { run } from './helpers/jxaRun';
 
 describe('App model tests', () => {
-    test('stores app name on instantiation', async () => {
-        const result = await run<string>((AppClass: typeof App) => {
-            const app = new AppClass('com.apple.Safari');
-            return app.name;
+    test('can create App instance', async () => {
+        const result = await run<App>((AppClass: typeof App) => {
+            const app = new AppClass(
+                'Safari',
+                'com.apple.Safari',
+                '17.4',
+                '/Applications/Safari.app',
+            );
+            return app;
         }, App);
 
-        expect(result).toBe('Safari');
-    });
-
-    test('stores app ID on instantiation', async () => {
-        const result = await run<string>((AppClass: typeof App) => {
-            const app = new AppClass('com.apple.Safari');
-            return app.id;
-        }, App);
-
-        expect(result).toBe('com.apple.Safari');
-    });
-
-    test('stores app version on instantiation', async () => {
-        const result = await run<string>((AppClass: typeof App) => {
-            const app = new AppClass('com.apple.Safari');
-            return app.version;
-        }, App);
-
-        expect(result).toMatch(/\d{1,2}\.\d{1,2}/);
-    });
-
-    test('stores path to app on instantiation', async () => {
-        const result = await run<PathLike>((AppClass: typeof App) => {
-            const app = new AppClass('com.apple.Safari');
-            return app.path;
-        }, App);
-
-        expect(result).toBe('/Applications/Safari.app');
+        expect(result).toMatchObject({
+            name: 'Safari',
+            id: 'com.apple.Safari',
+            version: '17.4',
+            path: '/Applications/Safari.app',
+        });
     });
 
     test("can get path to app's Info.plist", async () => {
         const result = await run<PathLike>((AppClass: typeof App) => {
-            const app = new AppClass('com.apple.Safari');
+            const app = new AppClass(
+                'Safari',
+                'com.apple.Safari',
+                '17.4',
+                '/Applications/Safari.app',
+            );
             return app.infoPlist;
         }, App);
 
