@@ -11,18 +11,19 @@
     "Intune",
     "MSDA",
     "Munki",
+    "osascript",
     "Preboot",
     "UTI",
+    "utis",
     "webcal"
   ],
   "ignoreWords": [
     "edgemac",
     "lproj",
-    "osascript",
     "shellcheck",
     "targendaz2",
     "trivago",
-    "utis"
+    "tseslint"
   ],
   "import": []
 }
