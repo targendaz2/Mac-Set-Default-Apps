@@ -1,8 +1,6 @@
 import '@jxa/global-type';
 
 export default class App {
-    documentTypes?: string[];
-
     constructor(
         readonly name: string,
         readonly id: string,

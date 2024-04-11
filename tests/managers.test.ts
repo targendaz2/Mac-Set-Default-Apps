@@ -39,8 +39,29 @@ describe('app manager tests', () => {
                 return manager.path;
             },
             AppManager,
+            App,
         );
 
         expect(result).toBe('/Applications/Safari.app');
+    });
+
+    test('can create App instance', async () => {
+        const result = await run<App>(
+            (ManagerClass: typeof AppManager, _) => {
+                const manager = new ManagerClass('com.apple.Safari');
+                return manager.build();
+            },
+            AppManager,
+            App,
+        );
+
+        const newApp = new App(
+            result.name,
+            result.id,
+            result.version,
+            result.path,
+        );
+
+        expect(result).toMatchObject({ ...newApp });
     });
 });

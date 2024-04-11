@@ -1,4 +1,7 @@
 import '@jxa/global-type';
+import type AppModel from '../models/App';
+
+const App: typeof AppModel = require('../models/App');
 
 export default class AppManager {
     readonly app: typeof Application &
@@ -29,5 +32,9 @@ export default class AppManager {
             })
             .toString()
             .replace('/System/Volumes/Preboot/Cryptexes/App/System', '');
+    }
+
+    build(): AppModel {
+        return new App(this.name, this.id, this.version, this.path);
     }
 }
