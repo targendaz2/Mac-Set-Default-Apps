@@ -34,7 +34,7 @@ export default class AppManager {
             .replace('/System/Volumes/Preboot/Cryptexes/App/System', '');
     }
 
-    build(): AppModel {
+    create(): AppModel {
         return new App(this.name, this.id, this.version, this.path);
     }
 }

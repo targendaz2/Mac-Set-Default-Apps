@@ -49,7 +49,7 @@ describe('app manager tests', () => {
         const result = await run<App>(
             (ManagerClass: typeof AppManager, _) => {
                 const manager = new ManagerClass('com.apple.Safari');
-                return manager.build();
+                return manager.create();
             },
             AppManager,
             App,
