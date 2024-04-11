@@ -39,4 +39,13 @@ describe('App model tests', () => {
 
         expect(result).toBe('/Applications/Safari.app');
     });
+
+    test("can get path to app's Info.plist", async () => {
+        const result = await run<PathLike>((AppClass: typeof App) => {
+            const app = new AppClass('com.apple.Safari');
+            return app.infoPlist;
+        }, App);
+
+        expect(result).toBe('/Applications/Safari.app/Contents/Info.plist');
+    });
 });

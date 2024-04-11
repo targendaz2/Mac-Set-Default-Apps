@@ -1,8 +1,8 @@
 export default class App {
-    name: string;
-    id: string;
-    version: string;
-    path: string;
+    readonly name: string;
+    readonly id: string;
+    readonly version: string;
+    readonly path: string;
     documentTypes?: string[];
 
     constructor(public bundleId: string) {
@@ -18,5 +18,9 @@ export default class App {
             })
             .toString()
             .replace('/System/Volumes/Preboot/Cryptexes/App/System', '');
+    }
+
+    get infoPlist() {
+        return this.path + '/Contents/Info.plist';
     }
 }
