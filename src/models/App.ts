@@ -1,6 +1,6 @@
 import '@jxa/global-type';
 
-export default class App {
+export class App {
     constructor(
         readonly name: string,
         readonly id: string,

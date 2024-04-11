@@ -1,7 +1,7 @@
 import { PathLike } from 'node:fs';
 import { describe, expect, test } from '@jest/globals';
-import AppManager from '../src/managers/AppManager';
-import App from '../src/models/App';
+import { AppManager } from '../src/managers/AppManager';
+import { App } from '../src/models/App';
 import { run } from './helpers/jxaRun';
 
 describe('app manager tests', () => {

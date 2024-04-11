@@ -1,9 +1,9 @@
 import '@jxa/global-type';
-import type AppModel from '../models/App';
+import { type App as AppModel } from '../models/App';
 
-const App: typeof AppModel = require('../models/App');
+const App: typeof AppModel = require('../models/App').App;
 
-export default class AppManager {
+export class AppManager {
     readonly app: typeof Application &
         Application._StandardAdditions &
         Application.AnyValue;
