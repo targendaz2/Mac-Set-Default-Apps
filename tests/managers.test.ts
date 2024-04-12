@@ -1,7 +1,7 @@
 import { PathLike } from 'node:fs';
 import { describe, expect, test } from '@jest/globals';
-import { AppManager } from '../src/managers/AppManager';
-import { App } from '../src/models/App';
+import { AppManager, UtiManager } from '../src/managers';
+import { App } from '../src/models';
 import { run } from './helpers/jxaRun';
 
 describe('app manager tests', () => {
@@ -63,5 +63,16 @@ describe('app manager tests', () => {
         );
 
         expect(result).toMatchObject({ ...newApp });
+    });
+});
+
+describe('UTI manager tests', () => {
+    test('can return UTI ID', async () => {
+        const result = await run<string>((ManagerClass: typeof UtiManager) => {
+            const manager = new ManagerClass('public.html');
+            return manager.id;
+        }, UtiManager);
+
+        expect(result).toBe('public.html');
     });
 });
