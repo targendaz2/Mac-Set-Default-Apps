@@ -1,7 +1,8 @@
 import { PathLike } from 'node:fs';
 import { describe, expect, test } from '@jest/globals';
-import { AppManager, UtiManager } from '../../src/managers';
+import { AppManager, InfoPlistManager, UtiManager } from '../../src/managers';
 import { App, Uti } from '../../src/models';
+import type { CFBundleURLType, InfoPlist } from '../../src/types';
 import { run } from '../helpers/jxaRun';
 
 describe('app manager tests', () => {
@@ -63,6 +64,39 @@ describe('app manager tests', () => {
         );
 
         expect(result).toMatchObject({ ...newApp });
+    });
+});
+
+describe('Info.plist manager tests', () => {
+    test('can get plist contents as JSON', async () => {
+        const result = await run<InfoPlist>(
+            (ManagerClass: typeof InfoPlistManager) => {
+                const manager = new ManagerClass(
+                    '/Applications/Safari.app/Contents/Info.plist',
+                );
+                return manager.contents;
+            },
+            InfoPlistManager,
+        );
+
+        expect(result.CFBundleDisplayName).toBe('Safari');
+        expect(result.CFBundleIdentifier).toBe('com.apple.Safari');
+        expect(result.CFBundleShortVersionString).toMatch(/\d{1,2}\.\d{1,2}/);
+    });
+
+    test('can get URL types from plist', async () => {
+        const result = await run<CFBundleURLType[]>(
+            (ManagerClass: typeof InfoPlistManager) => {
+                const manager = new ManagerClass(
+                    '/Applications/Safari.app/Contents/Info.plist',
+                );
+                return manager.urlTypes;
+            },
+            InfoPlistManager,
+        );
+
+        expect(result[0].CFBundleURLSchemes).toContain('http');
+        expect(result[0].CFBundleURLSchemes).toContain('https');
     });
 });
 
