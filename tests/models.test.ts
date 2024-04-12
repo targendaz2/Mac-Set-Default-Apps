@@ -1,6 +1,6 @@
 import { PathLike } from 'node:fs';
 import { describe, expect, test } from '@jest/globals';
-import { App } from '../src/models';
+import { App, Uti } from '../src/models';
 import { run } from './helpers/jxaRun';
 
 describe('App model tests', () => {
@@ -35,5 +35,23 @@ describe('App model tests', () => {
         }, App);
 
         expect(result).toBe('/Applications/Safari.app/Contents/Info.plist');
+    });
+});
+
+describe('UTI model tests', () => {
+    test('can create UTI instance', async () => {
+        const result = await run<Uti>((UtiClass: typeof Uti) => {
+            const uti = new UtiClass('public.html', [
+                'html',
+                'htm',
+                'text/html',
+            ]);
+            return uti;
+        }, Uti);
+
+        expect(result).toMatchObject({
+            id: 'public.html',
+            tags: ['html', 'htm', 'text/html'],
+        });
     });
 });

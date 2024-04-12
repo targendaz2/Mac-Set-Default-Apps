@@ -1,5 +1,3 @@
-import '@jxa/global-type';
-
 export class App {
     constructor(
         readonly name: string,
