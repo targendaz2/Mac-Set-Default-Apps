@@ -1,39 +1,39 @@
-import { UtiManager } from '@/src/managers';
-import { Uti } from '@/src/models';
+import { UTIManager } from '@/src/managers';
+import { UTI } from '@/src/models';
 import { run } from '@/tests/helpers/jxaRun';
 import { expect, test } from '@jest/globals';
 
 test('can return UTI ID', async () => {
-    const result = await run<string>((ManagerClass: typeof UtiManager) => {
+    const result = await run<string>((ManagerClass: typeof UTIManager) => {
         const manager = new ManagerClass('public.html');
         return manager.id;
-    }, UtiManager);
+    }, UTIManager);
 
     expect(result).toBe('public.html');
 });
 
 test('can get UTI tags', async () => {
-    const result = await run<string>((ManagerClass: typeof UtiManager) => {
+    const result = await run<string>((ManagerClass: typeof UTIManager) => {
         const manager = new ManagerClass('public.html');
         return manager.tags;
-    }, UtiManager);
+    }, UTIManager);
 
     expect(result).toContain('htm');
     expect(result).toContain('html');
     expect(result).toContain('text/html');
 });
 
-test('can create Uti instance', async () => {
-    const result = await run<Uti>(
-        (ManagerClass: typeof UtiManager, _) => {
+test('can create UTI instance', async () => {
+    const result = await run<UTI>(
+        (ManagerClass: typeof UTIManager, _) => {
             const manager = new ManagerClass('public.html');
             return manager.create();
         },
-        UtiManager,
-        Uti,
+        UTIManager,
+        UTI,
     );
 
-    const newUti = new Uti(result.id, result.tags);
+    const newUTI = new UTI(result.id, result.tags);
 
-    expect(result).toMatchObject({ ...newUti });
+    expect(result).toMatchObject({ ...newUTI });
 });

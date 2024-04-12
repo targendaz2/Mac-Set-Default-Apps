@@ -1,4 +1,4 @@
-import type { DocumentType, InfoPlist, UrlType } from '../types';
+import type { DocumentType, InfoPlist, URLType } from '../types';
 
 export class InfoPlistManager {
     readonly contents: InfoPlist;
@@ -13,7 +13,7 @@ export class InfoPlistManager {
         return this.contents.CFBundleDocumentTypes;
     }
 
-    get urlTypes(): UrlType[] | undefined {
+    get urlTypes(): URLType[] | undefined {
         return this.contents.CFBundleURLTypes;
     }
 }

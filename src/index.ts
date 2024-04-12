@@ -1,7 +1,7 @@
-import { AppManager, UtiManager } from './managers';
+import { AppManager, UTIManager } from './managers';
 
 const app = new AppManager('com.apple.Safari').create();
 console.log(app.name);
 
-const uti = new UtiManager('public.html').create();
+const uti = new UTIManager('public.html').create();
 console.log(uti.tags);

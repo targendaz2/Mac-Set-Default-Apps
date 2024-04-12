@@ -1,2 +1,2 @@
 export { App } from './App';
-export { Uti } from './Uti';
+export { UTI } from './UTI';

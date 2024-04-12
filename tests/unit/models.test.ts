@@ -1,7 +1,7 @@
 import { PathLike } from 'node:fs';
+import { App, UTI } from '@/src/models';
+import { run } from '@/tests/helpers/jxaRun';
 import { describe, expect, test } from '@jest/globals';
-import { App, Uti } from '../../src/models';
-import { run } from '../helpers/jxaRun';
 
 describe('App model tests', () => {
     test('can create App instance', async () => {
@@ -40,14 +40,14 @@ describe('App model tests', () => {
 
 describe('UTI model tests', () => {
     test('can create UTI instance', async () => {
-        const result = await run<Uti>((UtiClass: typeof Uti) => {
-            const uti = new UtiClass('public.html', [
+        const result = await run<UTI>((UTIClass: typeof UTI) => {
+            const UTI = new UTIClass('public.html', [
                 'html',
                 'htm',
                 'text/html',
             ]);
-            return uti;
-        }, Uti);
+            return UTI;
+        }, UTI);
 
         expect(result).toMatchObject({
             id: 'public.html',

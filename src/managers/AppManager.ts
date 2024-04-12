@@ -1,11 +1,11 @@
 import '@jxa/global-type';
 import type { App as AppModel } from '../models';
-import type { JxaApplication } from '../types';
+import type { JXAApplication } from '../types';
 
 const App: typeof AppModel = require('../models').App;
 
 export class AppManager {
-    readonly app: JxaApplication;
+    readonly app: JXAApplication;
 
     constructor(bundleId: string) {
         this.app = Application(bundleId);

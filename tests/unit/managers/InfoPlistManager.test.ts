@@ -1,5 +1,5 @@
 import { InfoPlistManager } from '@/src/managers';
-import type { DocumentType, InfoPlist, UrlType } from '@/src/types';
+import type { DocumentType, InfoPlist, URLType } from '@/src/types';
 import { run } from '@/tests/helpers/jxaRun';
 import { expect, test } from '@jest/globals';
 
@@ -36,7 +36,7 @@ test('can get document types from plist', async () => {
 });
 
 test('can get URL types from plist', async () => {
-    const result = await run<UrlType[]>(
+    const result = await run<URLType[]>(
         (ManagerClass: typeof InfoPlistManager) => {
             const manager = new ManagerClass(
                 '/Applications/Safari.app/Contents/Info.plist',

@@ -6,7 +6,7 @@ export type DocumentType = {
     CFBundleTypeRole: 'Editor' | 'Viewer' | 'Shell' | 'QLGenerator' | 'None';
 };
 
-export type UrlType = {
+export type URLType = {
     CFBundleURLSchemes: string[];
 };
 
@@ -16,9 +16,9 @@ export type InfoPlist = {
     CFBundleIdentifier: string;
     CFBundleName: string;
     CFBundleShortVersionString: string;
-    CFBundleURLTypes?: UrlType[];
+    CFBundleURLTypes?: URLType[];
 };
 
-export type JxaApplication = typeof Application &
+export type JXAApplication = typeof Application &
     Application._StandardAdditions &
     Application.AnyValue;

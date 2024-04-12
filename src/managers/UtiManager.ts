@@ -1,9 +1,9 @@
 import '@jxa/global-type';
-import type { Uti as UtiModel } from '../models';
+import type { UTI as UTIModel } from '../models';
 
-const Uti: typeof UtiModel = require('../models').Uti;
+const UTI: typeof UTIModel = require('../models').UTI;
 
-export class UtiManager {
+export class UTIManager {
     constructor(readonly id: string) {}
 
     get tags(): string[] {
@@ -28,7 +28,7 @@ export class UtiManager {
         );
     }
 
-    create(): UtiModel {
-        return new Uti(this.id, this.tags);
+    create(): UTIModel {
+        return new UTI(this.id, this.tags);
     }
 }
