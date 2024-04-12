@@ -5,7 +5,7 @@ const config: JestConfigWithTsJest = {
   preset: 'ts-jest',
   setupFilesAfterEnv: ['./tests/extensions/fs.ext.ts'],
   testEnvironment: 'node',
-  testRegex: 'tests/.*\\.test\\.ts$',
+  testRegex: '.+\\.test\\.ts$',
 };
 
 export default config;

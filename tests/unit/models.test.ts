@@ -1,7 +1,7 @@
 import { PathLike } from 'node:fs';
 import { describe, expect, test } from '@jest/globals';
-import { App, Uti } from '../src/models';
-import { run } from './helpers/jxaRun';
+import { App, Uti } from '../../src/models';
+import { run } from '../helpers/jxaRun';
 
 describe('App model tests', () => {
     test('can create App instance', async () => {

@@ -1,8 +1,8 @@
 import { PathLike } from 'node:fs';
 import { describe, expect, test } from '@jest/globals';
-import { AppManager, UtiManager } from '../src/managers';
-import { App, Uti } from '../src/models';
-import { run } from './helpers/jxaRun';
+import { AppManager, UtiManager } from '../../src/managers';
+import { App, Uti } from '../../src/models';
+import { run } from '../helpers/jxaRun';
 
 describe('app manager tests', () => {
     test('can get app name', async () => {

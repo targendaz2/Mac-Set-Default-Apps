@@ -21,7 +21,9 @@
     "lint:md": "markdownlint ./*.md",
     "lint:sh": "shellcheck **/*.sh",
     "start": "yarn build && osascript -l JavaScript ./dist/bundle.js",
-    "test": "jest"
+    "test": "jest",
+    "test:e2e": "jest tests/e2e",
+    "test:unit": "jest tests/unit"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",

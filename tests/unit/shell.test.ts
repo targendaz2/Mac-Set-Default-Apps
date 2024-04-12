@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import './extensions/fs.ext';
+import '../extensions/fs.ext';
 
 describe('lsregister tests', () => {
     test('command exists', async () => {
