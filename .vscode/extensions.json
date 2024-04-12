@@ -5,6 +5,7 @@
     "dbaeumer.vscode-eslint",
     "davidanson.vscode-markdownlint",
     "esbenp.prettier-vscode",
-    "timonwong.shellcheck"
+    "timonwong.shellcheck",
+    "orta.vscode-jest"
   ]
 }

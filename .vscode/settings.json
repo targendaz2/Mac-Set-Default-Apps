@@ -21,6 +21,8 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "eslint.experimental.useFlatConfig": true,
+  "jest.outputConfig": "neutral",
+  "jest.runMode": "on-demand",
   "material-icon-theme.files.associations": {
     ".markdownlintrc": "Settings",
     ".shellcheckrc": "Settings",
@@ -28,5 +30,6 @@
   },
   "markdownlint.config": {
     "extends": "./.markdownlintrc"
-  }
+  },
+  "testing.openTesting": "neverOpen"
 }
