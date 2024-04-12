@@ -116,8 +116,8 @@ export function run(jxaCodeFunction: (...args: any[]) => void, ...args: any[]) {
         .toString();
     const code = `
         ${args.filter((value) => value.name).join('\n')}
-        var fn   = (${jxaCodeFunction.toString()});
-        var out  = fn(${parsedArgs});
+        const fn = (${jxaCodeFunction.toString()});
+        const out = fn(${parsedArgs});
         JSON.stringify({ result: out });
         `;
     return executeInOsa(code);
