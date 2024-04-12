@@ -1,6 +1,8 @@
 import { describe, expect, test } from '@jest/globals';
-import { lsregister } from '../src/utils';
-import { run } from './helpers/jxaRun';
+import './extensions/fs.ext';
+
+// import { lsregister } from '../src/utils';
+// import { run } from './helpers/jxaRun';
 
 describe('lsregister tests', () => {
     test('command exists', async () => {
