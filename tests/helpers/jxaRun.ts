@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // Based heavily on @jxa/run
 // https://github.com/JXA-userland/JXA/tree/master/packages/%40jxa/run
 import { execFile } from 'node:child_process';
@@ -151,7 +152,7 @@ function executeInOsa(code: string) {
                 try {
                     const result = JSON.parse(stdout.toString().trim()).result;
                     resolve(result);
-                } catch (errorOutput) {
+                } catch {
                     resolve(stdout.toString().trim());
                 }
             },

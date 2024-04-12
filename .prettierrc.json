@@ -3,7 +3,13 @@
   "importOrderSortSpecifiers": true,
   "overrides": [
     {
-      "files": ["*.config.ts", "*.json", ".markdownlintrc", ".parcelrc"],
+      "files": [
+        "*.config.ts",
+        "*.config.mjs",
+        "*.json",
+        ".markdownlintrc",
+        ".parcelrc"
+      ],
       "options": {
         "tabWidth": 2
       }
