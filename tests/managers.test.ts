@@ -75,4 +75,15 @@ describe('UTI manager tests', () => {
 
         expect(result).toBe('public.html');
     });
+
+    test('can get UTI tags', async () => {
+        const result = await run<string>((ManagerClass: typeof UtiManager) => {
+            const manager = new ManagerClass('public.html');
+            return manager.tags;
+        }, UtiManager);
+
+        expect(result).toContain('htm');
+        expect(result).toContain('html');
+        expect(result).toContain('text/html');
+    });
 });
