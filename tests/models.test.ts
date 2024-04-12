@@ -1,6 +1,6 @@
 import { PathLike } from 'node:fs';
 import { describe, expect, test } from '@jest/globals';
-import { App } from '../src/models/App';
+import { App } from '../src/models';
 import { run } from './helpers/jxaRun';
 
 describe('App model tests', () => {
