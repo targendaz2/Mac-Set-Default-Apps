@@ -20,7 +20,7 @@
     "lint:js": "eslint",
     "lint:md": "markdownlint ./*.md",
     "lint:sh": "shellcheck **/*.sh",
-    "start": "osascript -l JavaScript ./dist/bundle.js",
+    "start": "yarn build && osascript -l JavaScript ./dist/bundle.js",
     "test": "jest"
   },
   "devDependencies": {

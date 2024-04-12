@@ -1,4 +1,7 @@
 import '@jxa/global-type';
+import type { Uti as UtiModel } from '../models';
+
+const Uti: typeof UtiModel = require('../models').Uti;
 
 export class UtiManager {
     constructor(readonly id: string) {}
@@ -23,5 +26,9 @@ export class UtiManager {
                     .split(','),
             ),
         );
+    }
+
+    create(): UtiModel {
+        return new Uti(this.id, this.tags);
     }
 }
