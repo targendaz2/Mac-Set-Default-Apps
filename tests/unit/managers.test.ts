@@ -2,7 +2,7 @@ import { PathLike } from 'node:fs';
 import { describe, expect, test } from '@jest/globals';
 import { AppManager, InfoPlistManager, UtiManager } from '../../src/managers';
 import { App, Uti } from '../../src/models';
-import type { CFBundleURLType, InfoPlist } from '../../src/types';
+import type { DocumentType, InfoPlist, UrlType } from '../../src/types';
 import { run } from '../helpers/jxaRun';
 
 describe('app manager tests', () => {
@@ -84,8 +84,24 @@ describe('Info.plist manager tests', () => {
         expect(result.CFBundleShortVersionString).toMatch(/\d{1,2}\.\d{1,2}/);
     });
 
+    test('can get document types from plist', async () => {
+        const result = await run<DocumentType[]>(
+            (ManagerClass: typeof InfoPlistManager) => {
+                const manager = new ManagerClass(
+                    '/Applications/Safari.app/Contents/Info.plist',
+                );
+                return manager.documentTypes;
+            },
+            InfoPlistManager,
+        );
+
+        expect(result[0].CFBundleTypeMIMETypes).toContain('text/css');
+        expect(result[0].CFBundleTypeExtensions).toContain('css');
+        expect(result[0].CFBundleTypeRole).toBe('Viewer');
+    });
+
     test('can get URL types from plist', async () => {
-        const result = await run<CFBundleURLType[]>(
+        const result = await run<UrlType[]>(
             (ManagerClass: typeof InfoPlistManager) => {
                 const manager = new ManagerClass(
                     '/Applications/Safari.app/Contents/Info.plist',

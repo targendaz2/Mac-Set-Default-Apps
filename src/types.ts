@@ -1,22 +1,22 @@
 import '@jxa/global-type';
 
-export type CFBundleDocumentType = {
+export type DocumentType = {
     CFBundleTypeExtensions?: string[];
     CFBundleTypeMIMETypes?: string[];
-    CFBundleTypeRole: string;
+    CFBundleTypeRole: 'Editor' | 'Viewer' | 'Shell' | 'QLGenerator' | 'None';
 };
 
-export type CFBundleURLType = {
+export type UrlType = {
     CFBundleURLSchemes: string[];
 };
 
 export type InfoPlist = {
     CFBundleDisplayName: string;
-    CFBundleDocumentTypes?: CFBundleDocumentType[];
+    CFBundleDocumentTypes?: DocumentType[];
     CFBundleIdentifier: string;
     CFBundleName: string;
     CFBundleShortVersionString: string;
-    CFBundleURLTypes?: CFBundleURLType[];
+    CFBundleURLTypes?: UrlType[];
 };
 
 export type JxaApplication = typeof Application &
