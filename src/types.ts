@@ -3,7 +3,13 @@ import '@jxa/global-type';
 export type DocumentType = {
     CFBundleTypeExtensions?: string[];
     CFBundleTypeMIMETypes?: string[];
-    CFBundleTypeRole: 'Editor' | 'Viewer' | 'Shell' | 'QLGenerator' | 'None';
+    CFBundleTypeRole:
+        | 'Editor'
+        | 'Viewer'
+        | 'Shell'
+        | 'QLGenerator'
+        | 'None'
+        | 'All';
 };
 
 export type UTLType = {

@@ -1,14 +1,16 @@
+import type { DocumentType } from '@/src/types';
+
 interface DefaultAssociationParams {
-    utis?: string[];
+    utis?: { [key: string]: DocumentType['CFBundleTypeRole'] };
     urlSchemes?: string[];
 }
 
 export class DefaultAssociation {
-    readonly utis: string[];
+    readonly utis: { [key: string]: DocumentType['CFBundleTypeRole'] };
     readonly urlSchemes: string[];
 
     constructor(params: DefaultAssociationParams) {
-        this.utis = params.utis || [];
+        this.utis = params.utis || {};
         this.urlSchemes = params.urlSchemes || [];
     }
 }
