@@ -4,22 +4,20 @@ MSDA provides an easy way to silently change the default applications used by ma
 
 ## Requirements
 
-- macOS 10.14.0 - macOS 12.2.1
-- macOS 12.3.0 or newer with Python installed
+macOS Ventura (13.0) or newer
 
 ## Deploying
 
-### As a Local Installation
-
-1. Download the latest packaged release of MSDA [here](https://github.com/targendaz2/Mac-Set-Default-Apps/releases)
-2. Install the package on as many target Macs as needed, either manually or through a system such as Munki or Jamf
-
-### As a Jamf Script
-
-**Note:** I assume these instructions will also work for MDM services other than Jamf, I just only have familiarity with Jamf
+### Using Jamf Pro
 
 1. Copy the contents of [payload/msda.py](https://github.com/targendaz2/Mac-Set-Default-Apps/blob/master/payload/msda.py) into a new Jamf script.
 2. In the script's User-Editable Settings section, set the `JAMF` variable to `True`.
+
+### As a Script via MDM
+
+### As a Package via MDM
+
+### Locally
 
 ## Usage
 
@@ -88,23 +86,13 @@ Set Google Chrome as the default web browser and email client for the current us
 msda set com.google.chrome -p http -p https -p mailto -u public.url all -u public.html viewer -u public.xhtml all -fut
 ```
 
+## Contributing
+
 ## FAQ
 
 How can I find an application's ID?
 
 > Run `osascript -e 'id of app "Name of App"'` in a Terminal window, replacing the text between the double quotes with the name of the application in question.
-
-How can I figure out what protocols or UTIs to set?
-
-> I've tried to include the most common examples above. Otherwise, a complete list of protocols can be found [here](https://en.wikipedia.org/wiki/List_of_URI_schemes), and UTIs [here](https://escapetech.eu/manuals/qdrop/uti.html).
-
-Are there commands other than `set`?
-
-> At the moment, no. Please [create an issue](https://github.com/targendaz2/Mac-Set-Default-Apps/issues/new) on this app's GitHub page if there are commands you'd find useful.
-
-Why aren't there any examples of setting a default app for a file extension?
-
-> I haven't found any apps that require this to be set as a default app. This feature was included solely to prevent MSDA from malfunctioning when being used on a Mac where a default app was already assigned to a file extension.
 
 Where can I go for help with this app?
 
