@@ -1,5 +1,5 @@
 import { PathLike } from 'node:fs';
-import { App } from '@/src/models';
+import { App, UTI } from '@/src/models';
 import { run } from '@/tests/helpers/jxaRun';
 import { describe, expect, test } from '@jest/globals';
 
@@ -74,9 +74,24 @@ describe('app model instantiation tests', () => {
 });
 
 describe('support checking tests', () => {
+    test('can confirm an app supports a UTI', async () => {
+        const result = await run<string[]>(
+            (AppClass: typeof App, UTIClass: typeof UTI) => {
+                const uti = new UTIClass('public.html');
+
+                const app = new AppClass('com.apple.Safari');
+                return app.supportsUTI(uti);
+            },
+            App,
+            UTI,
+        );
+
+        expect(result).toBeTruthy();
+    });
+
     test('can confirm an app supports a URL scheme', async () => {
-        const result = await run<string[]>((ModelClass: typeof App) => {
-            const app = new ModelClass('com.apple.Safari');
+        const result = await run<string[]>((AppClass: typeof App) => {
+            const app = new AppClass('com.apple.Safari');
             return app.supportsURLScheme('http');
         }, App);
 

@@ -1,5 +1,6 @@
+import type { UTI } from '@/src/models';
+import type { InfoPlist } from '@/src/types';
 import '@jxa/global-type';
-import type { InfoPlist } from '../types';
 
 export class App {
     readonly name: string;
@@ -51,6 +52,13 @@ export class App {
 
     get infoPlist(): string {
         return this.path + '/Contents/Info.plist';
+    }
+
+    supportsUTI(uti: UTI) {
+        const commonTags = uti.tags.filter((tag) =>
+            this.documentTypes.includes(tag),
+        );
+        return commonTags.length > 0;
     }
 
     supportsURLScheme(urlScheme: string) {
