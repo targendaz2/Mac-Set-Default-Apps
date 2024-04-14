@@ -52,4 +52,8 @@ export class App {
     get infoPlist(): string {
         return this.path + '/Contents/Info.plist';
     }
+
+    supportsURLScheme(urlScheme: string) {
+        return this.urlSchemes.includes(urlScheme);
+    }
 }
