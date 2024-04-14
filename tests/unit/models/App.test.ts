@@ -47,3 +47,13 @@ test("can get path to app's Info.plist", async () => {
 
     expect(result).toBe('/Applications/Safari.app/Contents/Info.plist');
 });
+
+test("can get app's supported URL schemes", async () => {
+    const result = await run<string[]>((ModelClass: typeof App) => {
+        const app = new ModelClass('com.apple.Safari');
+        return app.urlSchemes;
+    }, App);
+
+    expect(result).toContain('http');
+    expect(result).toContain('https');
+});

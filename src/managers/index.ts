@@ -1,1 +1,0 @@
-export { InfoPlistManager } from './InfoPlistManager';
