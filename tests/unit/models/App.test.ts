@@ -48,6 +48,19 @@ test("can get path to app's Info.plist", async () => {
     expect(result).toBe('/Applications/Safari.app/Contents/Info.plist');
 });
 
+test("can get app's supported document types", async () => {
+    const result = await run<string[]>((ModelClass: typeof App) => {
+        const app = new ModelClass('com.apple.Safari');
+        return app.documentTypes;
+    }, App);
+
+    expect(result).toContain('text/css');
+    expect(result).toContain('css');
+    expect(result).toContain('text/html');
+    expect(result).toContain('html');
+    expect(result).toContain('application/pdf');
+});
+
 test("can get app's supported URL schemes", async () => {
     const result = await run<string[]>((ModelClass: typeof App) => {
         const app = new ModelClass('com.apple.Safari');

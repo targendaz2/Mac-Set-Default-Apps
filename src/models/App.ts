@@ -7,7 +7,8 @@ export class App {
     readonly version: string;
     readonly path: string;
 
-    readonly urlSchemes?: string[];
+    readonly documentTypes: string[] = [];
+    readonly urlSchemes: string[] = [];
 
     constructor(bundleId: string) {
         const app = Application(bundleId);
@@ -28,6 +29,20 @@ export class App {
         const contents: InfoPlist = ObjC.deepUnwrap(
             $.NSDictionary.dictionaryWithContentsOfFile(this.infoPlist),
         );
+
+        let documentTypes = [];
+
+        documentTypes = contents.CFBundleDocumentTypes!.flatMap(
+            (documentType) => documentType.CFBundleTypeMIMETypes!,
+        );
+
+        documentTypes = documentTypes.concat(
+            contents.CFBundleDocumentTypes!.flatMap(
+                (documentType) => documentType.CFBundleTypeExtensions!,
+            ),
+        );
+
+        this.documentTypes = Array.from(new Set(documentTypes));
 
         this.urlSchemes = contents.CFBundleURLTypes!.flatMap(
             (urlType) => urlType.CFBundleURLSchemes,
