@@ -1,0 +1,9 @@
+name: Help Request
+description: Request help.
+title: '[Help]: '
+labels: ['help']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to ask for help!

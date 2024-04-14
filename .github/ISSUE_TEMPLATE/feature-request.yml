@@ -1,0 +1,9 @@
+name: Feature Request
+description: Request a new feature.
+title: '[Feature]: '
+labels: ['feature']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to request this feature!
