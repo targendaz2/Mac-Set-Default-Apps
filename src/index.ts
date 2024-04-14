@@ -1,6 +1,7 @@
-import { AppManager, UTIManager } from './managers';
+import { UTIManager } from './managers';
+import { App } from './models';
 
-const app = new AppManager('com.apple.Safari').create();
+const app = new App('com.apple.Safari');
 console.log(app.name);
 
 const uti = new UTIManager('public.html').create();
