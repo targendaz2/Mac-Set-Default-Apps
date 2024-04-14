@@ -2,6 +2,7 @@ import path from 'node:path';
 import webpack from 'webpack';
 
 export default {
+  devtool: 'source-map',
   entry: './src/index.ts',
   mode: 'production',
   module: {
