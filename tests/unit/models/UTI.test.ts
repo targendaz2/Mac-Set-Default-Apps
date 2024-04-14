@@ -2,14 +2,22 @@ import { UTI } from '@/src/models';
 import { run } from '@/tests/helpers/jxaRun';
 import { expect, test } from '@jest/globals';
 
-test('can create UTI instance', async () => {
-    const result = await run<UTI>((UTIClass: typeof UTI) => {
-        const UTI = new UTIClass('public.html', ['html', 'htm', 'text/html']);
-        return UTI;
+test('can return UTI ID', async () => {
+    const result = await run<string>((ModelClass: typeof UTI) => {
+        const uti = new ModelClass('public.html');
+        return uti.id;
     }, UTI);
 
-    expect(result).toMatchObject({
-        id: 'public.html',
-        tags: ['html', 'htm', 'text/html'],
-    });
+    expect(result).toBe('public.html');
+});
+
+test('can get UTI tags', async () => {
+    const result = await run<string>((ModelClass: typeof UTI) => {
+        const uti = new ModelClass('public.html');
+        return uti.tags;
+    }, UTI);
+
+    expect(result).toContain('htm');
+    expect(result).toContain('html');
+    expect(result).toContain('text/html');
 });
