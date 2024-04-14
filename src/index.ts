@@ -5,3 +5,5 @@ console.log(app.name);
 
 const uti = new UTI('public.html');
 console.log(uti.tags);
+
+console.log(app.supportsUTI(uti, 'Viewer'));

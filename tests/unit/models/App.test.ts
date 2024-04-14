@@ -50,16 +50,19 @@ describe('app model instantiation tests', () => {
     });
 
     test("can get app's supported document types", async () => {
-        const result = await run<string[]>((ModelClass: typeof App) => {
-            const app = new ModelClass('com.apple.Safari');
-            return app.documentTypes;
-        }, App);
+        const result = await run<{ [key: string]: string }>(
+            (ModelClass: typeof App) => {
+                const app = new ModelClass('com.apple.Safari');
+                return app.documentTypes;
+            },
+            App,
+        );
 
-        expect(result).toContain('text/css');
-        expect(result).toContain('css');
-        expect(result).toContain('text/html');
-        expect(result).toContain('html');
-        expect(result).toContain('application/pdf');
+        expect(result['text/css']).toBe('Viewer');
+        expect(result['css']).toBe('Viewer');
+        expect(result['text/html']).toBe('Viewer');
+        expect(result['html']).toBe('Viewer');
+        expect(result['application/pdf']).toBe('Viewer');
     });
 
     test("can get app's supported URL schemes", async () => {
@@ -80,7 +83,7 @@ describe('support checking tests', () => {
                 const uti = new UTIClass('public.html');
 
                 const app = new AppClass('com.apple.Safari');
-                return app.supportsUTI(uti);
+                return app.supportsUTI(uti, 'Viewer');
             },
             App,
             UTI,

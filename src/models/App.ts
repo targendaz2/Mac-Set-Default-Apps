@@ -1,5 +1,6 @@
 import type { UTI } from '@/src/models';
-import type { InfoPlist } from '@/src/types';
+import type { DocumentType, InfoPlist } from '@/src/types';
+import type { JXAApplication } from '@/src/types';
 import '@jxa/global-type';
 
 export class App {
@@ -8,11 +9,13 @@ export class App {
     readonly version: string;
     readonly path: string;
 
-    readonly documentTypes: string[] = [];
+    readonly documentTypes: {
+        [key: string]: DocumentType['CFBundleTypeRole'];
+    } = {};
     readonly urlSchemes: string[] = [];
 
     constructor(bundleId: string) {
-        const app = Application(bundleId);
+        const app: JXAApplication = Application(bundleId);
         app.includeStandardAdditions = true;
 
         // Basic app properties
@@ -31,19 +34,15 @@ export class App {
             $.NSDictionary.dictionaryWithContentsOfFile(this.infoPlist),
         );
 
-        let documentTypes = [];
+        for (const documentType of contents.CFBundleDocumentTypes!) {
+            for (const mimeType of documentType.CFBundleTypeMIMETypes || []) {
+                this.documentTypes[mimeType] = documentType.CFBundleTypeRole;
+            }
 
-        documentTypes = contents.CFBundleDocumentTypes!.flatMap(
-            (documentType) => documentType.CFBundleTypeMIMETypes!,
-        );
-
-        documentTypes = documentTypes.concat(
-            contents.CFBundleDocumentTypes!.flatMap(
-                (documentType) => documentType.CFBundleTypeExtensions!,
-            ),
-        );
-
-        this.documentTypes = Array.from(new Set(documentTypes));
+            for (const extension of documentType.CFBundleTypeExtensions || []) {
+                this.documentTypes[extension] = documentType.CFBundleTypeRole;
+            }
+        }
 
         this.urlSchemes = contents.CFBundleURLTypes!.flatMap(
             (urlType) => urlType.CFBundleURLSchemes,
@@ -54,9 +53,11 @@ export class App {
         return this.path + '/Contents/Info.plist';
     }
 
-    supportsUTI(uti: UTI) {
+    supportsUTI(uti: UTI, role: DocumentType['CFBundleTypeRole']) {
         const commonTags = uti.tags.filter((tag) =>
-            this.documentTypes.includes(tag),
+            Object.keys(this.documentTypes).includes(tag)
+                ? this.documentTypes[tag] === role
+                : false,
         );
         return commonTags.length > 0;
     }
