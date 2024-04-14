@@ -7,7 +7,7 @@ export class App {
     readonly version: string;
     readonly path: string;
 
-    readonly urlSchemes?: string[] = [];
+    readonly urlSchemes?: string[];
 
     constructor(bundleId: string) {
         const app = Application(bundleId);
@@ -29,11 +29,9 @@ export class App {
             $.NSDictionary.dictionaryWithContentsOfFile(this.infoPlist),
         );
 
-        for (const urlType of contents.CFBundleURLTypes!) {
-            this.urlSchemes = this.urlSchemes!.concat(
-                urlType.CFBundleURLSchemes,
-            );
-        }
+        this.urlSchemes = contents.CFBundleURLTypes!.flatMap(
+            (urlType) => urlType.CFBundleURLSchemes,
+        );
     }
 
     get infoPlist(): string {
