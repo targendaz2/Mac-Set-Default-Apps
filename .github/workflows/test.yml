@@ -27,12 +27,14 @@ jobs:
       - run: mkdir -p reports
 
       - name: Run tests
-        run: yarn test --json --outputFile reports/${{ matrix.os }}.json
+        run: yarn test --ci --reporters=default --reporters=jest-junit
+        env:
+          JEST_JUNIT_OUTPUT_FILE: reports/${{ matrix.os }}.xml
 
       - name: Publish test results
         uses: dorny/test-reporter@v1
         if: ${{ always() }}
         with:
           name: test results (${{ matrix.os }})
-          path: reports/${{ matrix.os }}.json
+          path: reports/${{ matrix.os }}.xml
           reporter: jest-junit
