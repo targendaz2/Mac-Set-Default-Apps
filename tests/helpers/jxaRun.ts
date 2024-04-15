@@ -2,6 +2,7 @@
 // Based heavily on @jxa/run
 // https://github.com/JXA-userland/JXA/tree/master/packages/%40jxa/run
 import { execFile } from 'node:child_process';
+import config from '@/src/config.json';
 
 export function runJXACode(jxaCode: string) {
     return executeInOsa(jxaCode);
@@ -114,7 +115,9 @@ export function run(jxaCodeFunction: (...args: any[]) => void, ...args: any[]) {
     const parsedArgs = args
         .map((value) => (value.name ? value.name : `"${value}"`))
         .toString();
+
     const code = `
+        const config = ${JSON.stringify(config)}
         ${args.filter((value) => value.name).join('\n')}
         const fn = (${jxaCodeFunction.toString()});
         const out = fn(${parsedArgs});
