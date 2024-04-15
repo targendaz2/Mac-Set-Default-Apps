@@ -34,28 +34,18 @@
       "title": "Default App Requirements",
       "description": "Requirements an app must meet to be set as a default.",
       "type": "object",
-      "properties": {
-        "browser": {
-          "title": "Web Browser",
-          "$ref": "#/$defs/defaultApp"
-        },
-        "calendar": {
-          "title": "Calendar",
-          "$ref": "#/$defs/defaultApp"
-        },
-        "mail": {
-          "title": "Mail Client",
-          "$ref": "#/$defs/defaultApp"
-        },
-        "pdf": {
-          "title": "PDF Reader",
-          "$ref": "#/$defs/defaultApp"
-        }
-      },
-      "additionalProperties": false,
-      "required": ["browser", "calendar", "mail", "pdf"]
+      "additionalProperties": {
+        "$ref": "#/$defs/defaultApp"
+      }
+    },
+    "systemPaths": {
+      "title": "System Paths",
+      "description": "Paths to system files and directories",
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
     }
   },
-  "required": ["defaultAppRequirements"],
   "additionalProperties": false
 }
