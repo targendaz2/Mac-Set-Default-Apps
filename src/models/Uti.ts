@@ -1,5 +1,7 @@
 import '@jxa/global-type';
 
+const config = require('@/src/config.json');
+
 export class UTI {
     readonly id: string;
     readonly tags: string[];
@@ -14,7 +16,7 @@ export class UTI {
         // ID's and tags matching the given UTI. The lsregister dump is huge
         // and the command doesn't natively allow searching or filtering.
         // TODO: Handle the lsregister dump parsing in JavaScript
-        const cmd = `/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -gc -dump Type | awk -F ':' "{ if (\\$1 == \\"type id\\" && \\$2 ~ \\"public.html\\") { check=\\"yes\\" } else if (\\$1 == \\"type id\\") { check=\\"no\\" } else if (\\$1 == \\"tags\\" && check == \\"yes\\") { print \\$2 } }"`;
+        const cmd = `${config.systemPaths.lsregister} -gc -dump Type | awk -F ':' "{ if (\\$1 == \\"type id\\" && \\$2 ~ \\"public.html\\") { check=\\"yes\\" } else if (\\$1 == \\"type id\\") { check=\\"no\\" } else if (\\$1 == \\"tags\\" && check == \\"yes\\") { print \\$2 } }"`;
 
         const result = app.doShellScript(cmd);
 
