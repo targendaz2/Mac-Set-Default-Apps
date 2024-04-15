@@ -1,0 +1,28 @@
+{
+  "$schema": "configSchema.json",
+  "defaultAppRequirements": {
+    "browser": {
+      "utis": {
+        "public.html": "Viewer",
+        "public.url": "Viewer",
+        "public.xhtml": "Viewer"
+      },
+      "urlSchemes": ["http", "https"]
+    },
+    "calendar": {
+      "utis": {
+        "com.apple.ical.ics": "All",
+        "com.apple.ical.vcs": "All"
+      },
+      "urlSchemes": ["webcal"]
+    },
+    "mail": {
+      "urlSchemes": ["mailto"]
+    },
+    "pdf": {
+      "utis": {
+        "com.adobe.pdf": "All"
+      }
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "$defs": {
+    "defaultApp": {
+      "type": "object",
+      "properties": {
+        "utis": {
+          "title": "UTI's",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "enum": ["Editor", "Viewer", "Shell", "QLGenerator", "None", "All"]
+          },
+          "minProperties": 1
+        },
+        "urlSchemes": {
+          "title": "URL Schemes",
+          "type": "array",
+          "items": {
+            "title": "URL Scheme",
+            "type": "string"
+          },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [{ "required": ["utis"] }, { "required": ["urlSchemes"] }]
+    }
+  },
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "defaultAppRequirements": {
+      "title": "Default App Requirements",
+      "description": "Requirements an app must meet to be set as a default.",
+      "type": "object",
+      "properties": {
+        "browser": {
+          "title": "Web Browser",
+          "$ref": "#/$defs/defaultApp"
+        },
+        "calendar": {
+          "title": "Calendar",
+          "$ref": "#/$defs/defaultApp"
+        },
+        "mail": {
+          "title": "Mail Client",
+          "$ref": "#/$defs/defaultApp"
+        },
+        "pdf": {
+          "title": "PDF Reader",
+          "$ref": "#/$defs/defaultApp"
+        }
+      },
+      "additionalProperties": false,
+      "required": ["browser", "calendar", "mail", "pdf"]
+    }
+  },
+  "required": ["defaultAppRequirements"],
+  "additionalProperties": false
+}

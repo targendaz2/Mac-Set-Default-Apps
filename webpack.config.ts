@@ -23,6 +23,9 @@ export default {
   },
   plugins: [],
   resolve: {
+    alias: {
+      '@': path.resolve(__dirname),
+    },
     extensions: ['.ts', '.js'],
   },
 } satisfies webpack.Configuration;
