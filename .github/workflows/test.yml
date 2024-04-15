@@ -24,13 +24,15 @@ jobs:
       - name: Install dependencies
         run: yarn
 
+      - run: mkdir -p reports
+
       - name: Run tests
-        run: yarn test
+        run: yarn test --json --outputFile reports/${{ matrix.os }}.json
 
       - name: Publish test results
         uses: dorny/test-reporter@v1
         if: ${{ always() }}
         with:
           name: test results (${{ matrix.os }})
-          path: reports/${{ matrix.os }}.xml
+          path: reports/${{ matrix.os }}.json
           reporter: jest-junit
