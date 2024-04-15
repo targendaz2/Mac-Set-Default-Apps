@@ -11,7 +11,6 @@ const config: JestConfigWithTsJest = {
   setupFilesAfterEnv: ['./tests/extensions/fs.ext.ts'],
   testEnvironment: 'node',
   testRegex: '.+\\.test\\.ts$',
-  testTimeout: 10000,
 };
 
 export default config;

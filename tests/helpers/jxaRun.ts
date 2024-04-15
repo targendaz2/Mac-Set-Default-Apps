@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+/* eslint-disable no-unused-vars */
 // Based heavily on @jxa/run
 // https://github.com/JXA-userland/JXA/tree/master/packages/%40jxa/run
 import { execFile } from 'node:child_process';

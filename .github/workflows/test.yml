@@ -27,8 +27,9 @@ jobs:
       - run: mkdir -p reports
 
       - name: Run tests
-        run: yarn test --ci --reporters=default --reporters=jest-junit
+        run: yarn test --reporters=default --reporters=jest-junit
         env:
+          JEST_JUNIT_INCLUDE_CONSOLE_OUTPUT: true
           JEST_JUNIT_OUTPUT_FILE: reports/${{ matrix.os }}.xml
 
       - name: Publish test results

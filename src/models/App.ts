@@ -15,25 +15,25 @@ export class App {
     readonly urlSchemes: string[] = [];
 
     constructor(bundleId: string) {
-        const app: JXAApplication = Application(bundleId);
+        const app: JXAApplication = Application.currentApplication();
         app.includeStandardAdditions = true;
 
-        // Basic app properties
-        this.name = app.name();
-        this.id = app.id() as unknown as string;
-        this.version = app.properties()['version'];
-        this.path = app
-            .pathTo(null, {
-                from: null,
-            })
-            .toString()
-            .replace('/System/Volumes/Preboot/Cryptexes/App/System', '');
+        // App path so we can get Info.plist
+        this.path = app.doShellScript(
+            `mdfind kMDItemCFBundleIdentifier = '${bundleId}'`,
+        );
 
-        // Complex app properties
+        // Info.plist contents
         const contents: InfoPlist = ObjC.deepUnwrap(
             $.NSDictionary.dictionaryWithContentsOfFile(this.infoPlist),
         );
 
+        // Basic app properties
+        this.name = contents.CFBundleDisplayName;
+        this.id = contents.CFBundleIdentifier;
+        this.version = contents.CFBundleShortVersionString;
+
+        // Complex app properties
         for (const documentType of contents.CFBundleDocumentTypes!) {
             for (const mimeType of documentType.CFBundleTypeMIMETypes || []) {
                 this.documentTypes[mimeType] = documentType.CFBundleTypeRole;
