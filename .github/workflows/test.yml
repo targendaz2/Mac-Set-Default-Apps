@@ -22,7 +22,7 @@ jobs:
           node-version: '21.x'
 
       - name: Install dependencies
-        run: yarn --frozen-lockfile
+        run: yarn
 
       - name: Run tests
         run: yarn test
