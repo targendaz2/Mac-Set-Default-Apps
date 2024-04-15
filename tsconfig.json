@@ -3,7 +3,6 @@
     "target": "ESNext",
     "module": "CommonJS",
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
     "removeComments": true,
