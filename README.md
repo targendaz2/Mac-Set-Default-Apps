@@ -1,5 +1,9 @@
 # Mac Set Default Apps (MSDA)
 
+![GitHub License](https://img.shields.io/github/license/targendaz2/Mac-Set-Default-Apps)
+![version](https://img.shields.io/github/package-json/v/targendaz2/Mac-Set-Default-Apps/jxa-v2?label=version)
+![tests](https://github.com/targendaz2/Mac-Set-Default-Apps/actions/workflows/test.yml/badge.svg?branch=jxa-v2)
+
 MSDA provides an easy way to silently change the default applications used by macOS. There are no pop-ups or prompts and, even better, it works for Google Chrome!
 
 ## Requirements

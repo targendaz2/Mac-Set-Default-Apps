@@ -1,6 +1,7 @@
+import type Config from '@/src/config.json';
 import '@jxa/global-type';
 
-const config = require('@/src/config.json');
+const config: typeof Config = require('@/src/config.json');
 
 export class UTI {
     readonly id: string;
