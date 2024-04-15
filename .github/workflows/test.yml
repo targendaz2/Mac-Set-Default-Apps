@@ -1,0 +1,36 @@
+name: Test
+
+on: [push]
+
+jobs:
+  test:
+    permissions:
+      checks: write
+
+    strategy:
+      matrix:
+        os: [macos-12, macos-13, macos-14]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '21.x'
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Run tests
+        run: yarn test
+
+      - name: Publish test results
+        uses: dorny/test-reporter@v1
+        if: ${{ always() }}
+        with:
+          name: test results (${{ matrix.os }})
+          path: reports/${{ matrix.os }}.xml
+          reporter: jest-junit

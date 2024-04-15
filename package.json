@@ -52,6 +52,9 @@
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4"
   },
+  "engines": {
+    "node": "^21.0.0"
+  },
   "os": [
     "darwin"
   ],
