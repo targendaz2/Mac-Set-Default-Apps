@@ -14,12 +14,33 @@ export default tseslint.config(
     files: ['src/**/*.ts'],
     rules: {
       '@typescript-eslint/no-var-requires': 'off',
-      'no-restricted-syntax': ['error', 'ExportDefaultDeclaration'],
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: ['node:*'],
+        },
+      ],
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'AwaitExpression',
+          message: 'JXA does not support async JavaScript.',
+        },
+        {
+          selector: 'ExportDefaultDeclaration',
+          message: 'Webpack breaks default exports in JXA code.',
+        },
+        {
+          selector: 'SpreadElement',
+          message: 'JXA does not support the spread operator.',
+        },
+      ],
     },
   },
   {
     rules: {
-      '@typescript-eslint/no-unused-vars': [
+      eqeqeq: 'error',
+      'no-unused-vars': [
         'error',
         {
           args: 'all',
@@ -31,6 +52,7 @@ export default tseslint.config(
           ignoreRestSiblings: true,
         },
       ],
+      'no-var': 'error',
     },
   },
 );
