@@ -4,6 +4,7 @@
   "dictionaryDefinitions": [],
   "dictionaries": [],
   "words": [
+    "argparse",
     "Cryptexes",
     "dgrdev",
     "Jamf",
@@ -18,7 +19,8 @@
     "Sonoma",
     "UTI",
     "utis",
-    "webcal"
+    "webcal",
+    "zparseopts"
   ],
   "ignoreWords": [
     "edgemac",
