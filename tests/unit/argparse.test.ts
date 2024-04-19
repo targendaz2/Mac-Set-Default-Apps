@@ -37,11 +37,27 @@ describe('argument fetching tests', () => {
 });
 
 describe('argument parsing tests', () => {
+    test('returns valid JSON', async () => {
+        const result = await run<string>((fn: typeof parseArgs) => {
+            return fn(['com.apple.Safari', '--browser', '--feu']);
+        }, parseArgs);
+
+        JSON.parse(result);
+    });
+
     test('accepts positional parameter for an app bundle ID', async () => {
         const result = await run<string>((fn: typeof parseArgs) => {
             return fn(['com.apple.Safari']);
         }, parseArgs);
 
-        expect(result).toBe('com.apple.Safari');
+        expect(JSON.parse(result).bundleId).toBe('com.apple.Safari');
     });
+
+    // test('accepts keyword parameter for the browser association', async () => {
+    //     const result = await run<string>((fn: typeof parseArgs) => {
+    //         return fn(['com.apple.Safari', '--browser']);
+    //     }, parseArgs);
+
+    //     expect(result).toBe('com.apple.Safari');
+    // });
 });

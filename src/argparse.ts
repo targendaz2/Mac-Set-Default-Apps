@@ -19,7 +19,9 @@ export function parseArgs(args: string[]) {
     const code = `
         function parse_args() {
             local bundle_id="\${1:-}"
-            echo "$bundle_id"
+            echo "{ \\
+                \\"bundleId\\": \\"$bundle_id\\" \\
+            }"
         }
         parse_args ${args.join(' ')}
     `;
