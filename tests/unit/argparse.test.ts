@@ -3,8 +3,8 @@ import cp from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { getArgs, parseArgs } from '@/src/argparse';
-import { run } from '@/tests/helpers/jxaRun';
+import { getArgs } from '@/src/args/getter';
+// import { run } from '@/tests/helpers/jxaRun';
 import { describe, expect, test } from '@jest/globals';
 
 describe('argument fetching tests', () => {
@@ -34,30 +34,4 @@ describe('argument fetching tests', () => {
         expect(result).toContain('--browser');
         expect(result).toContain('--feu');
     });
-});
-
-describe('argument parsing tests', () => {
-    test('returns valid JSON', async () => {
-        const result = await run<string>((fn: typeof parseArgs) => {
-            return fn(['com.apple.Safari', '--browser', '--feu']);
-        }, parseArgs);
-
-        JSON.parse(result);
-    });
-
-    test('accepts positional parameter for an app bundle ID', async () => {
-        const result = await run<string>((fn: typeof parseArgs) => {
-            return fn(['com.apple.Safari']);
-        }, parseArgs);
-
-        expect(JSON.parse(result).bundleId).toBe('com.apple.Safari');
-    });
-
-    // test('accepts keyword parameter for the browser association', async () => {
-    //     const result = await run<string>((fn: typeof parseArgs) => {
-    //         return fn(['com.apple.Safari', '--browser']);
-    //     }, parseArgs);
-
-    //     expect(result).toBe('com.apple.Safari');
-    // });
 });

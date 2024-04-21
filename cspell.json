@@ -5,11 +5,13 @@
   "dictionaries": [],
   "words": [
     "argparse",
+    "bools",
     "Cryptexes",
     "dgrdev",
     "Jamf",
     "ical",
     "Intune",
+    "linebreak",
     "lsregister",
     "mdfind",
     "MSDA",

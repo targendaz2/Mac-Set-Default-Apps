@@ -21,7 +21,12 @@ export default {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
-  plugins: [],
+  plugins: [
+    new webpack.BannerPlugin({
+      banner: '#!/usr/bin/osascript -l JavaScript',
+      raw: true,
+    }),
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname),

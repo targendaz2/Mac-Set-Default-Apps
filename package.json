@@ -15,12 +15,13 @@
   "author": "David Rosenberg <david@dgrdev.com>",
   "repository": "github:targendaz2/Mac-Set-Default-Apps",
   "scripts": {
-    "build": "webpack",
+    "build": "webpack && chmod +x ./dist/bundle.js",
+    "generateConfigSchema": "ts-json-schema-generator --type Config --path ./src/types.ts --out ./generated/configSchema.json",
     "lint": "yarn lint:js && yarn lint:md && yarn lint:sh",
     "lint:js": "eslint",
     "lint:md": "markdownlint ./*.md",
     "lint:sh": "shellcheck **/*.sh",
-    "start": "yarn build && osascript -l JavaScript ./dist/bundle.js",
+    "start": "yarn build && ./dist/bundle.js",
     "test": "jest",
     "test:e2e": "jest tests/e2e",
     "test:unit": "jest tests/unit"
@@ -46,6 +47,7 @@
     "prettier-plugin-sh": "^0.14.0",
     "shellcheck": "^2.2.0",
     "ts-jest": "^29.1.2",
+    "ts-json-schema-generator": "^2.0.1",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5",
