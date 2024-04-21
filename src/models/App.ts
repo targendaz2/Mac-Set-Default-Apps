@@ -53,10 +53,10 @@ export class App {
         return this.path + '/Contents/Info.plist';
     }
 
-    supportsUTI(uti: UTI, role: DocumentType['CFBundleTypeRole']) {
+    supportsUTI(uti: UTI) {
         const commonTags = uti.tags.filter((tag) =>
             Object.keys(this.documentTypes).includes(tag)
-                ? this.documentTypes[tag] === role
+                ? this.documentTypes[tag] === uti.role
                 : false,
         );
         return commonTags.length > 0;

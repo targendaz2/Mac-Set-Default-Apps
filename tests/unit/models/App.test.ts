@@ -83,7 +83,7 @@ describe('support checking tests', () => {
                 const uti = new UTIClass('public.html', 'Viewer');
 
                 const app = new AppClass('com.apple.Safari');
-                return app.supportsUTI(uti, 'Viewer');
+                return app.supportsUTI(uti);
             },
             App,
             UTI,
