@@ -3,7 +3,7 @@ import eslint from '@eslint/js';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import tseslint from 'typescript-eslint';
 
-export default tseslint.config(
+const config = tseslint.config(
   {
     ignores: ['dist/*'],
   },
@@ -39,8 +39,7 @@ export default tseslint.config(
   },
   {
     rules: {
-      eqeqeq: 'error',
-      'no-unused-vars': [
+      '@typescript-eslint/no-unused-vars': [
         'error',
         {
           args: 'all',
@@ -52,7 +51,10 @@ export default tseslint.config(
           ignoreRestSiblings: true,
         },
       ],
+      eqeqeq: 'error',
       'no-var': 'error',
     },
   },
 );
+
+export default config;

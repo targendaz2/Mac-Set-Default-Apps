@@ -1,8 +1,8 @@
 import path from 'node:path';
-import webpack, { BannerPlugin } from 'webpack';
-import WebpackShellPluginNext from 'webpack-shell-plugin-next'
+import { BannerPlugin, Configuration } from 'webpack';
+import WebpackShellPluginNext from 'webpack-shell-plugin-next';
 
-export default {
+const config: Configuration = {
   devtool: 'source-map',
   entry: './src/index.ts',
   mode: 'production',
@@ -16,10 +16,11 @@ export default {
     ],
   },
   optimization: {
+    concatenateModules: true,
     minimize: true,
   },
   output: {
-    filename: 'bundle.js',
+    filename: 'msda.js',
     path: path.resolve(__dirname, 'dist'),
   },
   plugins: [
@@ -29,11 +30,11 @@ export default {
     }),
     new WebpackShellPluginNext({
       onAfterDone: {
-        scripts: ['chmod +x ./dist/bundle.js'],
+        scripts: ['chmod +x ./dist/msda.js'],
         blocking: true,
         parallel: false,
-      }
-    })
+      },
+    }),
   ],
   resolve: {
     alias: {
@@ -41,4 +42,6 @@ export default {
     },
     extensions: ['.ts', '.js'],
   },
-} satisfies webpack.Configuration;
+};
+
+export default config;

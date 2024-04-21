@@ -32,14 +32,14 @@
   "repository": "github:targendaz2/Mac-Set-Default-Apps",
   "scripts": {
     "build": "webpack",
-    "generateConfigSchema": "ts-json-schema-generator --type Config --path ./src/types.ts --out ./generated/configSchema.json",
+    "generate": "ts-json-schema-generator --type Config --path ./src/types.ts --out ./generated/configSchema.json",
     "lint": "yarn lint:js && yarn lint:md && yarn lint:sh",
     "lint:js": "eslint",
     "lint:md": "markdownlint ./*.md",
     "lint:sh": "shellcheck **/*.sh",
-    "start": "yarn build && ./dist/bundle.js",
+    "start": "yarn build && ./dist/msda.js",
     "test": "jest",
-    "test:e2e": "jest tests/e2e",
+    "test:functional": "jest tests/functional",
     "test:unit": "jest tests/unit"
   },
   "devDependencies": {

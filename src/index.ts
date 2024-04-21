@@ -8,7 +8,9 @@ function main() {
         '--pdf': Boolean,
         '--feu': Boolean,
         '--fut': Boolean,
-        '-l': String
+        '--force': Boolean,
+        '-f': '--force',
+        '-l': String,
     });
     console.log(args['_'][-1]);
     console.log(args['--browser']);

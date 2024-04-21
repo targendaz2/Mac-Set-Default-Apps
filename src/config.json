@@ -26,6 +26,8 @@
     }
   },
   "systemPaths": {
-    "lsregister": "/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister"
+    "launchServicesPlist": "/Library/Preferences/com.apple.LaunchServices/",
+    "lsregister": "/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister",
+    "userTemplate": "/Library/User Template/Non_localized/"
   }
 }
