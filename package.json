@@ -3,9 +3,25 @@
   "version": "2.0.0",
   "description": "MSDA provides an easy way to silently change the default applications used by macOS. There are no pop-ups or prompts and, even better, it works for Google Chrome!",
   "keywords": [
-    "default",
+    "addigy",
+    "applescript",
     "apps",
-    "jamf"
+    "browser",
+    "calendar",
+    "default",
+    "email",
+    "ical",
+    "intune",
+    "jamf",
+    "kandji",
+    "mac",
+    "macos",
+    "mail",
+    "mosyle",
+    "msda",
+    "munki",
+    "osascript",
+    "pdf"
   ],
   "homepage": "https://github.com/targendaz2/Mac-Set-Default-Apps#readme",
   "bugs": {
