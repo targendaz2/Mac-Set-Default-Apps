@@ -1,7 +1,7 @@
-import type { UTI as UTIClass } from '@/src/models';
+import { UTI as UTIClass } from '@/src/models/UTI';
 import type { DefaultApp } from '@/src/types';
 
-const UTI: typeof UTIClass = require('@/src/models').UTI;
+const UTI: typeof UTIClass = require('@/src/models/UTI').UTI;
 
 export class AppAssociation {
     utis: UTIClass[] = [];

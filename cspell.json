@@ -30,6 +30,7 @@
     "zparseopts"
   ],
   "ignoreWords": [
+    "assocs",
     "edgemac",
     "lproj",
     "shellcheck",
