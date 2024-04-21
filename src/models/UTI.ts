@@ -25,8 +25,9 @@ export class UTI {
             new Set(
                 result
                     .replace(/["'][\w ]+["'],?/g, '')
-                    .replace(/\r|\.| /g, '')
-                    .split(','),
+                    .replace(/\.|,/g, '')
+                    .replace(/ +/g, ' ')
+                    .split(' '),
             ),
         );
     }
