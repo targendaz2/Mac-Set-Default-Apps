@@ -1,5 +1,6 @@
 import path from 'node:path';
-import webpack from 'webpack';
+import webpack, { BannerPlugin } from 'webpack';
+import WebpackShellPluginNext from 'webpack-shell-plugin-next'
 
 export default {
   devtool: 'source-map',
@@ -22,10 +23,17 @@ export default {
     path: path.resolve(__dirname, 'dist'),
   },
   plugins: [
-    new webpack.BannerPlugin({
+    new BannerPlugin({
       banner: '#!/usr/bin/osascript -l JavaScript',
       raw: true,
     }),
+    new WebpackShellPluginNext({
+      onAfterDone: {
+        scripts: ['chmod +x ./dist/bundle.js'],
+        blocking: true,
+        parallel: false,
+      }
+    })
   ],
   resolve: {
     alias: {

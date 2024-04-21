@@ -4671,6 +4671,7 @@ __metadata:
     typescript-eslint: "npm:^7.6.0"
     webpack: "npm:^5.91.0"
     webpack-cli: "npm:^5.1.4"
+    webpack-shell-plugin-next: "npm:^2.3.1"
   languageName: unknown
   linkType: soft
 
@@ -6231,6 +6232,15 @@ __metadata:
     flat: "npm:^5.0.2"
     wildcard: "npm:^2.0.0"
   checksum: 10c0/b607c84cabaf74689f965420051a55a08722d897bdd6c29cb0b2263b451c090f962d41ecf8c9bf56b0ab3de56e65476ace0a8ecda4f4a4663684243d90e0512b
+  languageName: node
+  linkType: hard
+
+"webpack-shell-plugin-next@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "webpack-shell-plugin-next@npm:2.3.1"
+  peerDependencies:
+    webpack: ^5.18.0
+  checksum: 10c0/948e3017c296d16f7086e2f8f06aa3b532db84d44749afb3d7367d7d315bfc6d834971b331ada4f91ac5b7e6646144f9ae9618c6a2c20e4f0668e3eb0cb2667b
   languageName: node
   linkType: hard
 

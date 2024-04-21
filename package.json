@@ -31,7 +31,7 @@
   "author": "David Rosenberg <david@dgrdev.com>",
   "repository": "github:targendaz2/Mac-Set-Default-Apps",
   "scripts": {
-    "build": "webpack && chmod +x ./dist/bundle.js",
+    "build": "webpack",
     "generateConfigSchema": "ts-json-schema-generator --type Config --path ./src/types.ts --out ./generated/configSchema.json",
     "lint": "yarn lint:js && yarn lint:md && yarn lint:sh",
     "lint:js": "eslint",
@@ -64,7 +64,8 @@
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.6.0",
     "webpack": "^5.91.0",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "webpack-shell-plugin-next": "^2.3.1"
   },
   "engines": {
     "node": "^21.0.0"
