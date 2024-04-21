@@ -2,19 +2,20 @@
 
 ![GitHub License](https://img.shields.io/github/license/targendaz2/Mac-Set-Default-Apps)
 ![version](https://img.shields.io/github/package-json/v/targendaz2/Mac-Set-Default-Apps/jxa-v2?label=version)
+![macOS](https://img.shields.io/badge/macOS-12.0%2B-orange)
 ![tests](https://github.com/targendaz2/Mac-Set-Default-Apps/actions/workflows/test.yml/badge.svg?branch=jxa-v2)
 
 MSDA provides an easy way to silently change the default applications used by macOS. There are no pop-ups or prompts and, even better, it works for Google Chrome!
 
 ## Requirements
 
-macOS Ventura (13.0) or newer
+macOS Monterey (12.0) - macOS Sonoma (14.0)
 
 ## Deploying
 
 ### Using Jamf Pro
 
-1. Copy the contents of [payload/msda.py](https://github.com/targendaz2/Mac-Set-Default-Apps/blob/master/payload/msda.py) into a new Jamf script.
+1. Copy the contents of [msda.js](https://github.com/targendaz2/Mac-Set-Default-Apps/blob/master/payload/msda.py) into a new Jamf script.
 2. In the script's User-Editable Settings section, set the `JAMF` variable to `True`.
 
 ### As a Script via MDM

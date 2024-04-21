@@ -8,10 +8,6 @@
   "[markdown]": {
     "editor.tabSize": 2
   },
-  "[shellscript]": {
-    "editor.insertSpaces": false,
-    "editor.tabSize": 4
-  },
   "[typescript]": {
     "editor.tabSize": 4
   },
@@ -23,12 +19,12 @@
   "eslint.experimental.useFlatConfig": true,
   "jest.outputConfig": "test-results-based",
   "jest.runMode": "on-demand",
+  "markdownlint.config": {
+    "extends": "./.markdownlintrc"
+  },
   "material-icon-theme.files.associations": {
     ".markdownlintrc": "Settings",
     ".shellcheckrc": "Settings",
     "cspell.json": "Settings"
-  },
-  "markdownlint.config": {
-    "extends": "./.markdownlintrc"
   }
 }

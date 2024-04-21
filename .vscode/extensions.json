@@ -1,11 +1,10 @@
 {
   "recommendations": [
-    "mads-hartmann.bash-ide-vscode",
     "streetsidesoftware.code-spell-checker",
     "dbaeumer.vscode-eslint",
     "davidanson.vscode-markdownlint",
     "esbenp.prettier-vscode",
-    "timonwong.shellcheck",
-    "orta.vscode-jest"
+    "orta.vscode-jest",
+    "github.vscode-github-actions"
   ]
 }

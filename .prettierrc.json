@@ -4,12 +4,11 @@
   "overrides": [
     {
       "files": [
-        "*.config.ts",
         "*.config.mjs",
+        "*.config.ts",
         "*.json",
         "*.yml",
-        ".markdownlintrc",
-        ".parcelrc"
+        ".markdownlintrc"
       ],
       "options": {
         "tabWidth": 2
@@ -20,21 +19,9 @@
       "options": {
         "tabWidth": 2
       }
-    },
-    {
-      "files": "*.sh",
-      "options": {
-        "functionNextLine": false,
-        "indent": 4,
-        "parser": "sh",
-        "switchCaseIndent": true,
-        "tabWidth": 4,
-        "variant": 0,
-        "useTabs": true
-      }
     }
   ],
-  "plugins": ["@trivago/prettier-plugin-sort-imports", "prettier-plugin-sh"],
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
   "singleQuote": true,
   "tabWidth": 4,
   "trailingComma": "all"
