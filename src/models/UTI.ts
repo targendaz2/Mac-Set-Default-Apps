@@ -1,17 +1,20 @@
 import type Config from '@/src/config.json';
+import type { UTIRole } from '@/src/types';
 import '@jxa/global-type';
 
 const config: typeof Config = require('@/src/config.json');
 
 export class UTI {
     readonly id: string;
+    readonly role: UTIRole;
     readonly tags: string[];
 
-    constructor(id: string) {
+    constructor(id: string, role: UTIRole) {
         const app = Application.currentApplication();
         app.includeStandardAdditions = true;
 
         this.id = id;
+        this.role = role;
 
         // This long awk command essentially parses the lsregister dump for
         // ID's and tags matching the given UTI. The lsregister dump is huge

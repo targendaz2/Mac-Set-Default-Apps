@@ -80,7 +80,7 @@ describe('support checking tests', () => {
     test('can confirm an app supports a UTI', async () => {
         const result = await run<string[]>(
             (AppClass: typeof App, UTIClass: typeof UTI) => {
-                const uti = new UTIClass('public.html');
+                const uti = new UTIClass('public.html', 'Viewer');
 
                 const app = new AppClass('com.apple.Safari');
                 return app.supportsUTI(uti, 'Viewer');
