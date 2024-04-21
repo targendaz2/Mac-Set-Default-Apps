@@ -31,7 +31,7 @@ export type JXAApplication = typeof Application &
 
 export type UTIRole = 'Viewer' | 'Shell' | 'QLGenerator' | 'None' | 'All';
 
-type DefaultApp = {
+export type DefaultApp = {
     /**
      * UTI's required by this default app definition.
      *
