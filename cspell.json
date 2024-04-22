@@ -11,6 +11,11 @@
       "name": "MDMs",
       "description": "Mobile Device Management (MDM) solution terms and concepts.",
       "path": "./dicts/MDMs.txt"
+    },
+    {
+      "name": "URLSchemes",
+      "description": "URL schemes",
+      "path": "./dicts/URLSchemes.txt"
     }
   ],
   "dictionaries": [
@@ -21,7 +26,8 @@
     "misc",
     "node",
     "npm",
-    "typescript"
+    "typescript",
+    "URLSchemes"
   ],
   "words": ["dgrdev", "MSDA"],
   "ignoreWords": [

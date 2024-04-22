@@ -9,4 +9,3 @@ preboot
 Sonoma
 UTI
 UTIs
-WebCal

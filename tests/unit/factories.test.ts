@@ -1,6 +1,17 @@
 // import cp from 'node:child_process';
-import { infoPlistFactory } from '@/tests/factories';
+import { infoPlistFactory, urlTypeFactory } from '@/tests/factories';
 import { describe, expect, test } from '@jest/globals';
+
+describe('URL Type factory tests', () => {
+    test('can generate an object', () => {
+        urlTypeFactory.build();
+    });
+
+    test('generated URL Type has a URL scheme', () => {
+        const urlType = urlTypeFactory.build();
+        expect(urlType.CFBundleURLSchemes).toBeDefined();
+    });
+});
 
 describe('Info.plist factory tests', () => {
     test('can generate an object', () => {
