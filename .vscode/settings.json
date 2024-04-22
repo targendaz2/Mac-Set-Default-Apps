@@ -25,5 +25,8 @@
   "material-icon-theme.files.associations": {
     ".markdownlintrc": "Settings",
     "cspell.json": "Settings"
+  },
+  "material-icon-theme.folders.associations": {
+    "dicts": "Docs"
   }
 }

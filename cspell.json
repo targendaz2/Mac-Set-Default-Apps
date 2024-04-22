@@ -1,42 +1,38 @@
 {
   "version": "0.2",
   "ignorePaths": [".prettierrc*", ".vscode/*", "*.lock", "node_modules/"],
-  "dictionaryDefinitions": [],
-  "dictionaries": [],
-  "words": [
-    "Addigy",
-    "AppleScript",
-    "dgrdev",
-    "Jamf",
-    "iCal",
-    "Intune",
-    "Kandji",
-    "LaunchServices",
-    "LSRegister",
-    "Mosyle",
-    "MSDA",
-    "Munki",
-    "Sonoma",
-    "UTI",
-    "WebCal"
+  "dictionaryDefinitions": [
+    {
+      "name": "macOS",
+      "description": "macOS terms and concepts.",
+      "path": "./dicts/macOS.txt"
+    },
+    {
+      "name": "MDMs",
+      "description": "Mobile Device Management (MDM) solution terms and concepts.",
+      "path": "./dicts/MDMs.txt"
+    }
   ],
+  "dictionaries": [
+    "bash",
+    "filetypes",
+    "macOS",
+    "MDMs",
+    "misc",
+    "node",
+    "npm",
+    "typescript"
+  ],
+  "words": ["dgrdev", "MSDA"],
   "ignoreWords": [
-    "argparse",
     "assocs",
     "bools",
-    "cryptexes",
     "edgemac",
     "linebreak",
-    "lproj",
-    "mdfind",
-    "osascript",
-    "preboot",
     "shellcheck",
-    "shtm",
     "targendaz2",
     "trivago",
-    "tseslint",
-    "utis"
+    "tseslint"
   ],
   "import": []
 }

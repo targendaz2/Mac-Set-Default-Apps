@@ -1,0 +1,12 @@
+AppleScript
+cryptexes
+iCal
+LaunchServices
+LSRegister
+mdfind
+osascript
+preboot
+Sonoma
+UTI
+UTIs
+WebCal
