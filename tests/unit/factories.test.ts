@@ -25,4 +25,14 @@ describe('Info.plist factory tests', () => {
         expect(infoPlist.CFBundleDisplayName).toBe(name);
         expect(infoPlist.CFBundleIdentifier).toContain(name);
     });
+
+    test('can generate Info.plist with single URL Type', () => {
+        const infoPlist = infoPlistFactory.urlTypes().build();
+        expect(infoPlist.CFBundleURLTypes!.length).toBe(1);
+    });
+
+    test('can generate Info.plist with multiple URL Types', () => {
+        const infoPlist = infoPlistFactory.urlTypes(3).build();
+        expect(infoPlist.CFBundleURLTypes!.length).toBe(3);
+    });
 });
