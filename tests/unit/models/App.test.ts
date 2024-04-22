@@ -1,7 +1,10 @@
 import { PathLike } from 'node:fs';
-import { App, UTI } from '@/src/models';
+import { App, AppAssociation, UTI } from '@/src/models';
+import type { Config } from '@/src/types';
 import { run } from '@/tests/helpers/jxaRun';
 import { describe, expect, test } from '@jest/globals';
+
+const config: Config = require('@/src/config.json');
 
 describe('app model instantiation tests', () => {
     test('can get app name', async () => {
@@ -78,7 +81,7 @@ describe('app model instantiation tests', () => {
 
 describe('support checking tests', () => {
     test('can confirm an app supports a UTI', async () => {
-        const result = await run<string[]>(
+        const result = await run<boolean>(
             (AppClass: typeof App, UTIClass: typeof UTI) => {
                 const uti = new UTIClass('public.html', 'Viewer');
 
@@ -93,10 +96,27 @@ describe('support checking tests', () => {
     });
 
     test('can confirm an app supports a URL scheme', async () => {
-        const result = await run<string[]>((AppClass: typeof App) => {
+        const result = await run<boolean>((AppClass: typeof App) => {
             const app = new AppClass('com.apple.Safari');
             return app.supportsURLScheme('http');
         }, App);
+
+        expect(result).toBeTruthy();
+    });
+
+    test('can confirm an app supports an app association', async () => {
+        const result = await run<boolean>(
+            (AppClass: typeof App, AppAssocClass: typeof AppAssociation, _) => {
+                const app = new AppClass('com.apple.Safari');
+                const appAssoc = new AppAssocClass(
+                    config.defaultAppRequirements.browser,
+                );
+                return app.supportsAssociation(appAssoc);
+            },
+            App,
+            AppAssociation,
+            UTI,
+        );
 
         expect(result).toBeTruthy();
     });

@@ -24,7 +24,6 @@
   },
   "material-icon-theme.files.associations": {
     ".markdownlintrc": "Settings",
-    ".shellcheckrc": "Settings",
     "cspell.json": "Settings"
   }
 }

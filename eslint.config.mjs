@@ -13,7 +13,6 @@ const config = tseslint.config(
   {
     files: ['src/**/*.ts'],
     rules: {
-      '@typescript-eslint/no-var-requires': 'off',
       'no-restricted-imports': [
         'error',
         {
@@ -51,6 +50,7 @@ const config = tseslint.config(
           ignoreRestSiblings: true,
         },
       ],
+      '@typescript-eslint/no-var-requires': 'off',
       eqeqeq: 'error',
       'no-var': 'error',
     },

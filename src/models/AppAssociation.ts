@@ -4,8 +4,8 @@ import type { DefaultApp } from '@/src/types';
 const UTI: typeof UTIClass = require('@/src/models/UTI').UTI;
 
 export class AppAssociation {
-    utis: UTIClass[] = [];
-    urlSchemes: string[] = [];
+    readonly utis: UTIClass[] = [];
+    readonly urlSchemes: string[] = [];
 
     constructor(spec: Partial<DefaultApp>) {
         if (spec.utis) {

@@ -1,4 +1,4 @@
-import type { UTI } from '@/src/models';
+import type { AppAssociation, UTI } from '@/src/models';
 import type { DocumentType, InfoPlist } from '@/src/types';
 import type { JXAApplication } from '@/src/types';
 import '@jxa/global-type';
@@ -53,7 +53,7 @@ export class App {
         return this.path + '/Contents/Info.plist';
     }
 
-    supportsUTI(uti: UTI) {
+    supportsUTI(uti: UTI): boolean {
         const commonTags = uti.tags.filter((tag) =>
             Object.keys(this.documentTypes).includes(tag)
                 ? this.documentTypes[tag] === uti.role
@@ -62,7 +62,19 @@ export class App {
         return commonTags.length > 0;
     }
 
-    supportsURLScheme(urlScheme: string) {
+    supportsURLScheme(urlScheme: string): boolean {
         return this.urlSchemes.includes(urlScheme);
+    }
+
+    supportsAssociation(assoc: AppAssociation): boolean {
+        for (const uti of assoc.utis) {
+            if (!this.supportsUTI(uti)) return false;
+        }
+
+        for (const urlScheme of assoc.urlSchemes) {
+            if (!this.supportsURLScheme(urlScheme)) return false;
+        }
+
+        return true;
     }
 }

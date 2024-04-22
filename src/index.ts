@@ -12,8 +12,8 @@ function main() {
         '--pdf': Boolean,
         '--feu': Boolean,
         '--fut': Boolean,
-        '--force': Boolean,
-        '-f': '--force',
+        // '--force': Boolean,
+        // '-f': '--force',
         '-l': String,
     });
 
