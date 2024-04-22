@@ -1000,6 +1000,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@faker-js/faker@npm:^8.4.1":
+  version: 8.4.1
+  resolution: "@faker-js/faker@npm:8.4.1"
+  checksum: 10c0/4f2aecddcfdc2cc8b50b2d15d1e37302a7c7a5bbd184ae910a9d271bc11248533ca74dcdd4a9ccbe20410553e7af0f6a4d334c5b955635e09a32ddf4a64942d4
+  languageName: node
+  linkType: hard
+
 "@humanwhocodes/config-array@npm:^0.11.14":
   version: 0.11.14
   resolution: "@humanwhocodes/config-array@npm:0.11.14"
@@ -3325,6 +3332,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fishery@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "fishery@npm:2.2.2"
+  dependencies:
+    lodash.mergewith: "npm:^4.6.2"
+  checksum: 10c0/31bc39f51dc10bfe2dc975ad16f4a6da5b5ad2d83de3180b4671cf391fb650b6cb8a582ec7b78559f4161b427cebed04e01578c1849c32adf6206fde7d8e3d98
+  languageName: node
+  linkType: hard
+
 "flat-cache@npm:^3.0.4":
   version: 3.2.0
   resolution: "flat-cache@npm:3.2.0"
@@ -4613,6 +4629,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lodash.mergewith@npm:^4.6.2":
+  version: 4.6.2
+  resolution: "lodash.mergewith@npm:4.6.2"
+  checksum: 10c0/4adbed65ff96fd65b0b3861f6899f98304f90fd71e7f1eb36c1270e05d500ee7f5ec44c02ef979b5ddbf75c0a0b9b99c35f0ad58f4011934c4d4e99e5200b3b5
+  languageName: node
+  linkType: hard
+
 "lodash@npm:^4.17.21":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
@@ -4650,6 +4673,7 @@ __metadata:
   resolution: "mac-set-default-apps@workspace:."
   dependencies:
     "@eslint/js": "npm:^9.0.0"
+    "@faker-js/faker": "npm:^8.4.1"
     "@jest/globals": "npm:^29.7.0"
     "@jxa/global-type": "npm:^1.3.6"
     "@trivago/prettier-plugin-sort-imports": "npm:^4.3.0"
@@ -4659,6 +4683,7 @@ __metadata:
     cspell: "npm:^8.6.1"
     eslint: "npm:^8.56.0"
     eslint-config-prettier: "npm:^9.1.0"
+    fishery: "npm:^2.2.2"
     jest: "npm:^29.7.0"
     jest-junit: "npm:^16.0.0"
     markdownlint-cli: "npm:^0.39.0"

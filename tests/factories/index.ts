@@ -1,0 +1,1 @@
+export { infoPlistFactory } from './infoPlist';
