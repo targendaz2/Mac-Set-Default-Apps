@@ -2,6 +2,7 @@
 import {
     documentTypeFactory,
     infoPlistFactory,
+    lsHandlerFactory,
     urlTypeFactory,
 } from '@/tests/factories';
 import extensionsAndMIMETypes from '@/tests/factories/data/extensionsAndMIMETypes.json';
@@ -77,5 +78,22 @@ describe('Info.plist factory tests', () => {
 
         expect(infoPlist.CFBundleDocumentTypes!.length).toBe(3);
         expect(infoPlist.CFBundleURLTypes!.length).toBe(2);
+    });
+});
+
+describe('LSHandler factory tests', () => {
+    test('can generate an object', () => {
+        lsHandlerFactory.buildDocumentType();
+        lsHandlerFactory.buildURLScheme();
+    });
+
+    test('can generate a Document Type LSHandler', () => {
+        const lsHandler = lsHandlerFactory.buildDocumentType();
+        expect(lsHandler.LSHandlerContentType).toBeDefined();
+    });
+
+    test('can generate a URL scheme LSHandler', () => {
+        const lsHandler = lsHandlerFactory.buildURLScheme();
+        expect(lsHandler!.LSHandlerURLScheme).toBeDefined();
     });
 });
