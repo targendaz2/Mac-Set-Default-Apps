@@ -3,6 +3,11 @@
   "ignorePaths": [".prettierrc*", ".vscode/*", "*.lock", "node_modules/"],
   "dictionaryDefinitions": [
     {
+      "name": "extensions",
+      "description": "Common file extensions.",
+      "path": "./dicts/extensions.txt"
+    },
+    {
       "name": "macOS",
       "description": "macOS terms and concepts.",
       "path": "./dicts/macOS.txt"
@@ -20,7 +25,7 @@
   ],
   "dictionaries": [
     "bash",
-    "filetypes",
+    "extensions",
     "macOS",
     "MDMs",
     "misc",

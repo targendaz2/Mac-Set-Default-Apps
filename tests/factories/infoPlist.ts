@@ -1,9 +1,16 @@
 import type { InfoPlist } from '@/src/types';
-import { urlTypeFactory } from '@/tests/factories/urlType';
+import { documentTypeFactory, urlTypeFactory } from '@/tests/factories';
 import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 
-class InfoPlistFactory extends Factory<InfoPlist, { urlTypes?: number }> {
+class InfoPlistFactory extends Factory<
+    InfoPlist,
+    { documentTypes?: number; urlTypes?: number }
+> {
+    documentTypes(count: number = 1) {
+        return this.transient({ documentTypes: count });
+    }
+
     urlTypes(count: number = 1) {
         return this.transient({ urlTypes: count });
     }
@@ -21,6 +28,12 @@ export const infoPlistFactory = InfoPlistFactory.define(
             CFBundleName: appName,
             CFBundleShortVersionString: faker.system.semver(),
         };
+
+        if (transientParams.documentTypes) {
+            infoPlist.CFBundleDocumentTypes = documentTypeFactory.buildList(
+                transientParams.documentTypes,
+            );
+        }
 
         if (transientParams.urlTypes) {
             infoPlist.CFBundleURLTypes = urlTypeFactory.buildList(
