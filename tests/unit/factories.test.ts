@@ -4,6 +4,7 @@ import {
     infoPlistFactory,
     urlTypeFactory,
 } from '@/tests/factories';
+import extensionsAndMIMETypes from '@/tests/factories/data/extensionsAndMIMETypes.json';
 import { describe, expect, test } from '@jest/globals';
 
 describe('Document Type factory tests', () => {
@@ -15,7 +16,10 @@ describe('Document Type factory tests', () => {
         const documentType = documentTypeFactory.build();
         const extension = documentType.CFBundleTypeExtensions![0];
 
-        expect(documentType.CFBundleTypeMIMETypes![0]).toContain(extension);
+        expect(documentType.CFBundleTypeMIMETypes![0]).toBe(
+            // @ts-expect-error 'eslint thinks this is an any type for some reason'
+            extensionsAndMIMETypes[extension],
+        );
     });
 
     test('generated document type has a role', () => {
