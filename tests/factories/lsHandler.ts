@@ -5,6 +5,7 @@ import type {
 } from '@/src/types';
 import roles from '@/tests/factories/data/roles.json';
 import urlSchemes from '@/tests/factories/data/urlSchemes.json';
+import utis from '@/tests/factories/data/utis.json';
 import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 
@@ -38,9 +39,10 @@ export const lsHandlerFactory = LSHandlerFactory.define(
 
         if (transientParams.documentType) {
             role = faker.helpers.arrayElement(roles);
+            const uti = faker.helpers.arrayElement(utis);
 
             // @ts-expect-error 'ignoring implicit any error'
-            lsHandler['LSHandlerContentType'] = 'public.html';
+            lsHandler['LSHandlerContentType'] = uti;
         } else if (transientParams.urlScheme) {
             role = 'All';
             const urlScheme = faker.helpers.arrayElement(urlSchemes);
