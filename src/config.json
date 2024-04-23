@@ -25,8 +25,12 @@
       }
     }
   },
+  "logging": {
+    "logPath": "/var/log/msda.log",
+    "verbose": false
+  },
   "systemPaths": {
-    "launchServicesPlist": "/Library/Preferences/com.apple.LaunchServices/",
+    "launchServicesPlist": "/Library/Preferences/com.apple.LaunchServices/com.apple.launchservices.secure.plist",
     "lsregister": "/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister",
     "userTemplate": "/Library/User Template/Non_localized/"
   }

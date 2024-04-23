@@ -34,6 +34,15 @@ export interface Config {
     };
 
     /**
+     * Configures how MSDA handles logging.
+     *
+     * */
+    logging: {
+        logPath: string;
+        verbose: boolean;
+    };
+
+    /**
      * Paths to system files and directories.
      *
      * @minProperties 1
