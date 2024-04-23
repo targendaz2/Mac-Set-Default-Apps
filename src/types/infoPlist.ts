@@ -10,7 +10,7 @@ export type DocumentType = {
         | 'All';
 };
 
-export type UTIType = {
+export type URLType = {
     CFBundleURLSchemes: string[];
 };
 
@@ -20,5 +20,5 @@ export type InfoPlist = {
     CFBundleIdentifier: string;
     CFBundleName: string;
     CFBundleShortVersionString: string;
-    CFBundleURLTypes?: UTIType[];
+    CFBundleURLTypes?: URLType[];
 };
