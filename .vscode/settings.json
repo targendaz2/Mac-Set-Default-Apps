@@ -1,22 +1,12 @@
 {
-  "[javascript]": {
-    "editor.tabSize": 4
-  },
-  "[json]": {
-    "editor.tabSize": 2
-  },
-  "[markdown]": {
-    "editor.tabSize": 2
-  },
-  "[typescript]": {
-    "editor.tabSize": 4
-  },
-  "[yaml]": {
-    "editor.tabSize": 2
-  },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "eslint.experimental.useFlatConfig": true,
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "explorer.fileNesting.patterns": {
+    "package.json": ".eslint*, .markdown*, .prettierrc*, .yarnrc*, cspell*, eslint*, jest*, webpack*, yarn.lock"
+  },
   "jest.outputConfig": "test-results-based",
   "jest.runMode": "on-demand",
   "markdownlint.config": {
