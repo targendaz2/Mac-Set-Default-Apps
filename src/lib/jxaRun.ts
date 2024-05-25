@@ -4,7 +4,7 @@
 // Based heavily on @jxa/run
 // https://github.com/JXA-userland/JXA/tree/master/packages/%40jxa/run
 import { execFile } from 'node:child_process';
-import config from '@/src/config.json';
+import config from '@/config.json';
 
 export function runJXACode(jxaCode: string) {
     return executeInOsa(jxaCode);

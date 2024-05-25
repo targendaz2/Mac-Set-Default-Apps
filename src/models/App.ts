@@ -1,6 +1,6 @@
-import type { AppAssociation, UTI } from '@/src/models';
-import type { DocumentType, InfoPlist } from '@/src/types';
-import type { JXAApplication } from '@/src/types';
+import type { AppAssociation, UTI } from '@/models';
+import type { DocumentType, InfoPlist } from '@/types';
+import type { JXAApplication } from '@/types';
 import '@jxa/global-type';
 
 export class App {

@@ -38,7 +38,7 @@ const config: Configuration = {
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname),
+      '@': path.resolve(__dirname, 'src'),
     },
     extensions: ['.ts', '.js'],
   },

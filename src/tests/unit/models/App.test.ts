@@ -1,10 +1,10 @@
 import { PathLike } from 'node:fs';
-import { App, AppAssociation, UTI } from '@/src/models';
-import type { Config } from '@/src/types';
-import { run } from '@/tests/helpers/jxaRun';
+import { run } from '@/lib/jxaRun';
+import { App, AppAssociation, UTI } from '@/models';
+import type { Config } from '@/types';
 import { describe, expect, test } from '@jest/globals';
 
-const config: Config = require('@/src/config.json');
+const config: Config = require('@/config.json');
 
 describe('app model instantiation tests', () => {
     test('can get app name', async () => {

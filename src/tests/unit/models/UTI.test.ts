@@ -1,5 +1,5 @@
-import { UTI } from '@/src/models';
-import { run } from '@/tests/helpers/jxaRun';
+import { run } from '@/lib/jxaRun';
+import { UTI } from '@/models';
 import { expect, test } from '@jest/globals';
 
 test('can return UTI ID', async () => {

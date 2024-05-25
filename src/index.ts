@@ -1,6 +1,6 @@
-import { arg } from '@/src/args';
-import { AppAssociation } from '@/src/models';
-import type { Config } from '@/src/types';
+import { arg } from '@/lib/args';
+import { AppAssociation } from '@/models';
+import type { Config } from '@/types';
 
 const config: Config = require('@/src/config.json');
 

@@ -1,11 +1,11 @@
+import roles from '@/data/roles.json';
+import urlSchemes from '@/data/urlSchemes.json';
+import utis from '@/data/utis.json';
 import type {
     LSHandler,
     LSHandlerDocumentType,
     LSHandlerURLScheme,
-} from '@/src/types';
-import roles from '@/tests/factories/data/roles.json';
-import urlSchemes from '@/tests/factories/data/urlSchemes.json';
-import utis from '@/tests/factories/data/utis.json';
+} from '@/types';
 import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 

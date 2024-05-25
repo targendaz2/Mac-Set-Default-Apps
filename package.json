@@ -78,5 +78,8 @@
     "darwin"
   ],
   "private": true,
-  "packageManager": "yarn@4.2.2"
+  "packageManager": "yarn@4.2.2",
+  "dependencies": {
+    "zod": "^3.23.8"
+  }
 }

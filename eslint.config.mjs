@@ -11,7 +11,8 @@ const config = tseslint.config(
   ...tseslint.configs.recommended,
   eslintConfigPrettier,
   {
-    files: ['src/**/*.ts'],
+    files: ['./src/*.ts'],
+    ignores: ['./src/tests/**/*.ts'],
     rules: {
       'no-restricted-imports': [
         'error',

@@ -1,5 +1,5 @@
-import type { LSHandler, LaunchServicesPlist } from '@/src/types';
-import type { JXAApplication } from '@/src/types';
+import type { LSHandler, LaunchServicesPlist } from '@/types';
+import type { JXAApplication } from '@/types';
 import '@jxa/global-type';
 
 export class LaunchServices {

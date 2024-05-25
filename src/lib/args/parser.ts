@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // Heavily based on Vercel's "arg" package
 // https://github.com/vercel/arg
-import { getArgs } from '@/src/args/getter';
+import { getArgs } from '@/lib/args/getter';
 
 // eslint-disable-next-line no-unused-vars
 type Handler<T = any> = (value: T, name: string, previousValue?: T) => T;

@@ -1,5 +1,5 @@
-import type { URLType } from '@/src/types';
-import urlSchemes from '@/tests/factories/data/urlSchemes.json';
+import urlSchemes from '@/data/urlSchemes.json';
+import type { URLType } from '@/types';
 import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 

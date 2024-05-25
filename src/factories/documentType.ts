@@ -1,6 +1,6 @@
-import type { DocumentType } from '@/src/types';
-import extensionsAndMIMETypes from '@/tests/factories/data/extensionsAndMIMETypes.json';
-import roles from '@/tests/factories/data/roles.json';
+import extensionsAndMIMETypes from '@/data/extensionsAndMIMETypes.json';
+import roles from '@/data/roles.json';
+import type { DocumentType } from '@/types';
 import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 

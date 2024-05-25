@@ -1,11 +1,11 @@
 // import cp from 'node:child_process';
+import extensionsAndMIMETypes from '@/data/extensionsAndMIMETypes.json';
 import {
     documentTypeFactory,
     infoPlistFactory,
     lsHandlerFactory,
     urlTypeFactory,
-} from '@/tests/factories';
-import extensionsAndMIMETypes from '@/tests/factories/data/extensionsAndMIMETypes.json';
+} from '@/factories';
 import { describe, expect, test } from '@jest/globals';
 
 describe('Document Type factory tests', () => {

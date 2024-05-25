@@ -1,5 +1,5 @@
-import { AppAssociation, UTI } from '@/src/models';
-import { run } from '@/tests/helpers/jxaRun';
+import { run } from '@/lib/jxaRun';
+import { AppAssociation, UTI } from '@/models';
 import { expect, test } from '@jest/globals';
 
 test('can instantiate with single UTI', async () => {

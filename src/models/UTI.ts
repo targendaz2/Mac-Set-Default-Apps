@@ -1,8 +1,8 @@
-import type Config from '@/src/config.json';
-import type { UTIRole } from '@/src/types';
+import type Config from '@/config.json';
+import type { UTIRole } from '@/types';
 import '@jxa/global-type';
 
-const config: typeof Config = require('@/src/config.json');
+const config: typeof Config = require('@/config.json');
 
 export class UTI {
     readonly id: string;

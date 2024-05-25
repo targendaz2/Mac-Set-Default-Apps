@@ -1,5 +1,5 @@
-import type { InfoPlist } from '@/src/types';
-import { documentTypeFactory, urlTypeFactory } from '@/tests/factories';
+import { documentTypeFactory, urlTypeFactory } from '@/factories';
+import type { InfoPlist } from '@/types';
 import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
 

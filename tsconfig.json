@@ -10,7 +10,7 @@
     "forceConsistentCasingInFileNames": true,
     "sourceMap": true,
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./src/*"]
     }
   }
 }

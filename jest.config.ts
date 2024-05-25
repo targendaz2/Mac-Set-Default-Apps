@@ -8,7 +8,7 @@ const config: JestConfigWithTsJest = {
     useESM: true,
   }),
   preset: 'ts-jest',
-  setupFilesAfterEnv: ['./tests/extensions/fs.ext.ts'],
+  setupFilesAfterEnv: ['./jest/fs.ext.ts'],
   testEnvironment: 'node',
   testRegex: '.+\\.test\\.ts$',
   testTimeout: 30000,
