@@ -39,8 +39,8 @@
     "lint:sh": "shellcheck **/*.sh",
     "start": "yarn build && ./dist/msda.js",
     "test": "jest",
-    "test:functional": "jest tests/functional",
-    "test:unit": "jest tests/unit"
+    "test:functional": "jest src/tests/functional",
+    "test:unit": "jest src/tests/unit"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
@@ -74,12 +74,6 @@
   "engines": {
     "node": "^21.0.0"
   },
-  "os": [
-    "darwin"
-  ],
   "private": true,
-  "packageManager": "yarn@4.2.2",
-  "dependencies": {
-    "zod": "^3.23.8"
-  }
+  "packageManager": "yarn@4.2.2"
 }

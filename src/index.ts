@@ -2,7 +2,7 @@ import { arg } from '@/lib/args';
 import { AppAssociation } from '@/models';
 import type { Config } from '@/types';
 
-const config: Config = require('@/src/config.json');
+const config: Config = require('@/config.json');
 
 function main() {
     const args = arg({
