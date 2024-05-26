@@ -1,4 +1,4 @@
-export { documentTypeFactory } from './documentType';
-export { infoPlistFactory } from './infoPlist';
-export { lsHandlerFactory } from './lsHandler';
-export { urlTypeFactory } from './urlType';
+export { documentTypeFactory, documentTypeSchemaFactory } from './documentType';
+export { launchServicesSchemaFactory } from './launchServices';
+export { lsHandlerFactory, lsHandlerSchemaFactory } from './lsHandler';
+export { urlSchemeFactory, urlSchemeSchemaFactory } from './urlScheme';

@@ -1,5 +1,5 @@
 import { fs } from '@/lib/macos';
-import { LaunchServicesSchema } from '@/lib/macos/types';
+import { LaunchServicesSchema } from './schemas';
 
 export const launchServices = {
     read: (forUser: string): LaunchServicesSchema | undefined => {

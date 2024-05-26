@@ -1,64 +1,42 @@
-import roles from '@/data/roles.json';
-import urlSchemes from '@/data/urlSchemes.json';
-import utis from '@/data/utis.json';
-import type {
-    LSHandler,
-    LSHandlerDocumentType,
-    LSHandlerURLScheme,
-} from '@/types';
+import { LSHandler } from '@/lib/macos/launchServices/interfaces';
+import { LSHandlerSchema } from '@/lib/macos/launchServices/schemas';
 import { faker } from '@faker-js/faker';
 import { Factory } from 'fishery';
+import { documentTypeFactory, documentTypeSchemaFactory } from './documentType';
+import { urlSchemeFactory, urlSchemeSchemaFactory } from './urlScheme';
 
-class LSHandlerFactory extends Factory<
-    LSHandler,
-    { documentType?: boolean; urlScheme?: boolean }
-> {
-    buildDocumentType() {
-        return this.transient({
-            documentType: true,
-        }).build() as LSHandlerDocumentType;
-    }
+class LSHandlerFactory extends Factory<LSHandler> {}
 
-    buildURLScheme() {
-        return this.transient({
-            urlScheme: true,
-        }).build() as LSHandlerURLScheme;
-    }
-}
+export const lsHandlerFactory = LSHandlerFactory.define(() => {
+    const lsHandlerType = faker.helpers.arrayElement([
+        'DocumentType',
+        'URLScheme',
+    ]);
 
-export const lsHandlerFactory = LSHandlerFactory.define(
-    ({ transientParams }) => {
-        const appName = faker.word.noun();
-        const domain = faker.internet.domainName();
-        const bundleId = domain.split(',').reverse().join('.') + '.' + appName;
-
-        let role = '';
-        const lsHandler = {
-            LSHandlerPreferredVersions: {},
-        };
-
-        if (transientParams.documentType) {
-            role = faker.helpers.arrayElement(roles);
-            const uti = faker.helpers.arrayElement(utis);
-
-            // @ts-expect-error 'ignoring implicit any error'
-            lsHandler['LSHandlerContentType'] = uti;
-        } else if (transientParams.urlScheme) {
-            role = 'All';
-            const urlScheme = faker.helpers.arrayElement(urlSchemes);
-
-            // @ts-expect-error 'ignoring implicit any error'
-            lsHandler['LSHandlerURLScheme'] = urlScheme;
-        } else {
+    switch (lsHandlerType) {
+        case 'DocumentType':
+            return documentTypeFactory.build();
+        case 'URLScheme':
+            return urlSchemeFactory.build();
+        default:
             throw new Error();
-        }
+    }
+});
 
-        // @ts-expect-error 'ignoring implicit any error'
-        lsHandler[`LSHandlerRole${role}`] = bundleId;
+class LSHandlerSchemaFactory extends Factory<LSHandlerSchema> {}
 
-        // @ts-expect-error 'ignoring implicit any error'
-        lsHandler.LSHandlerPreferredVersions[`LSHandlerRole${role}`] = '-';
+export const lsHandlerSchemaFactory = LSHandlerSchemaFactory.define(() => {
+    const lsHandlerType = faker.helpers.arrayElement([
+        'DocumentType',
+        'URLScheme',
+    ]);
 
-        return lsHandler as LSHandler;
-    },
-);
+    switch (lsHandlerType) {
+        case 'DocumentType':
+            return documentTypeSchemaFactory.build();
+        case 'URLScheme':
+            return urlSchemeSchemaFactory.build();
+        default:
+            throw new Error();
+    }
+});

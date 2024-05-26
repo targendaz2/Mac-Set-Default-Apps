@@ -1,2 +1,2 @@
-export { fs } from './fs';
-export { launchServices } from './launchServices';
+export { fs } from './fileSystem';
+export { launchServices } from './launchServices/api';

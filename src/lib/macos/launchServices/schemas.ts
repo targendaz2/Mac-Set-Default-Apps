@@ -1,4 +1,4 @@
-export type LSHandlerDocumentTypeSchema = {
+export type DocumentTypeSchema = {
     LSHandlerContentType: string;
 } & (
     | {
@@ -33,17 +33,15 @@ export type LSHandlerDocumentTypeSchema = {
       }
 );
 
-export type LSHandlerURLSchemeSchema = {
+export type URLSchemeSchema = {
     LSHandlerURLScheme: string;
     LSHandlerPreferredVersions: {
-        LSHandlerRoleAll: string;
+        LSHandlerRoleAll: '-';
     };
     LSHandlerRoleAll: string;
 };
 
-export type LSHandlerSchema =
-    | LSHandlerDocumentTypeSchema
-    | LSHandlerURLSchemeSchema;
+export type LSHandlerSchema = DocumentTypeSchema | URLSchemeSchema;
 
 export type LaunchServicesSchema = {
     LSHandlers: LSHandlerSchema[];
