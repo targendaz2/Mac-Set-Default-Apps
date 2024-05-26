@@ -115,7 +115,15 @@ export function run<R, A1, A2, A3, A4, A5, A6, A7, A8, A9>(
 ): Promise<R>;
 export function run(jxaCodeFunction: (...args: any[]) => void, ...args: any[]) {
     const parsedArgs = args
-        .map((value) => (value.name ? value.name : `"${value}"`))
+        .map((value) => {
+            if (value.name) {
+                return value.name;
+            } else if (typeof value === 'object') {
+                return JSON.stringify(value);
+            } else {
+                return `"${value}"`;
+            }
+        })
         .toString();
 
     const code = `
