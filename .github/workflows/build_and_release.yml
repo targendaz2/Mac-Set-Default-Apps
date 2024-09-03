@@ -30,7 +30,7 @@ jobs:
         id: get_version
         run: echo "##[set-output name=version;]$(./payload/msda --version 2>&1)"
       - name: Download built package
-        uses: actions/download-artifact@v1
+        uses: actions/download-artifact@v4.1.7
         with:
           name: ${{ format('MacSetDefaultApps-v{0}.pkg', steps.get_version.outputs.version) }}
           path: '.'
