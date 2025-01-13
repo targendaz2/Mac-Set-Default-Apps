@@ -1,22 +1,27 @@
 {
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "cSpell.diagnosticLevel": "Hint",
+  "cSpell.mergeCSpellSettings": false,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "eslint.experimental.useFlatConfig": true,
+  "eslint.useFlatConfig": true,
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
   "explorer.fileNesting.patterns": {
-    "package.json": ".eslint*, .markdown*, .prettierrc*, .yarnrc*, cspell*, eslint*, jest*, webpack*, yarn.lock"
+    "package.json": ".eslint*, .markdown*, .prettierrc*, .yarnrc*, cspell*, eslint*, jest*, rollup*, webpack*, yarn.lock"
   },
-  "jest.outputConfig": "test-results-based",
-  "jest.runMode": "on-demand",
   "markdownlint.config": {
     "extends": "./.markdownlintrc"
   },
   "material-icon-theme.files.associations": {
-    ".markdownlintrc": "Settings",
-    "cspell.json": "Settings"
+    ".markdownlintrc": "settings",
+    "cspell.json": "settings"
   },
   "material-icon-theme.folders.associations": {
-    "dicts": "Docs"
-  }
+    "dicts": "docs"
+  },
+  "prettier.prettierPath": "./node_modules/prettier",
+  "prettier.requireConfig": true
 }

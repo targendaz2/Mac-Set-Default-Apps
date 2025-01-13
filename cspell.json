@@ -1,6 +1,12 @@
 {
   "version": "0.2",
-  "ignorePaths": [".prettierrc*", ".vscode/*", "*.lock", "node_modules/"],
+  "ignorePaths": [
+    ".gitignore",
+    ".prettierrc*",
+    ".vscode/*",
+    "*.lock",
+    "node_modules/"
+  ],
   "dictionaryDefinitions": [
     {
       "name": "extensions",

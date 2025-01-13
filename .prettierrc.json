@@ -1,28 +1,11 @@
 {
-  "importOrder": ["^(node:)", "^(@.*)", "<THIRD_PARTY_MODULES>", "^[./]"],
+  "experimentalTernaries": true,
+  "importOrder": ["^@core/(.*)$", "^@server/(.*)$", "^@ui/(.*)$", "^[./]"],
+  "importOrderGroupNamespaceSpecifiers": true,
+  "importOrderSeparation": true,
   "importOrderSortSpecifiers": true,
-  "overrides": [
-    {
-      "files": [
-        "*.config.mjs",
-        "*.config.ts",
-        "*.json",
-        "*.yml",
-        ".markdownlintrc"
-      ],
-      "options": {
-        "tabWidth": 2
-      }
-    },
-    {
-      "files": ["*.md"],
-      "options": {
-        "tabWidth": 2
-      }
-    }
-  ],
   "plugins": ["@trivago/prettier-plugin-sort-imports"],
+  "semi": true,
   "singleQuote": true,
-  "tabWidth": 4,
   "trailingComma": "all"
 }

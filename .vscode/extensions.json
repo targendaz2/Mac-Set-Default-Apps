@@ -1,11 +1,11 @@
 {
   "recommendations": [
     "streetsidesoftware.code-spell-checker",
+    "editorconfig.editorconfig",
     "dbaeumer.vscode-eslint",
+    "github.vscode-github-actions",
     "davidanson.vscode-markdownlint",
     "esbenp.prettier-vscode",
-    "orta.vscode-jest",
-    "github.vscode-github-actions",
-    "editorconfig.editorconfig"
+    "vitest.explorer"
   ]
 }

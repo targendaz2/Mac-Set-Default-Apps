@@ -4,15 +4,29 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 import tseslint from 'typescript-eslint';
 
 const config = tseslint.config(
-  {
-    ignores: ['dist/*'],
-  },
   eslint.configs.recommended,
-  ...tseslint.configs.recommended,
-  eslintConfigPrettier,
+  ...tseslint.configs.strict,
   {
-    files: ['./src/*.ts'],
-    ignores: ['./src/tests/**/*.ts'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          args: 'all',
+          argsIgnorePattern: '^_',
+          caughtErrors: 'all',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
+    },
+  },
+  {
+    files: ['./src/**/*.ts'],
+    ignores: ['./src/**/*.spec.ts', './src/**/*.test.ts'],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -37,25 +51,7 @@ const config = tseslint.config(
       ],
     },
   },
-  {
-    rules: {
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        {
-          args: 'all',
-          argsIgnorePattern: '^_',
-          caughtErrors: 'all',
-          caughtErrorsIgnorePattern: '^_',
-          destructuredArrayIgnorePattern: '^_',
-          varsIgnorePattern: '^_',
-          ignoreRestSiblings: true,
-        },
-      ],
-      '@typescript-eslint/no-var-requires': 'off',
-      eqeqeq: 'error',
-      'no-var': 'error',
-    },
-  },
+  eslintConfigPrettier,
 );
 
 export default config;
