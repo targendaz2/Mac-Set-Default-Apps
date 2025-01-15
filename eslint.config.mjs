@@ -4,6 +4,9 @@ import eslintConfigPrettier from 'eslint-config-prettier';
 import tseslint from 'typescript-eslint';
 
 const config = tseslint.config(
+  {
+    ignores: ['node_modules', 'build', 'dist'],
+  },
   eslint.configs.recommended,
   ...tseslint.configs.strict,
   {

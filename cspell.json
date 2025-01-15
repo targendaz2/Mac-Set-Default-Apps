@@ -5,6 +5,8 @@
     ".prettierrc*",
     ".vscode/*",
     "*.lock",
+    "build/",
+    "dist/",
     "node_modules/"
   ],
   "dictionaryDefinitions": [
