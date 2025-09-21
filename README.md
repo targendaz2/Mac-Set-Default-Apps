@@ -1,5 +1,5 @@
 > [!WARNING]
-> Please look at [default-browser](https://github.com/macadmins/default-browser) or [utiluti](https://github.com/scriptingosx/utiluti) instead of using MSDA. Both tools are much more actively developed, are are safer and easier to use.
+> Please look at [default-browser](https://github.com/macadmins/default-browser) or [utiluti](https://github.com/scriptingosx/utiluti) instead of using MSDA. Both tools are much more actively developed, and are safer and easier to use.
 
 # Mac Set Default Apps (MSDA)
 
