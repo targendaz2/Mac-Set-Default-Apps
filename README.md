@@ -1,3 +1,6 @@
+> [!WARNING]
+> Please look at [default-browser](https://github.com/macadmins/default-browser) or [utiluti](https://github.com/scriptingosx/utiluti) instead of using MSDA. Both tools are much more actively developed, are are safer and easier to use.
+
 # Mac Set Default Apps (MSDA)
 
 MSDA provides an easy way to silently change the default applications used by macOS. There are no pop-ups or prompts and, even better, it works for Google Chrome!
